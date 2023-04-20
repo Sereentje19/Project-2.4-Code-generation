@@ -1,4 +1,4 @@
-package SOT.Squad.Code.generation;
+package SOT.Squad.code.generation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

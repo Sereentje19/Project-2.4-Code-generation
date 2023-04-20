@@ -1,8 +1,7 @@
-package SOT.Squad.Code.generation;
+package SOT.Squad.code.generation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 
 @SpringBootApplication
 public class CodeGenerationApplication {
