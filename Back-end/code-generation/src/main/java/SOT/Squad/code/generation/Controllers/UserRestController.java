@@ -4,10 +4,7 @@ import SOT.Squad.code.generation.Models.Users;
 import SOT.Squad.code.generation.Services.UserService;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +22,11 @@ public class UserRestController {
     @PostMapping("/restusers")
     public Users addUser(@RequestBody Users user) {
         return userService.addUser(user);
+    }
+
+    @PutMapping("/restusers")
+    public Users updateUser(@RequestBody Users user) {
+        return userService.updateUser(user);
     }
 
 }
