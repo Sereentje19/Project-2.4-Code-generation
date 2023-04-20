@@ -21,7 +21,8 @@ public class UserService {
     }
 
     public UserService() {
-        users.add(new Users(1, "Thijs", "Moerland"));
-        users.add(new Users(2, "Serena", "Kenter"));
-        users.add(new Users(3, "Omar", "Al Sayasna"));
+        users.add(new Users(1, "Thijs", "Moerland",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
+        users.add(new Users(1, "Serena", "Kenter",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
+        users.add(new Users(1, "Omar", "Al Sayasna",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
+    }
 }

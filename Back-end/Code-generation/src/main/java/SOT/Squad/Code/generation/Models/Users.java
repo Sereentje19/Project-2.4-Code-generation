@@ -3,6 +3,8 @@ package SOT.Squad.Code.generation.Models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 @Getter
 @Setter
 public class Users {
@@ -15,6 +17,17 @@ public class Users {
     private int houseNumber;
     private String postalCode;
     private String city;
-    
 
+
+    public Users(int id, String firstName, String lastName, int phoneNumber, String email, String street, int houseNumber, String postalCode, String city) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.postalCode = postalCode;
+        this.city = city;
+    }
 }
