@@ -30,6 +30,16 @@ public class UserService {
         return null;
     }
 
+    public Users deleteUser(Users user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == user.getId()) {
+                users.remove(i);
+                return user;
+            }
+        }
+        return null;
+    }
+
     public UserService() {
         users.add(new Users(1, "Thijs", "Moerland",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
         users.add(new Users(2, "Serena", "Kenter",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));

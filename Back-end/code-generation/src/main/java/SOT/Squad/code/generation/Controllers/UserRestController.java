@@ -29,4 +29,9 @@ public class UserRestController {
         return userService.updateUser(user);
     }
 
+    @DeleteMapping("/restusers")
+    public Users deleteUser(@RequestBody Users user) {
+        return userService.deleteUser(user);
+    }
+
 }
