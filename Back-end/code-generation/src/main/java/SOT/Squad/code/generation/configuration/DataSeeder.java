@@ -16,9 +16,9 @@ public class DataSeeder implements ApplicationRunner {
     private UserService userService;
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        userService.addUser(new User(1,"Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
-        userService.addUser(new User(2,"Omar", "Al Sayasna", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
-        userService.addUser(new User(3,"Serena", "Kenter", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
+        userService.addUser(new User(0,"Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
+        userService.addUser(new User(0,"Omar", "Al Sayasna", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
+        userService.addUser(new User(0,"Serena", "Kenter", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
 
     }
 }
