@@ -1,14 +1,16 @@
 package SOT.Squad.code.generation.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "\"Users\"")
 public class User {
     @Id
@@ -22,5 +24,7 @@ public class User {
     private int houseNumber;
     private String postalCode;
     private String city;
+    @OneToMany(mappedBy = "user")
+    private List<BankAccount> bankAccountList;
 
 }
