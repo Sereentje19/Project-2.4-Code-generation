@@ -1,6 +1,8 @@
 package SOT.Squad.code.generation.Services;
 
-import SOT.Squad.code.generation.Models.Users;
+import SOT.Squad.code.generation.Models.User;
+import SOT.Squad.code.generation.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,40 +11,27 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private List<Users> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
+    private List<User> users = new ArrayList<>();
 
-    public List<Users> getAllUsers() {
-        return users;
+    public List<User> getAllUsers() {
+        return (List<User>)userRepository.findAll();
     }
 
-    public Users addUser(Users user) {
-        users.add(user);
-        return user;
+    public User getUser(long id) {
+        return userRepository.findById(id).get();
     }
 
-    public Users updateUser(Users user) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == user.getId()) {
-                users.set(i, user);
-                return user;
-            }
-        }
-        return null;
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
 
-    public Users deleteUser(Users user) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == user.getId()) {
-                users.remove(i);
-                return user;
-            }
-        }
-        return null;
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
-    public UserService() {
-        users.add(new Users(1, "Thijs", "Moerland",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
-        users.add(new Users(2, "Serena", "Kenter",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
-        users.add(new Users(3, "Omar", "Al Sayasna",681340798,"680942@student.inholland.nl","Söderblomstraat",53,"2131GB","Hoofddorp"));
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
     }
 }

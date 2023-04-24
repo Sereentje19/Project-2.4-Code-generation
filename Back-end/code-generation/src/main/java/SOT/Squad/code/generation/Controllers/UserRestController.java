@@ -1,37 +1,43 @@
 package SOT.Squad.code.generation.Controllers;
 
-import SOT.Squad.code.generation.Models.Users;
+import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserRestController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/restusers")
-    public List<Users> getAllUsers() {
+    @GetMapping()
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/restusers")
-    public Users addUser(@RequestBody Users user) {
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable long id) {
+        return userService.getUser(id);
+    }
+
+    @PostMapping
+    public User addUser(@RequestBody User user) {
         return userService.addUser(user);
     }
 
-    @PutMapping("/restusers")
-    public Users updateUser(@RequestBody Users user) {
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable long id, @RequestBody User user) {
+        user.setId(id);
         return userService.updateUser(user);
     }
 
-    @DeleteMapping("/restusers")
-    public Users deleteUser(@RequestBody Users user) {
-        return userService.deleteUser(user);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
     }
 
 }
