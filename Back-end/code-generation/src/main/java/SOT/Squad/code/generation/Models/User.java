@@ -24,7 +24,8 @@ public class User {
     private int houseNumber;
     private String postalCode;
     private String city;
-    @OneToMany(mappedBy = "user")
-    private List<BankAccount> bankAccountList;
+//    @OneToMany(mappedBy = "user")
+//    private List<BankAccount> bankAccountList;
+    private List<Long> bankAccountList;
 
 }

@@ -15,6 +15,10 @@ public class BankAccount {
     @GeneratedValue
     private long id;
     private String iban;
-    @ManyToOne
-    private User user;
+    private String accountType;
+    private String currency;
+    private double balance;
+//    @ManyToOne
+//    private User user;
+    private long userId;
 }
