@@ -3,10 +3,7 @@ package SOT.Squad.code.generation.Controllers;
 import SOT.Squad.code.generation.Models.BankAccount;
 import SOT.Squad.code.generation.Services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,10 @@ public class BankAccountRestController {
     @GetMapping
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountService.getAllBankAccounts();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBankAccount(@PathVariable long id) {
+        bankAccountService.deleteBankAccount(id);
     }
 }
