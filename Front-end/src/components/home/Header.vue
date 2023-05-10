@@ -4,8 +4,8 @@
 
     <div class="navbar">
       <a class="" id="" href="/">Home</a>
-      <a class="" id="" href="/Quizes">Quizes</a>
-      <a class="grey btn" href="/Login">Login</a>
+      <a class="" id="" href="/">Quizes</a>
+      <a class="grey btn" href="/">Login</a>
 
     </div>
   </div>

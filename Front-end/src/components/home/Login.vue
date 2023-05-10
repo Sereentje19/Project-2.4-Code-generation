@@ -14,7 +14,7 @@
                 <button @click="login()" class="loginBtn btn" id="" type="button">Sign in</button>
             </div>
         </div>
-    </div>
+    </div>5
 </template>
 
 <script>
@@ -34,7 +34,7 @@ export default {
     // },
     methods: {
         login() {
-            axios.post("users/", {
+            axios.get("users", {
                 // username: this.username,
                 // password: this.password,
             }).then((res) => {
