@@ -1,0 +1,42 @@
+#letterType2 {
+  margin-top: 50px;
+}
+
+.loginBtn,
+.loginBtn:hover {
+  margin-top: 25px;
+  font-size: 15px;
+  background-color: rgb(15, 108, 190);
+  margin-left: auto;
+  color: white;
+  border-radius: 0;
+  border: 0px;
+}
+
+.loginBtn:hover{
+    background-color: rgb(12, 97, 172);
+}
+
+.imgcontainer,
+.container {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+#logIn {
+  margin-top: 250px;
+}
+
+.container {
+  padding: 35px;
+  background-color: rgb(255, 255, 255);
+}
+
+body {
+  background-image: url("../images/pexels-photo-5935254.jpeg");
+  background-size: 100%;
+}
+
+/* background-color: rgb(208, 45, 125); */
