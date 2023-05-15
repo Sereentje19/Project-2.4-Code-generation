@@ -30,7 +30,7 @@ public class DataSeeder implements ApplicationRunner {
         userService.addUser(new User(0,"Serena", "Kenter", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null));
 
         bankAccountService.addBankAccount(new BankAccount(0, "NL12INHO0123456789", "CURRENT", "Euro", 1000, 1));
-        bankAccountService.addBankAccount(new BankAccount(0, "NL12INHO0123456788", "SAVING", "Euro", 2000, 1));
+        bankAccountService.addBankAccount(new BankAccount(0, "NL12INHO0123456789", "SAVING", "Euro", 2000, 1));
         bankAccountService.addBankAccount(new BankAccount(0, "NL12INHO0123456787", "CURRENT", "Euro", 100, 2));
 
     }

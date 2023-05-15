@@ -23,6 +23,9 @@ public class BankAccountService {
         return (List<BankAccount>) bankAccountRepository.findAll();
     }
 
+    public BankAccount getBankAccountByIbanAndType(String iban, String accountType) {
+        return bankAccountRepository.getByIbanAndAccountType(iban, accountType);
+    }
     public BankAccount addBankAccount(BankAccount bankAccount) {
         return bankAccountRepository.save(bankAccount);
     }

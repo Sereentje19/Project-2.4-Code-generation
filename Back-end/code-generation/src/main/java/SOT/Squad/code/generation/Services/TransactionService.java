@@ -16,6 +16,9 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private BankAccountService bankAccountService;
+
     private List<Transaction> transactions = new ArrayList<>();
     public List<Transaction> GetAllTransactions() {
         return (List<Transaction>)transactionRepository.findAll();
@@ -24,8 +27,15 @@ public class TransactionService {
         return transactionRepository.findById(id).get();
     }
     public Transaction AddTransaction(Transaction transaction) {
+        BankAccount bankAccountFrom = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountFrom(), transaction.getAccountFromtype());
+        BankAccount bankAccountTo = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountTo(), transaction.getAccountTotype());
+
+
+
         return transactionRepository.save(transaction);
     }
+
+
     //public Transaction GetTransactionByAccount(BankAccount bankAccountFrom) {
     //    return transactionRepositrory.findByBankAccount(bankAccountFrom);
     //}

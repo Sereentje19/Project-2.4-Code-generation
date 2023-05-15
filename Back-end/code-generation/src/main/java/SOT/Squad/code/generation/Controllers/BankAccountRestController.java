@@ -15,13 +15,18 @@ public class BankAccountRestController {
     private BankAccountService bankAccountService;
 
     @GetMapping("/{id}")
-    public List<BankAccount> getAllAccounts(@PathVariable long id) {
+    public List<BankAccount> getAllAccountsFromUser(@PathVariable long id) {
         return bankAccountService.getUsersBankAccounts(id);
     }
 
     @GetMapping
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountService.getAllBankAccounts();
+    }
+
+    @GetMapping("/{iban}/{accountType}")
+    public BankAccount getBankAccountByIbanAndType(@PathVariable String iban, @PathVariable String accountType) {
+        return bankAccountService.getBankAccountByIbanAndType(iban, accountType);
     }
 
     @DeleteMapping("/{id}")
