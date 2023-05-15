@@ -21,12 +21,17 @@ public class TransactionController {
         return transactionService.GetAllTransactions();
     }
     @GetMapping("/{id}")
-    public Transaction getTransaction(@PathVariable long id) {
-        return transactionService.GetTransaction(id);
+    public Transaction getTransactionById(@PathVariable long id) {
+        return transactionService.GetTransactionById(id);
     }
     @PostMapping
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         return transactionService.AddTransaction(transaction);
+    }
+
+    @GetMapping("/bank/{string}")
+    public List<Transaction>GetAllByIban(@PathVariable String string){
+        return transactionService.GetAllByIban(string);
     }
 
 }
