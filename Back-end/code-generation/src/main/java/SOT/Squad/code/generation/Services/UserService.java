@@ -34,4 +34,9 @@ public class UserService {
     public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
+    public User getByUsernameAndPassword(String username, String password)
+    {
+        return userRepository.getByUsernameAndPassword(username, password);
+    }
+
 }

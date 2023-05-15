@@ -14,34 +14,41 @@
                 <button @click="login()" class="loginBtn btn" id="" type="button">Sign in</button>
             </div>
         </div>
-    </div>5
+    </div>
 </template>
 
 <script>
 import axios from '../../axios-auth.js';
 
 export default {
-    // data() {
-    //     return {
-    //         user: [
-    //             {
-    //                 username: '',
-    //                 email: '',
-    //                 password: '',
-    //             }
-    //         ]
-    //     };
-    // },
+    data() {
+        return {
+            user: [
+                {
+                    username: '',
+                    password: '',
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phoneNumber: '',
+                    houseNumber: '',
+                    street: '',
+                    postalCode: '',
+                    city: '',
+                }
+            ]
+        };
+    },
     methods: {
         login() {
-            axios.get("users", {
-                // username: this.username,
-                // password: this.password,
+            axios.post("users/login", {
+                username: this.username,
+                password: this.password,
             }).then((res) => {
-                // axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.jwt;
-                // localStorage.setItem("jwt", res.data.jwt)
+                axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.jwt;
+                localStorage.setItem("jwt", res.data.jwt);
+                console.log(res.data.jwt);
                 this.$router.push("/home");
-                // console.log(res.data.jwt);
             }).catch((error) => {
                 console.log(error);
                 alert("Error logging in");
