@@ -33,4 +33,10 @@ public class BankAccountService {
     public void deleteBankAccount(long id) {
         bankAccountRepository.deleteById(id);
     }
+
+    public BankAccount putByIbanAndAccountType(String iban, String accountType, double amount) {
+        BankAccount bankAccount = bankAccountRepository.getByIbanAndAccountType(iban, accountType);
+//        bankAccount.setBalance(bankAccount.getBalance() + amount);
+        return bankAccountRepository.save(bankAccount);
+    }
 }

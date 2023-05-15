@@ -46,10 +46,10 @@ public class TransactionService {
     }
 
     public Transaction AddTransaction(Transaction transaction) {
-        BankAccount bankAccountFrom = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountFrom(), transaction.getAccountFromtype());
-        BankAccount bankAccountTo = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountTo(), transaction.getAccountTotype());
+//        BankAccount bankAccountFrom = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountFrom(), transaction.getAccountFromtype());
+//        BankAccount bankAccountTo = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountTo(), transaction.getAccountTotype());
 
-
+//        BankAccount bankAccount = bankAccountService.putByIbanAndAccountType(transaction.getBankAccountTo(), transaction.getAccountTotype(), transaction.getAmount());
 
         return transactionRepository.save(transaction);
     }

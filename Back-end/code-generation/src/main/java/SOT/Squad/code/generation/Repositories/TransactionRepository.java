@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
     //Transaction findByBankAccount(BankAccount bankAccountFrom)
 
-
     public Iterable<Transaction> getAllByBankAccountFrom(String bankAccountFrom);
     public Iterable<Transaction> getAllByBankAccountTo(String bankAccountFrom);
 
