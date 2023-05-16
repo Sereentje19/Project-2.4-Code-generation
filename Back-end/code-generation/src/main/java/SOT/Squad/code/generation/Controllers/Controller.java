@@ -1,7 +1,10 @@
 package SOT.Squad.code.generation.Controllers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -42,6 +45,31 @@ public class Controller {
 //            return request.getHeader("Authorization");
             return "";
         }
+
+
+
+
+
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public ResponseEntity<Map<String, Object>> respond(Object data) {
+        return respondWithCode(HttpStatus.OK, data);
+    }
+
+    public ResponseEntity<Map<String, Object>> respondWithError(HttpStatus httpStatus, String message) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("errorMessage", message);
+        return respondWithCode(httpStatus, data);
+    }
+
+    private ResponseEntity<Map<String, Object>> respondWithCode(HttpStatus httpStatus, Object data) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("data", data);
+        return ResponseEntity.status(httpStatus)
+                .header("Content-Type", "application/json; charset=utf-8")
+                .body(responseBody);
+    }
 
 
 

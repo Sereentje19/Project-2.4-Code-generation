@@ -5,19 +5,22 @@ import SOT.Squad.code.generation.Services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/users")
-public class UserRestController{
+public class UserRestController extends Controller{
 
     @Autowired
     private UserService userService;
@@ -33,9 +36,22 @@ public class UserRestController{
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody User user) {
-        return generateJwt(user);
+    public Map<String, Object> login(@RequestBody User user) throws Exception {
+        try {
+            User currentUser = userService.getByUsernameAndPassword(user.getUsername(), user.getPassword());
+
+            if (currentUser == null) {
+                throw new Exception("Incorrect username or password.");
+            }
+            
+            return generateJwt(currentUser);
+
+        }catch(Exception exception){
+            throw new Exception(exception.getMessage());
+        }
+
     }
+
 
     @PostMapping
     public User addUser(@RequestBody User user) {
@@ -44,7 +60,6 @@ public class UserRestController{
 
 //    @PostMapping("/login")
 //    public User getByUsernameAndPassword(@RequestBody User user) {
-//        generateJwt(user);
 //        return userService.getByUsernameAndPassword(user.getUsername(), user.getPassword());
 //    }
 
