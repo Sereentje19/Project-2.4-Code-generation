@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BankAccountRepository extends CrudRepository<BankAccount, Long> {
     public Iterable<BankAccount> getAllByIban(String iban);
+
     public Iterable<BankAccount> getAllByUserId(long userId);
 }

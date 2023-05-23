@@ -16,7 +16,7 @@ public class BankAccountService {
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
     public List<BankAccount> getUsersBankAccounts(long id) {
-        return (List<BankAccount>)bankAccountRepository.getAllByUserId(id);
+        return (List<BankAccount>) bankAccountRepository.getAllByUserId(id);
     }
 
     public List<BankAccount> getAllBankAccounts() {

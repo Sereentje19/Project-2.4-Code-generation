@@ -1,6 +1,9 @@
 package SOT.Squad.code.generation.Models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +21,7 @@ public class BankAccount {
     private String accountType;
     private String currency;
     private double balance;
-//    @ManyToOne
+    //    @ManyToOne
 //    private User user;
     private long userId;
 }
