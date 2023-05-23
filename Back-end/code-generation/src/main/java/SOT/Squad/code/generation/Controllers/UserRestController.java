@@ -5,6 +5,8 @@ import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,26 +28,17 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-//    @PostMapping("/login")
-//    public void login(@RequestBody User user) throws Exception {
-//        try {
-//            User currentUser = userService.getByUsernameAndPassword(user.getUsername(), user.getPassword());
-//
-////            if (currentUser == null) {
-////                throw new Exception("Incorrect username or password.");
-////            }
-//
-////            return generateJwt(currentUser);
-//
-//        }catch(Exception exception){
-//            throw new Exception(exception.getMessage());
-//        }
-//
-//    }
 
     @PostMapping("/login")
-    public LoginResponseDTO login(@RequestBody LoginRequestDTO requestDTO) {
-        return userService.login(requestDTO);
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
+        try {
+            LoginResponseDTO response = userService.login(requestDTO);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
+        }
     }
 
 
@@ -53,11 +46,6 @@ public class UserRestController extends Controller {
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
     }
-
-//    @PostMapping("/login")
-//    public User getByUsernameAndPassword(@RequestBody User user) {
-//        return userService.getByUsernameAndPassword(user.getUsername(), user.getPassword());
-//    }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable long id, @RequestBody User user) {
@@ -69,37 +57,4 @@ public class UserRestController extends Controller {
     public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
-
-
-//
-//
-//        private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-//        private static final String ISSUER = "THE_ISSUER";
-//        private static final String AUDIENCE = "THE_AUDIENCE";
-//
-//        public static Map<String, Object> generateJwt(User user) {
-//            long issuedAtMillis = System.currentTimeMillis();
-//            long expirationMillis = issuedAtMillis + 9000 * 1000; // 9000 seconds
-//
-//            JwtBuilder jwtBuilder = Jwts.builder()
-//                    .setIssuer(ISSUER)
-//                    .setAudience(AUDIENCE)
-//                    .setIssuedAt(new Date(issuedAtMillis))
-//                    .setNotBefore(new Date(issuedAtMillis))
-//                    .setExpiration(new Date(expirationMillis))
-//                    .claim("data", user)
-//                    .signWith(SECRET_KEY);
-//
-//            String jwt = jwtBuilder.compact();
-//
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("message", "Successful login.");
-//            response.put("jwt", jwt);
-//            response.put("username", user.getUsername());
-//            response.put("expireAt", expirationMillis);
-//
-//            return response;
-//        }
-
-
 }

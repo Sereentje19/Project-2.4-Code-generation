@@ -26,15 +26,7 @@ export default {
             user: [
                 {
                     username: '',
-                    password: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phoneNumber: '',
-                    houseNumber: '',
-                    street: '',
-                    postalCode: '',
-                    city: '',
+                    password: ''
                 }
             ]
         };
@@ -50,8 +42,7 @@ export default {
                 console.log(res.data.token);
                 this.$router.push("/home");
             }).catch((error) => {
-                console.log(error);
-                alert("Error logging in");
+                alert(error.response.data.token);
             });
         }
     }
