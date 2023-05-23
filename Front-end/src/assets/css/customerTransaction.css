@@ -1,0 +1,100 @@
+.bodyStructure {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.structure {
+    display: flex;
+    width: 100%;
+    margin: 5%;
+    flex-direction: column;
+    background-color: white;
+}
+
+.headInfo {
+    background-color: white;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+}
+
+.accountNumber {
+    width: 60%;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 2.5%;
+    margin: 2.5%;
+    margin-right: 0;
+}
+
+.accountNumber p {
+    margin-bottom: 0;
+}
+
+.bodyInfo {
+    background-color: green;
+    height: 80%;
+    margin: 2.5%;
+    margin-top: 0;
+    overflow-y: scroll;
+}
+
+.groupOptions {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2.5%;
+
+}
+
+.option {
+    height: 100%;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option button {
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    border-radius: 10px;
+}
+
+.option button:hover {
+    background-color: green;
+}
+
+.transaction{
+    margin: 2.5%;
+    height: 100px;
+    background-color: white;
+}
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  .bodyInfo {
+    scrollbar-width: auto;
+    scrollbar-color: #000000 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  .bodyInfo::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  .bodyInfo::-webkit-scrollbar-track {
+    background: green;
+  }
+
+  .bodyInfo::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
+
