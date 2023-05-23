@@ -45,9 +45,9 @@ export default {
                 username: this.username,
                 password: this.password,
             }).then((res) => {
-                axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.jwt;
-                localStorage.setItem("jwt", res.data.jwt);
-                console.log(res.data.jwt);
+                axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
+                localStorage.setItem("jwt", res.data.token);
+                console.log(res.data.token);
                 this.$router.push("/home");
             }).catch((error) => {
                 console.log(error);

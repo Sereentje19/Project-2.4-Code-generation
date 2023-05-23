@@ -23,7 +23,9 @@ public class MySecurityConfiguration {
         // We need to do this to allow POST requests
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        httpSecurity.authorizeHttpRequests().requestMatchers("/login").permitAll().requestMatchers("/cars").authenticated();
+        httpSecurity.authorizeHttpRequests()
+                .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/users").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
