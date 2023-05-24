@@ -9,31 +9,33 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Deposit
                         </button>
                     </div>
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Withdraw
                         </button>
                     </div>
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Transaction
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="bodyInfo">
-                <!-- Hier komen de transacties -->
+            <div id="extraPadding">
+                <div class="bodyInfo">
+                    <!-- Hier komen de transacties -->
 
-                <div v-for="trans in transactions" class="transaction">
-                    <h1>blabla ... {{ trans.id }}</h1>
+                    <div v-for="index in 10" :key="index" class="transaction">
+                        <h1>blabla ... </h1>
+                    </div>
                 </div>
-
             </div>
         </div>
+
     </body>
     <footerNavigation />
 </template>
@@ -95,4 +97,5 @@ export default {
 
 <style>
 @import '../../assets/css/customerTransaction.css';
+@import '../../assets/css/main.css';
 </style>
