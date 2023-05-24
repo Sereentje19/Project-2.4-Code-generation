@@ -14,4 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 //    @Query(value = "SELECT * FROM Users LIMIT ?1 OFFSET ?2", nativeQuery = true)
 //    public Iterable<User> getAllUsersWithLimitAndOffset(int limit, int offset);
 
+    public User getByUsernameAndPassword(String Username, String Password);
+
 }
