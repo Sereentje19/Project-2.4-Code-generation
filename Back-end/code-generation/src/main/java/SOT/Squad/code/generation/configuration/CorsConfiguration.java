@@ -12,9 +12,22 @@ public class CorsConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/users/login")
                 .allowedOrigins("http://localhost:5174")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("POST")
                 .allowedHeaders("*")
                 .allowedMethods("*")
                 .allowedOrigins("*");
+
+//        registry.addMapping("/**")
+//                .allowedHeaders("*")
+//                .allowedMethods("*")
+//                .allowedOrigins("*");
+
+//        registry.addMapping("/transactions/{id}")
+//                .allowedOrigins("http://localhost:5174")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE")
+//                .allowedHeaders("*")
+//                .allowedMethods("*")
+//                .allowedOrigins("*");
     }
+
 }
