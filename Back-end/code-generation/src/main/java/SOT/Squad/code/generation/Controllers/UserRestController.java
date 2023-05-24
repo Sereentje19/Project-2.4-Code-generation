@@ -3,6 +3,8 @@ package SOT.Squad.code.generation.Controllers;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,11 @@ public class UserRestController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
+//    @GetMapping("/{limit}/{offset}")
+//    public List<User> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
+//        return userService.getAllUsers(limit, offset);
+//    }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable long id) {
