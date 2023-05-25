@@ -19,10 +19,6 @@ public class UserService {
         return (List<User>)userRepository.findAll();
     }
 
-//    public List<User> getAllUsers(int limit, int offset) {
-//        return (List<User>)userRepository.getAllUsersWithLimitAndOffset(limit, offset);
-//    }
-
     public User getUser(long id) {
         return userRepository.findById(id).get();
     }

@@ -14,23 +14,28 @@ public class BankAccountRestController {
     @Autowired
     private BankAccountService bankAccountService;
 
-    @GetMapping("/{id}")
-    public List<BankAccount> getAllAccountsFromUser(@PathVariable long id) {
-        return bankAccountService.getUsersBankAccounts(id);
-    }
-
-    @GetMapping
+    @GetMapping //Employee
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountService.getAllBankAccounts();
     }
 
-    @GetMapping("/{iban}/{accountType}")
-    public BankAccount getBankAccountByIbanAndType(@PathVariable String iban, @PathVariable String accountType) {
-        return bankAccountService.getBankAccountByIbanAndType(iban, accountType);
+    @PostMapping //Employee & Customer
+    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+        return bankAccountService.addBankAccount(bankAccount);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteBankAccount(@PathVariable long id) {
-        bankAccountService.deleteBankAccount(id);
+    @PutMapping("/{iban}") //Employee & Customer
+    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
+        return bankAccountService.updateBankAccount(bankAccount, iban);
+    }
+
+    @GetMapping("/{iban}") //Employee & Customer
+    public List<BankAccount> getAccountByIban(@PathVariable String id) {
+        return bankAccountService.getBankAccountByIban(id);
+    }
+
+    @DeleteMapping("/{iban}") //Employee
+    public void deleteBankAccount(@PathVariable String iban) {
+        bankAccountService.deleteBankAccount(iban);
     }
 }

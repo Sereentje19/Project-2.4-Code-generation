@@ -5,8 +5,6 @@ import SOT.Squad.code.generation.Services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.JwtBuilder;
@@ -27,19 +25,30 @@ public class UserRestController extends Controller{
     @Autowired
     private UserService userService;
 
-    @GetMapping()
+    @GetMapping() //Employee
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-//    @GetMapping("/{limit}/{offset}")
-//    public List<User> getAllUsers(@PathVariable int limit, @PathVariable int offset) {
-//        return userService.getAllUsers(limit, offset);
-//    }
+    @PostMapping //Employee
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
+    }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}") //Employee
+    public void deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
+    }
+
+    @GetMapping("/{id}") //Employee & Customer
     public User getUser(@PathVariable long id) {
         return userService.getUser(id);
+    }
+
+    @PutMapping("/{id}") //Employee & Customer
+    public User updateUser(@PathVariable long id, @RequestBody User user) {
+        user.setId(id);
+        return userService.updateUser(user);
     }
 
     @PostMapping("/login")
@@ -60,26 +69,16 @@ public class UserRestController extends Controller{
     }
 
 
-    @PostMapping
-    public User addUser(@RequestBody User user) {
-        return userService.addUser(user);
-    }
+
 
 //    @PostMapping("/login")
 //    public User getByUsernameAndPassword(@RequestBody User user) {
 //        return userService.getByUsernameAndPassword(user.getUsername(), user.getPassword());
 //    }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable long id, @RequestBody User user) {
-        user.setId(id);
-        return userService.updateUser(user);
-    }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
-    }
+
+
 
 
 

@@ -13,30 +13,25 @@ public class BankAccountService {
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
-    private List<BankAccount> bankAccounts = new ArrayList<>();
-
-    public List<BankAccount> getUsersBankAccounts(long id) {
-        return (List<BankAccount>)bankAccountRepository.getAllByUserId(id);
-    }
 
     public List<BankAccount> getAllBankAccounts() {
         return (List<BankAccount>) bankAccountRepository.findAll();
     }
 
-    public BankAccount getBankAccountByIbanAndType(String iban, String accountType) {
-        return bankAccountRepository.getByIbanAndAccountType(iban, accountType);
-    }
     public BankAccount addBankAccount(BankAccount bankAccount) {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public void deleteBankAccount(long id) {
-        bankAccountRepository.deleteById(id);
+    public BankAccount updateBankAccount(BankAccount bankAccount, String iban) {
+        bankAccount.setIban(iban);
+        return bankAccountRepository.save(bankAccount);
     }
 
-    public BankAccount putByIbanAndAccountType(String iban, String accountType, double amount) {
-        BankAccount bankAccount = bankAccountRepository.getByIbanAndAccountType(iban, accountType);
-//        bankAccount.setBalance(bankAccount.getBalance() + amount);
-        return bankAccountRepository.save(bankAccount);
+    public List<BankAccount> getBankAccountByIban(String iban) {
+        return (List<BankAccount>)bankAccountRepository.getAllByIban(iban);
+    }
+
+    public void deleteBankAccount(String iban) {
+        bankAccountRepository.deleteByIban(iban);
     }
 }

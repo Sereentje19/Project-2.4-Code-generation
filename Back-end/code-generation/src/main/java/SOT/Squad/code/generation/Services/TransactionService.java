@@ -16,9 +16,6 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    @Autowired
-    private BankAccountService bankAccountService;
-
     private List<Transaction> transactions = new ArrayList<>();
     public List<Transaction> GetAllTransactions() {
         return (List<Transaction>)transactionRepository.findAll();
@@ -26,35 +23,19 @@ public class TransactionService {
     public Transaction GetTransactionById(long id) {
         return transactionRepository.findById(id).get();
     }
-    public List<Transaction> GetAllByIban(String string) {
-        List<Transaction> fromList = (List<Transaction>) transactionRepository.getAllByBankAccountFrom(string);
-        List<Transaction> toList = (List<Transaction>) transactionRepository.getAllByBankAccountTo(string);
-
-        //write a function that returns a list of transactions and removes the duplicates
-        List<Transaction> transactions = new ArrayList<>();
-        for (Transaction transaction : fromList) {
-            if (!transactions.contains(transaction)) {
-                transactions.add(transaction);
-            }
-        }
-        for (Transaction transaction : toList) {
-            if (!transactions.contains(transaction)) {
-                transactions.add(transaction);
-            }
-        }
-        return transactions;
+    public List<Transaction> GetTransactionsByIban(String iban) {
+        return transactionRepository.getByIban(iban);
     }
-
     public Transaction AddTransaction(Transaction transaction) {
-//        BankAccount bankAccountFrom = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountFrom(), transaction.getAccountFromtype());
-//        BankAccount bankAccountTo = bankAccountService.getBankAccountByIbanAndType(transaction.getBankAccountTo(), transaction.getAccountTotype());
-
-//        BankAccount bankAccount = bankAccountService.putByIbanAndAccountType(transaction.getBankAccountTo(), transaction.getAccountTotype(), transaction.getAmount());
-
         return transactionRepository.save(transaction);
     }
 
-
+    public Transaction UpdateTransaction(Transaction transaction) {
+        return transactionRepository.save(transaction);
+    }
+    public void DeleteTransaction(long id) {
+        transactionRepository.deleteById(id);
+    }
     //public Transaction GetTransactionByAccount(BankAccount bankAccountFrom) {
     //    return transactionRepositrory.findByBankAccount(bankAccountFrom);
     //}
