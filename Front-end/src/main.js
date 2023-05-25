@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
-import footer from './components/home/Footer.vue';
-import header from './components/home/Header.vue';
+import footer from './components/main/Footer.vue';
+import header from './components/main/Header.vue';
 import router from './router'
 
 import './assets/css/main.css'
