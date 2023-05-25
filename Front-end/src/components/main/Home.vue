@@ -9,7 +9,7 @@
         text text text text text text text text text text text text 
         text text text text text text text text text text text text text text 
       </div>
-      <br><a href="/customer/transaction" class="btn">transactions</a>
+      <br><a href="/customer/transactions/1" class="btn">transactions</a>
     </div>
 
   </body>

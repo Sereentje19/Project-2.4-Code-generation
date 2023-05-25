@@ -27,12 +27,11 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <!-- Hier komen de transacties -->
-
-                    <div v-for="trans in transactions" class="transaction">
-                        <h1>blabla ... {{ trans.description }}</h1>
-                    </div>
-
+                    <a href="/customer/viewTransaction/1">
+                        <div v-for="trans in transactions" class="transaction">
+                            <h1>blabla ... {{ this.transactions.id }}</h1>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -65,16 +64,7 @@ export default {
     },
     data() {
         return {
-            transactions: [
-                {
-                    id: 0,
-                    description: '',
-                    amount: '',
-                    type: '',
-                    bankAccountFrom: '',
-                    bankAccountTo: '',
-                }
-            ],
+            transactions: [],
         };
     },
     mounted() {
@@ -83,6 +73,30 @@ export default {
     methods: {
         getAll() {
             axios
+            //     .get('users/' + this.id, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         this.transactions = res.data;
+
+            //         console.log(res.data)
+            //         console.log(this.transactions.id)
+            //     })
+            //     .catch(error => console.log(error))
+
+            // axios
+            //     .get('bankaccounts/' + this.id)
+            //     .then((res) => {
+            //         this.transactions = res.data;
+
+            //         console.log(res.data)
+            //         console.log(this.transactions.id)
+            //     })
+            //     .catch(error => console.log(error))
+
+            axios
                 .get('transactions/' + this.id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
@@ -90,8 +104,12 @@ export default {
                 })
                 .then((res) => {
                     this.transactions = res.data;
+
+                    // console.log(res.data)
+                    // console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
+
         },
     },
 };

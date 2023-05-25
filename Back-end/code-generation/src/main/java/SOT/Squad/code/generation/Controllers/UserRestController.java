@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 public class UserRestController extends Controller {
@@ -27,6 +30,7 @@ public class UserRestController extends Controller {
     public User getUser(@PathVariable long id) {
         return userService.getUser(id);
     }
+
 
     @PostMapping
     public User addUser(@RequestBody User user) {
