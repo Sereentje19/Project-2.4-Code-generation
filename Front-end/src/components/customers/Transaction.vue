@@ -1,5 +1,6 @@
 <template>
     <headerNavigation />
+
     <body class="bodyStructure">
         <div class="structure">
             <div class="headInfo">
@@ -28,8 +29,8 @@
                 <div class="bodyInfo">
                     <!-- Hier komen de transacties -->
 
-                    <div v-for="index in 10" :key="index" class="transaction">
-                        <h1>blabla</h1>
+                    <div v-for="trans in transactions" class="transaction">
+                        <h1>blabla ... {{ trans.id }}</h1>
                     </div>
 
                 </div>
@@ -58,16 +59,22 @@ export default {
             footerNavigation
         },
     },
+    name: "transactions",
+    props: {
+        id: Number,
+    },
     data() {
         return {
-            transactions: [{
-                id: 0,
-                description: '',
-                amount: '',
-                type: '',
-                bankAccountFrom: '',
-                bankAccountTo: '',
-            }],
+            transactions: [
+                {
+                    id: 0,
+                    description: '',
+                    amount: '',
+                    type: '',
+                    bankAccountFrom: '',
+                    bankAccountTo: '',
+                }
+            ],
         };
     },
     mounted() {

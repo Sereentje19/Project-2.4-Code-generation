@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 public class UserRestController extends Controller {
@@ -29,7 +28,7 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
         try {
