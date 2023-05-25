@@ -5,10 +5,11 @@
     <div id="homeText">
       <h1> Welcome to SOT Bank</h1>
       <div>
-        Welcome to SOT Bank, your trusted partner for financial success. With personalized service, advanced technology,
-        and unwavering security, we're here to help you achieve your goals. Join us and experience the difference today.
+        text text text text text text text text text text text text 
+        text text text text text text text text text text text text 
+        text text text text text text text text text text text text text text 
       </div>
-      <br><a href="/Quizes" id="homeBtn" class="mainButtonReverse btn">Go to Quizes</a>
+      <br><a href="/customer/transaction" class="btn">transactions</a>
     </div>
 
   </body>
