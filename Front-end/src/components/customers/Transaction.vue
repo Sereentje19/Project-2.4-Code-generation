@@ -30,7 +30,7 @@
                     <!-- Hier komen de transacties -->
 
                     <div v-for="trans in transactions" class="transaction">
-                        <h1>blabla ... {{ trans.id }}</h1>
+                        <h1>blabla ... {{ trans.description }}</h1>
                     </div>
 
                 </div>

@@ -25,8 +25,8 @@ public class MySecurityConfiguration {
         httpSecurity.cors().and().csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
-                .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/users").authenticated();
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/transactions/{id}").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

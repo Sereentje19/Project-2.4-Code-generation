@@ -28,20 +28,6 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-    @CrossOrigin(origins = "*")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
-        try {
-            LoginResponseDTO response = userService.login(requestDTO);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
-        }
-    }
-
-
     @PostMapping
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
