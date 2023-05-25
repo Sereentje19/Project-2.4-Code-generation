@@ -1,4 +1,5 @@
 <template>
+    <headerNavigation />
     <body class="bodyStructure">
         <div class="structure">
             <div class="headInfo">
@@ -7,35 +8,86 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Deposit
                         </button>
                     </div>
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Withdraw
                         </button>
                     </div>
                     <div class="option">
-                        <button>
+                        <button class="btn">
                             Transaction
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="bodyInfo">
-                <!-- Hier komen de transacties -->
+            <div id="extraPadding">
+                <div class="bodyInfo">
+                    <!-- Hier komen de transacties -->
 
-                <div v-for="index in 10" :key="index" class="transaction">
-                    <h1>blabla</h1>
-                </div> 
-                   
+                    <div v-for="index in 10" :key="index" class="transaction">
+                        <h1>blabla</h1>
+                    </div>
+
+                </div>
             </div>
         </div>
     </body>
+    <footerNavigation />
 </template>
 
 <script>
+
+import headerNavigation from './Header.vue'
+import footerNavigation from './Footer.vue';
+import axios from '../../axios-auth.js';
+
+export default {
+    header: {
+        name: "header",
+        components: {
+            headerNavigation
+        }
+    },
+    footer: {
+        name: "footer",
+        components: {
+            footerNavigation
+        },
+    },
+    data() {
+        return {
+            transactions: [{
+                id: 0,
+                description: '',
+                amount: '',
+                type: '',
+                bankAccountFrom: '',
+                bankAccountTo: '',
+            }],
+        };
+    },
+    mounted() {
+        this.getAll();
+    },
+    methods: {
+        getAll() {
+            axios
+                .get('transactions/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.transactions = res.data;
+                })
+                .catch(error => console.log(error))
+        },
+    },
+};
 </script>
 
 <style>

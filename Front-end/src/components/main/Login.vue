@@ -26,15 +26,7 @@ export default {
             user: [
                 {
                     username: '',
-                    password: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phoneNumber: '',
-                    houseNumber: '',
-                    street: '',
-                    postalCode: '',
-                    city: '',
+                    password: ''
                 }
             ]
         };
