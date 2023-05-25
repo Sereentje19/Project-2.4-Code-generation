@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/login")
-public class LoginController {
+public class LoginRestController {
 
     @Autowired
     private UserService userService;
