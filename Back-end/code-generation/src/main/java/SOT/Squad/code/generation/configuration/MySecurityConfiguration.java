@@ -22,10 +22,9 @@ public class MySecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // We need to do this to allow POST requests
 
-        httpSecurity.csrf().disable();
+        httpSecurity.cors().and().csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
-                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/users/login").permitAll()
                 .requestMatchers("/users").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

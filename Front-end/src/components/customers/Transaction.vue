@@ -41,8 +41,8 @@
 
 <script>
 
-import headerNavigation from './Header.vue'
-import footerNavigation from './Footer.vue';
+import headerNavigation from '../main/Header.vue'
+import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 export default {
