@@ -19,7 +19,7 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div class="bodyInfoText">transaction number: {{ this.transactions.id }}</div>
+                    <div class="bodyInfoText"> transaction number: {{ this.transactions.id }}</div>
                     <div class="bodyInfoText"> amount: {{ this.transactions.amount }}</div>
                     <div class="bodyInfoText"> description: {{ this.transactions.description }}</div>
                     <div class="bodyInfoText"> type: {{ this.transactions.type }}</div>
@@ -82,32 +82,12 @@ export default {
     },
     methods: {
         getAll() {
-            // axios
-            //     .get('users/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
-            // axios
-            //     .get('bankaccounts/' + this.id)
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
             axios
-                .get('transactions/' + this.id)
+                .get('transactions/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.transactions = res.data;
 
