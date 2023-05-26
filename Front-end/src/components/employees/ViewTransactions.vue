@@ -9,7 +9,11 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option"></div>
-                    <div class="option"></div>
+                    <div class="option">
+                        <button class="btn">
+                            edit
+                        </button>
+                    </div>
                     <div class="option">
                         <button class="btn">
                             delete

@@ -8,38 +8,31 @@
                     <p>rekeningnummer....</p>
                 </div>
                 <div class="groupOptions">
-                    <div class="option"></div>
-                    <div class="option"></div>
                     <div class="option">
                         <button class="btn">
-                            delete
+                            Transaction
                         </button>
+                    </div>
+                    <div class="option"></div>
+
+                    <div class="option">
+                        <input id="inputField" type="text">
                     </div>
                 </div>
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div class="bodyInfoText">transaction number: {{ this.transactions.id }}</div>
-                    <div class="bodyInfoText"> amount: {{ this.transactions.amount }}</div>
-                    <div class="bodyInfoText"> description: {{ this.transactions.description }}</div>
-                    <div class="bodyInfoText"> type: {{ this.transactions.type }}</div>
-                    <div class="bodyInfoText"> bankAccountFrom: {{ this.transactions.bankAccountFrom }}</div>
-                    <div class="bodyInfoText"> bankAccountTo: {{ this.transactions.bankAccountTo }}</div>
+                    <a href="/employee/viewTransaction/1">
+                        <div v-for="trans in transactions" class="transaction">
+                            <h1>blabla ... {{ this.transactions.id }}</h1>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </body>
     <footerNavigation />
 </template>
-
-<style>
-.bodyInfoText {
-    font-size: 30px;
-    padding: 10px;
-    padding-left: 30px;
-}
-</style>
-
 
 <script>
 
@@ -66,15 +59,7 @@ export default {
     },
     data() {
         return {
-            transactions:
-            {
-                id: 0,
-                amount: '',
-                description: '',
-                type: '',
-                bankAccountFrom: '',
-                bankAccountTo: ''
-            }
+            transactions: [],
         };
     },
     mounted() {
@@ -82,7 +67,7 @@ export default {
     },
     methods: {
         getAll() {
-            // axios
+            axios
             //     .get('users/' + this.id, {
             //         headers: {
             //             Authorization: "Bearer " + localStorage.getItem("jwt")
@@ -107,12 +92,16 @@ export default {
             //     .catch(error => console.log(error))
 
             axios
-                .get('transactions/' + this.id)
+                .get('transactions/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.transactions = res.data;
 
-                    console.log(res.data)
-                    console.log(this.transactions.id)
+                    // console.log(res.data)
+                    // console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
 

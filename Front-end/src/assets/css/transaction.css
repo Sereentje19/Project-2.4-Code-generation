@@ -78,6 +78,15 @@
   background-color: rgb(208, 45, 125);
 }
 
+a,
+a:hover{
+  color:black;
+}
+
+#inputField{
+  margin-right: 20%;
+  }
+
 .transaction {
   margin: 2.5%;
   height: 100px;

@@ -116,5 +116,5 @@ export default {
 </script>
 
 <style>
-@import '../../assets/css/customerTransaction.css';
+@import '../../assets/css/transaction.css';
 </style>
