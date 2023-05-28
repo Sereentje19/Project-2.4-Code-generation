@@ -14,19 +14,36 @@ public class TransactionRestController {
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping()
+
+
+    @PostMapping //Employee & Customer
+    public Transaction addTransaction(@RequestBody Transaction transaction) {
+        return transactionService.AddTransaction(transaction);
+    }
+
+    @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {
         return transactionService.GetAllTransactions();
     }
 
-    @GetMapping("/{id}")
-    public Transaction getTransaction(@PathVariable long id) {
-        return transactionService.GetTransaction(id);
+    @GetMapping("/{iban}") //Employee & Customer
+    public List<Transaction> getTransactionsByIban(@PathVariable String iban) {
+        return transactionService.GetTransactionsByIban(iban);
+    }
+    @GetMapping("/{id}") //Employee & Customer
+    public Transaction getTransactionById(@PathVariable long id) {
+        return transactionService.GetTransactionById(id);
     }
 
-    @PostMapping
-    public Transaction addTransaction(@RequestBody Transaction transaction) {
-        return transactionService.AddTransaction(transaction);
+    @PutMapping("/{id}") //Employee
+    public Transaction updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
+        transaction.setId(id);
+        return transactionService.UpdateTransaction(transaction);
+    }
+
+    @DeleteMapping("/{id}") //Employee
+    public void deleteTransaction(@PathVariable long id) {
+        transactionService.DeleteTransaction(id);
     }
 
 }

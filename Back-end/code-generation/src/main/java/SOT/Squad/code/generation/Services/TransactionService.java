@@ -21,14 +21,21 @@ public class TransactionService {
         return (List<Transaction>) transactionRepository.findAll();
     }
 
-    public Transaction GetTransaction(long id) {
+    public Transaction GetTransactionById(long id) {
         return transactionRepository.findById(id).get();
     }
-
-
-
+    public List<Transaction> GetTransactionsByIban(String iban) {
+        return transactionRepository.getByIban(iban);
+    }
     public Transaction AddTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);
+    }
+
+    public Transaction UpdateTransaction(Transaction transaction) {
+        return transactionRepository.save(transaction);
+    }
+    public void DeleteTransaction(long id) {
+        transactionRepository.deleteById(id);
     }
     //public Transaction GetTransactionByAccount(BankAccount bankAccountFrom) {
     //    return transactionRepositrory.findByBankAccount(bankAccountFrom);
