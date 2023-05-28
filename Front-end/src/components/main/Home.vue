@@ -16,6 +16,11 @@
       
       <div>
 
+        text text text text text text text text text text text text 
+        text text text text text text text text text text text text 
+        text text text text text text text text text text text text text text 
+
+
         <div class="d-flex p-2 mb-1 bg-secondary">
           <div>
             <h4>{ rekening nummer }</h4>
@@ -32,8 +37,9 @@
           <h4 class="align-baseline">{ saldo }</h4>
         </div>
 
+
       </div>
-      <br><a href="/Quizes" id="homeBtn" class="mainButtonReverse btn">Go to Quizes</a>
+      <br><a href="/customer/transactions/1" class="btn">transactions</a>
     </div>
 
   </body>

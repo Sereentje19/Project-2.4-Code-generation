@@ -27,31 +27,23 @@ export default {
                 {
                     username: '',
                     password: '',
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phoneNumber: '',
-                    houseNumber: '',
-                    street: '',
-                    postalCode: '',
-                    city: '',
+                    id: 0,
                 }
             ]
         };
     },
     methods: {
         login() {
-            axios.post("users/login", {
+            axios.post("login", {
                 username: this.username,
                 password: this.password,
             }).then((res) => {
-                axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.jwt;
-                localStorage.setItem("jwt", res.data.jwt);
-                console.log(res.data.jwt);
-                this.$router.push("/home");
+                axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
+                localStorage.setItem("jwt", res.data.token);
+                console.log(res.data.token);
+                this.$router.push("/customer/transactions/1");
             }).catch((error) => {
-                console.log(error);
-                alert("Error logging in");
+                alert(error.response.data.token);
             });
         }
     }

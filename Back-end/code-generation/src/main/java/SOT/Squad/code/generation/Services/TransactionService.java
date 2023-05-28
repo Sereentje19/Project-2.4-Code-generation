@@ -1,7 +1,6 @@
 package SOT.Squad.code.generation.Services;
 
 
-import SOT.Squad.code.generation.Models.BankAccount;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,11 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     private List<Transaction> transactions = new ArrayList<>();
+
     public List<Transaction> GetAllTransactions() {
-        return (List<Transaction>)transactionRepository.findAll();
+        return (List<Transaction>) transactionRepository.findAll();
     }
+
     public Transaction GetTransactionById(long id) {
         return transactionRepository.findById(id).get();
     }
