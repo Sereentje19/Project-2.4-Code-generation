@@ -31,6 +31,7 @@
 
 .structure {
   display: flex;
+  width: 100%;
   max-width: 100%;
   margin: 5%;
   flex-direction: column;

@@ -7,12 +7,10 @@ import EmployeeTransactions from '../components/employees/Transaction.vue';
 import CustomerViewTransaction from '../components/customers/ViewTransactions.vue';
 import EmployeeViewTransaction from '../components/employees/ViewTransactions.vue';
 import Accounts from '../components/employees/Accounts.vue';
-
 import AccountInfo from '../components/customers/AccountInfo.vue';
 import CustomerAccountOverview from '../components/customers/AccountOverview.vue';
 import AllAccounts from '../components/employees/AllAccounts.vue';
 import AccountInfoforEmployee from '../components/employees/AccountInfo.vue';
-
 import CustomerCreateTransactions from '../components/customers/CreateTransaction.vue';
 import CustomerWithdrawOrDeposit from '../components/customers/WithdrawOrDeposit.vue';
 import pincode from '../components/customers/pincode.vue';
