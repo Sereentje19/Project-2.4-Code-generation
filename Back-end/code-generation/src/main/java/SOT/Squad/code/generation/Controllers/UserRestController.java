@@ -57,12 +57,11 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-    @GetMapping("/test") //Employee & Customer
+    @GetMapping("/login") //Employee & Customer
     public User getUserOnUsername() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String username = keyProvider.decodeJWT(request.getHeader("Authorization"));
-        User user = userService.getUserByUsername(username);
-        return user;
+        String username = keyProvider.decodeJWT();
+        return userService.getUserByUsername(username);
+
     }
 
     @PutMapping("/{id}") //Employee & Customer

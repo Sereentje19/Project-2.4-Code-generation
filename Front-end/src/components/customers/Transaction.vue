@@ -5,7 +5,7 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>rekeningnummer....</p>
+                    <p>{{ this.user.rekeningnummer }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
@@ -64,15 +64,33 @@ export default {
     },
     data() {
         return {
-            transactions: [],
-            user: [
+            transactions: [
                 {
-                    id: 0,
-                    username: '',
-                    firstname: '',
-                    lastname: '',
-
+                    // id: '',
+                    // description: '',
+                    // amount: '',
+                    // accountFromtype: '',
+                    // accountTotype: '',
+                    // bankAccountFrom: '',
+                    // bankAccountTo: '',
                 }
+            ],
+            user: [
+                // {
+                //     id: 0,
+                //     username: '',
+                //     password: '',
+                //     firstName: '',
+                //     lastName: '',
+                //     phoneNumber: '',
+                //     email: '',
+                //     street: '',
+                //     houseNumber: '',
+                //     postalCode: '',
+                //     city: '',
+                //     bankAccountList: [],
+
+                // }
             ],
         };
     },
@@ -82,7 +100,7 @@ export default {
     methods: {
         getAll() {
             axios
-                .get('users/test', {
+                .get('users/login', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -96,7 +114,7 @@ export default {
                 .catch(error => console.log(error))
 
             // axios
-            //     .get('bankaccounts/' + this.id)
+            //     .get('bankaccounts/' + this.user.bankAccountList)
             //     .then((res) => {
             //         this.transactions = res.data;
 
@@ -106,12 +124,16 @@ export default {
             //     .catch(error => console.log(error))
 
             axios
-                .get('transactions/' + this.id)
+                .get('transactions/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.transactions = res.data;
 
-                    // console.log(res.data)
-                    // console.log(this.transactions.id)
+                    console.log(res.data)
+                    console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
 
