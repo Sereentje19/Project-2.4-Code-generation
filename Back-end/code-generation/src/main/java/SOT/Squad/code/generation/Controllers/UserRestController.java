@@ -4,10 +4,9 @@ import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -106,6 +106,8 @@ public class UserRestController extends Controller {
 
             String jwt = jwtBuilder.compact();
 
+
+
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Successful login.");
             response.put("jwt", jwt);
@@ -113,6 +115,9 @@ public class UserRestController extends Controller {
             response.put("expireAt", expirationMillis);
 
             return response;
+
         }
+
+
 
 }
