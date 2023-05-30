@@ -29,7 +29,7 @@
                 <div class="bodyInfo">
                     <a href="/customer/viewTransaction/1">
                         <div v-for="trans in transactions" class="transaction">
-                            <h1>blabla ... {{ this.transactions.id }}</h1>
+                            <h1>blabla ... {{ this.user.id }}</h1>
                         </div>
                     </a>
                 </div>
@@ -65,6 +65,7 @@ export default {
     data() {
         return {
             transactions: [],
+            user: [],
         };
     },
     mounted() {
@@ -73,18 +74,18 @@ export default {
     methods: {
         getAll() {
             axios
-            //     .get('users/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
+                .get('users/test', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
 
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
+                    console.log(res.data)
+                    console.log(this.user.id)
+                })
+                .catch(error => console.log(error))
 
             // axios
             //     .get('bankaccounts/' + this.id)
@@ -96,19 +97,19 @@ export default {
             //     })
             //     .catch(error => console.log(error))
 
-            axios
-                .get('transactions/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    this.transactions = res.data;
+            // axios
+            //     .get('transactions/' + this.id, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         this.transactions = res.data;
 
-                    // console.log(res.data)
-                    // console.log(this.transactions.id)
-                })
-                .catch(error => console.log(error))
+            //         // console.log(res.data)
+            //         // console.log(this.transactions.id)
+            //     })
+            //     .catch(error => console.log(error))
 
         },
     },

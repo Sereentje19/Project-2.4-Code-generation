@@ -21,8 +21,6 @@ public class BankAccount {
     private String accountType;
     private String currency;
     private double balance;
-    //    @ManyToOne
-//    private User user;
     private long userId;
     private boolean disabled;
 }

@@ -36,14 +36,6 @@
     <footerNavigation />
 </template>
 
-<style>
-.bodyInfoText {
-    font-size: 30px;
-    padding: 10px;
-    padding-left: 30px;
-}
-</style>
-
 
 <script>
 
