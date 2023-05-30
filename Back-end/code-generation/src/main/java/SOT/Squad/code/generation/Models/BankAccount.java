@@ -24,4 +24,5 @@ public class BankAccount {
     //    @ManyToOne
 //    private User user;
     private long userId;
+    private boolean disabled;
 }
