@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -26,8 +25,6 @@ public class User {
     private int houseNumber;
     private String postalCode;
     private String city;
-    //    @OneToMany(mappedBy = "user")
-//    private List<BankAccount> bankAccountList;
     private List<Long> bankAccountList;
 
     @ElementCollection(fetch = FetchType.EAGER)
