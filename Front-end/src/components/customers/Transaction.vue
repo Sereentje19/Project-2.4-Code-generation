@@ -28,8 +28,8 @@
             <div id="extraPadding">
                 <div class="bodyInfo">
                     <a href="/customer/viewTransaction/1">
-                        <div v-for="trans in transactions" class="transaction">
-                            <h1>blabla ... {{ this.user.id }}</h1>
+                        <div v-for="u in user" class="transaction">
+                            <h1>blabla ... {{ this.user.username }}</h1>
                         </div>
                     </a>
                 </div>
@@ -65,7 +65,15 @@ export default {
     data() {
         return {
             transactions: [],
-            user: [],
+            user: [
+                {
+                    id: 0,
+                    username: '',
+                    firstname: '',
+                    lastname: '',
+
+                }
+            ],
         };
     },
     mounted() {
@@ -97,19 +105,15 @@ export default {
             //     })
             //     .catch(error => console.log(error))
 
-            // axios
-            //     .get('transactions/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
+            axios
+                .get('transactions/' + this.id)
+                .then((res) => {
+                    this.transactions = res.data;
 
-            //         // console.log(res.data)
-            //         // console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
+                    console.log(res.data)
+                    console.log(this.transactions.id)
+                })
+                .catch(error => console.log(error))
 
         },
     },
