@@ -110,8 +110,8 @@ export default {
                 .then((res) => {
                     this.transactions = res.data;
 
-                    console.log(res.data)
-                    console.log(this.transactions.id)
+                    // console.log(res.data)
+                    // console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
 
