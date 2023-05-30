@@ -31,6 +31,12 @@
   border-radius: 20px;
 }
 
+.bodyInfoText {
+  font-size: 30px;
+  padding: 10px;
+  padding-left: 30px;
+}
+
 .accountNumber p {
   margin-bottom: 0;
 }
