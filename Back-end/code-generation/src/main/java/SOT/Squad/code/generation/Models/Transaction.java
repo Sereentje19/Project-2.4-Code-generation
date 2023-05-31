@@ -24,4 +24,5 @@ public class Transaction {
     private String accountTotype;
     private String bankAccountFrom;
     private String bankAccountTo;
+    private String betalingskenmerk;
 }

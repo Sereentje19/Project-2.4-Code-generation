@@ -5,24 +5,26 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>van rekeningnummer....</p>
+                    <input type="text" class="input" placeholder="rekening van" v-model="transactions.bankAccountFrom">
                 </div>
                 <div class="accountNumber mr-2">
-                    <p>naar rekeningnummer....</p>
+                    <input type="text" class="input" placeholder="rekening naar" v-model="transactions.bankAccountTo">
                     
                 </div>
             </div>
             <div class="body">
                 <div class="other">
-                    <p>bedrag</p>
+                    <input type="text" class="input" placeholder="bedrag" v-model="transactions.amount">
                 </div>
                 <div class="other">
-                    mededeling
+                    <input type="text" class="input" placeholder="description" v-model="transactions.description">
                 </div>
                 <div class="other">
-                    betalings kenmerk
+                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transactions.betalingskenmerk">
                 </div>
             </div>
+        <button @click="createTransaction">Create transaction</button>
+            
         </div>
     </body>
     <footerNavigation />
@@ -47,13 +49,50 @@ export default {
             footerNavigation
         },
     },
-    name: "transactions",
+    name: "createtransactions",
     props: {
         id: Number,
     },
     data() {
         return {
-            transactions: [],
+            user: [
+                {
+                    id: 0,
+                    username: "",
+                    password: "",
+                    fistName: "",
+                    lastName: "",
+                    phoneNumber: "",
+                    email: "",
+                    street: "",
+                    houseNumber: "",
+                    postalCode: "",
+                    city: "",
+                    bankAccountList: [
+                        // {
+                        //     id: 0,
+                        //     accountNumber: "BE00 0000 0000 0000",
+                        //     saldo: 1000,
+                        //     firstName: "test",
+                        //     lastName: "test",
+                        //     email: "test",
+                        // }
+                    ],
+                }
+            ],
+
+            transactions: [
+                {
+                    id: 0,
+                    description: "",
+                    amount: 0,
+                    accountFromtype: "",
+                    accountTotype: "",
+                    bankAccountFrom: "",
+                    bankAccountTo: "",
+                    betalingskenmerk: "",
+                }
+            ],
         };
     },
     mounted() {
@@ -62,18 +101,36 @@ export default {
     methods: {
         getAll() {
             axios
-            //     .get('users/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
+                .get('users/login', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
 
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
+                    console.log(res.data)
+                    console.log(this.user.id)
+                })
+                .catch(error => console.log(error))
+            },
+
+
+        createTransaction() {
+            axios
+                .post('transactions', this.transactions, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data)
+                    this.$refs.form.reset();
+                    this.$router.push("/home");
+                })
+                .catch((error)=> console.log(error));
+        },
+            
 
             // axios
             //     .get('bankaccounts/' + this.id)
@@ -85,23 +142,10 @@ export default {
             //     })
             //     .catch(error => console.log(error))
 
-            axios
-                .get('transactions/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    this.transactions = res.data;
-
-                    // console.log(res.data)
-                    // console.log(this.transactions.id)
-                })
-                .catch(error => console.log(error))
-
+            
         },
-    },
-};
+    };
+
 </script>
 
 <style>
