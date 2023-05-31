@@ -5,7 +5,7 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>{{ this.user.rekeningnummer }}</p>
+                    <p>{{ this.user.bankAccountList[0] }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
@@ -28,8 +28,8 @@
             <div id="extraPadding">
                 <div class="bodyInfo">
                     <a href="/customer/viewTransaction/1">
-                        <div v-for="u in user" class="transaction">
-                            <h1>blabla ... {{ this.user.username }}</h1>
+                        <div v-for="list in this.user.bankAccountList" class="transaction">
+                            <h1>{{ list }}</h1>
                         </div>
                     </a>
                 </div>
@@ -66,31 +66,40 @@ export default {
         return {
             transactions: [
                 {
-                    // id: '',
-                    // description: '',
-                    // amount: '',
-                    // accountFromtype: '',
-                    // accountTotype: '',
-                    // bankAccountFrom: '',
-                    // bankAccountTo: '',
+                    id: '',
+                    description: '',
+                    amount: '',
+                    accountFromtype: '',
+                    accountTotype: '',
+                    bankAccountFrom: '',
+                    bankAccountTo: '',
                 }
             ],
-            user: [
-                // {
-                //     id: 0,
-                //     username: '',
-                //     password: '',
-                //     firstName: '',
-                //     lastName: '',
-                //     phoneNumber: '',
-                //     email: '',
-                //     street: '',
-                //     houseNumber: '',
-                //     postalCode: '',
-                //     city: '',
-                //     bankAccountList: [],
-
-                // }
+            user:
+            {
+                id: 0,
+                username: '',
+                password: '',
+                firstName: '',
+                lastName: '',
+                phoneNumber: '',
+                email: '',
+                street: '',
+                houseNumber: '',
+                postalCode: '',
+                city: '',
+                bankAccountList: [],
+            },
+            bankAccounts: [
+                {
+                    id: 0,
+                    iban: '',
+                    accountType: '',
+                    currency: '',
+                    balance: '',
+                    userId: '',
+                    disabled: '',
+                }
             ],
         };
     },
@@ -109,12 +118,28 @@ export default {
                     this.user = res.data;
 
                     console.log(res.data)
-                    console.log(this.user.id)
+                    console.log(this.user.bankAccountList[0])
                 })
                 .catch(error => console.log(error))
 
+            for (let i = 0; i < this.user.bankAccountList.length; i++) {
+                axios
+                    .get('bankaccounts/' + this.user.bankAccountList[i])
+                    .then((res) => {
+                        this.bankAccounts = res.data;
+
+                        console.log(res.data)
+                    })
+                    .catch(error => console.log(error))
+            }
+
+
             // axios
-            //     .get('bankaccounts/' + this.user.bankAccountList)
+            //     .get('transactions/' + this.id, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
             //     .then((res) => {
             //         this.transactions = res.data;
 
@@ -122,20 +147,6 @@ export default {
             //         console.log(this.transactions.id)
             //     })
             //     .catch(error => console.log(error))
-
-            axios
-                .get('transactions/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    this.transactions = res.data;
-
-                    console.log(res.data)
-                    console.log(this.transactions.id)
-                })
-                .catch(error => console.log(error))
 
         },
     },
