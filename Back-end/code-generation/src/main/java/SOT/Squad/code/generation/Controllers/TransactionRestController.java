@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.Controllers;
 
+import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class TransactionRestController {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    JWTKeyProvider keyProvider;
 
 
     @PostMapping //Employee & Customer
@@ -30,10 +33,17 @@ public class TransactionRestController {
     public List<Transaction> getTransactionsByIban(@PathVariable String iban) {
         return transactionService.GetTransactionsByIban(iban);
     }
+
     @GetMapping("/{id}") //Employee & Customer
     public Transaction getTransactionById(@PathVariable long id) {
-        return transactionService.GetTransactionById(id);
+        try{
+            keyProvider.decodeJWT();
+            return transactionService.GetTransactionById(id);
+        }catch (Exception e) {
+            return null;
+        }
     }
+
 
     @PutMapping("/{id}") //Employee
     public Transaction updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {

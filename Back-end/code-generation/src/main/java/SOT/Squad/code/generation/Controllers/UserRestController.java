@@ -57,48 +57,12 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-    @GetMapping("/test") //Employee & Customer
-    public String getUserOnUserId() {
-        try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            String username = decodeJWT(request.getHeader("Authorization"));
-            User user = userService.getUserByUsername(username);
-//            return userService.getUser(userId);
-            return "username: " + user.getBankAccountList() + " is logged in";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    @GetMapping("/login") //Employee & Customer
+    public User getUserOnUsername() {
+        String username = keyProvider.decodeJWT();
+        return userService.getUserByUsername(username);
+
     }
-
-    public String decodeJWT(@RequestHeader("Authorization") String authorizationHeader) {
-
-        try {
-            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-                return null;
-            }
-
-            String jwtToken = authorizationHeader.replace("Bearer ", "");
-            String username = Jwts.parser().setSigningKey(keyProvider.getPrivateKey()).parseClaimsJws(jwtToken).getBody().getSubject();
-//            String username = claims.get("username", String.class);
-            return username;
-
-        } catch (JwtException e) {
-            return null;
-        }
-    }
-
-    public void respondWithError(HttpServletResponse response, int httpCode, String message) throws IOException {
-        String errorMessage = "{\"errorMessage\":\"" + message + "\"}";
-        respondWithCode(response, httpCode, errorMessage);
-    }
-
-    private void respondWithCode(HttpServletResponse response, int httpCode, Object data) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setStatus(httpCode);
-        response.getWriter().write(data.toString());
-    }
-
 
     @PutMapping("/{id}") //Employee & Customer
     public User updateUser(@PathVariable long id, @RequestBody User user) {
