@@ -1,9 +1,13 @@
 package SOT.Squad.code.generation.Controllers;
 
+import SOT.Squad.code.generation.Models.BankAccount;
+import SOT.Squad.code.generation.Models.Role;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,14 +28,14 @@ class UserRestControllerTest {
     @Test
     void addUser() {
         assertNotNull(userService.addUser(
-                new User(0,"Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null)
+                new User(0,"Thijs", "Moerland" ,"Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null, List.of(Role.CUSTOMER))
         ),"user was null");
     }
 
     @Test
     void updateUser() {
         assertNotNull(userService.updateUser(
-                new User(1,"Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null)
+                new User(1,"Thijs", "Moerland","Thijs", "Moerland", 064567,"Moerland8","123street",53,"2131GB","hoofddorp", null, List.of(Role.CUSTOMER))
         ),"user was null");
     }
 

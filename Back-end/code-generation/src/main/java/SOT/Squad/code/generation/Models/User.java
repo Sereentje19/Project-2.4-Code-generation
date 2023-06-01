@@ -25,6 +25,7 @@ public class User {
     private int houseNumber;
     private String postalCode;
     private String city;
+
     private List<Long> bankAccountList;
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -1,9 +1,6 @@
 package SOT.Squad.code.generation.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +20,5 @@ public class BankAccount {
     private double balance;
     private long userId;
     private boolean disabled;
+
 }
