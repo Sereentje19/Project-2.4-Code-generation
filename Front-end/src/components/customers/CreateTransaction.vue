@@ -9,7 +9,7 @@
                 </div>
                 <div class="accountNumber mr-2">
                     <input type="text" class="input" placeholder="rekening naar" v-model="transactions.bankAccountTo">
-                    
+
                 </div>
             </div>
             <div class="body">
@@ -23,8 +23,8 @@
                     <input type="text" class="input" placeholder="betalingskenmerk" v-model="transactions.betalingskenmerk">
                 </div>
             </div>
-        <button @click="createTransaction">Create transaction</button>
-            
+            <button @click="createTransaction()">Create transaction</button>
+
         </div>
     </body>
     <footerNavigation />
@@ -55,44 +55,41 @@ export default {
     },
     data() {
         return {
-            user: [
-                {
-                    id: 0,
-                    username: "",
-                    password: "",
-                    fistName: "",
-                    lastName: "",
-                    phoneNumber: "",
-                    email: "",
-                    street: "",
-                    houseNumber: "",
-                    postalCode: "",
-                    city: "",
-                    bankAccountList: [
-                        // {
-                        //     id: 0,
-                        //     accountNumber: "BE00 0000 0000 0000",
-                        //     saldo: 1000,
-                        //     firstName: "test",
-                        //     lastName: "test",
-                        //     email: "test",
-                        // }
-                    ],
-                }
-            ],
-
-            transactions: [
-                {
-                    id: 0,
-                    description: "",
-                    amount: 0,
-                    accountFromtype: "",
-                    accountTotype: "",
-                    bankAccountFrom: "",
-                    bankAccountTo: "",
-                    betalingskenmerk: "",
-                }
-            ],
+            user:
+            {
+                id: 0,
+                username: "",
+                password: "",
+                fistName: "",
+                lastName: "",
+                phoneNumber: "",
+                email: "",
+                street: "",
+                houseNumber: "",
+                postalCode: "",
+                city: "",
+                bankAccountList: [
+                    // {
+                    //     id: 0,
+                    //     accountNumber: "BE00 0000 0000 0000",
+                    //     saldo: 1000,
+                    //     firstName: "test",
+                    //     lastName: "test",
+                    //     email: "test",
+                    // }
+                ],
+            },
+            transactions:
+            {
+                id: 0,
+                description: "",
+                amount: 0,
+                accountFromtype: "",
+                accountTotype: "",
+                bankAccountFrom: "",
+                bankAccountTo: "",
+                betalingskenmerk: "",
+            },
         };
     },
     mounted() {
@@ -113,10 +110,12 @@ export default {
                     console.log(this.user.id)
                 })
                 .catch(error => console.log(error))
-            },
+        },
 
 
         createTransaction() {
+            console.log(this.transactions)
+
             axios
                 .post('transactions', this.transactions, {
                     headers: {
@@ -128,23 +127,23 @@ export default {
                     this.$refs.form.reset();
                     this.$router.push("/home");
                 })
-                .catch((error)=> console.log(error));
+                .catch((error) => console.log(error));
         },
-            
 
-            // axios
-            //     .get('bankaccounts/' + this.id)
-            //     .then((res) => {
-            //         this.transactions = res.data;
 
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
+        // axios
+        //     .get('bankaccounts/' + this.id)
+        //     .then((res) => {
+        //         this.transactions = res.data;
 
-            
-        },
-    };
+        //         console.log(res.data)
+        //         console.log(this.transactions.id)
+        //     })
+        //     .catch(error => console.log(error))
+
+
+    },
+};
 
 </script>
 
