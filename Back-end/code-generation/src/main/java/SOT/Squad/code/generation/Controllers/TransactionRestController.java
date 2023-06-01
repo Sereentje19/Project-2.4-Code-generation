@@ -21,6 +21,7 @@ public class TransactionRestController {
 
     @PostMapping //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
+        keyProvider.decodeJWT();
         return transactionService.AddTransaction(transaction);
     }
 
