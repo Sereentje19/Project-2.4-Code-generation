@@ -34,7 +34,7 @@ public class TransactionRestController {
         return transactionService.GetTransactionsByIban(iban);
     }
 
-    @GetMapping("/{id}") //Employee & Customer
+    @GetMapping("/user/{id}") //Employee & Customer
     public Transaction getTransactionById(@PathVariable long id) {
         try{
             keyProvider.decodeJWT();

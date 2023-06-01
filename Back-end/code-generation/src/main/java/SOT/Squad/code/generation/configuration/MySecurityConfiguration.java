@@ -27,8 +27,8 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/bankaccounts/{id}").permitAll()
-                .requestMatchers("/transactions/{id}").authenticated();
+                .requestMatchers("/bankaccounts/user/{id}").permitAll()
+                .requestMatchers("/transactions/user/{id}").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

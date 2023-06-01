@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-
 @RestController
 @RequestMapping("/bankaccounts")
 public class BankAccountRestController {
@@ -40,7 +39,7 @@ public class BankAccountRestController {
         keyProvider.decodeJWT();
         return bankAccountService.getBankAccountByIban(id);
     }
-    @GetMapping("/{id}") //Employee & Customer
+    @GetMapping("/user/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable String id) {
         keyProvider.decodeJWT();
         return bankAccountService.getBankAccountById(id);

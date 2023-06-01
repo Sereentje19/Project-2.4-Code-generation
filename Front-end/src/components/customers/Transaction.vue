@@ -117,20 +117,17 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
-                    // console.log(this.user.username);
                     this.getBankAccounts();
-                    // this.getTransactions();
-
+                    this.getTransactions();
                 })
                 .catch(error => console.log(error));
         },
         getBankAccounts() {
-            // console.log(this.user);
             for (let i = 0; i < this.user.bankAccountList.length; i++) {
                 console.log(i + "hoi")
 
                 axios
-                    .get('bankaccounts/' + this.user.bankAccountList[i], {
+                    .get('bankaccounts/user/' + this.user.bankAccountList[i], {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("jwt")
                         }
@@ -146,7 +143,7 @@ export default {
         },
         getTransactions() {
             axios
-                .get('transactions/' + this.id, {
+                .get('transactions/user/' + this.id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -155,7 +152,7 @@ export default {
                     this.transactions = res.data;
 
                     console.log(res.data)
-                    console.log(this.transactions.id)
+                    // console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
         },
