@@ -37,9 +37,9 @@ public class DataSeeder implements ApplicationRunner {
         transactionService.AddTransaction(new Transaction(2, "test", 100, "withDraw","deposit", "NL12INHO0123456788", "NL12INHO0123456789"));
         transactionService.AddTransaction(new Transaction(3, "test", 100, "deposit","deposit", "NL12INHO0123456787", "NL12INHO0123456788"));
 
-        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getIban()), List.of(Role.CUSTOMER)));
-        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc1.getIban()), List.of(Role.CUSTOMER)));
-        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getIban()), List.of(Role.CUSTOMER)));
+        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId()), List.of(Role.CUSTOMER)));
+        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc1.getId()), List.of(Role.CUSTOMER)));
+        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId()), List.of(Role.CUSTOMER)));
 
     }
 }

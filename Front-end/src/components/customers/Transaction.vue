@@ -14,7 +14,7 @@
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="testje()">
                             Withdraw
                         </button>
                     </div>
@@ -103,11 +103,12 @@ export default {
             ],
         };
     },
+
     mounted() {
-        this.getAll();
+        this.getUser();
     },
     methods: {
-        getAll() {
+        getUser() {
             axios
                 .get('users/login', {
                     headers: {
@@ -116,38 +117,47 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
+                    // console.log(this.user.username);
+                    this.getBankAccounts();
+                    // this.getTransactions();
 
-                    console.log(res.data)
-                    console.log(this.user.bankAccountList[0])
                 })
-                .catch(error => console.log(error))
-
+                .catch(error => console.log(error));
+        },
+        getBankAccounts() {
+            // console.log(this.user);
             for (let i = 0; i < this.user.bankAccountList.length; i++) {
+                console.log(i + "hoi")
+
                 axios
-                    .get('bankaccounts/' + this.user.bankAccountList[i])
+                    .get('bankaccounts/' + this.user.bankAccountList[i], {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
                     .then((res) => {
                         this.bankAccounts = res.data;
 
                         console.log(res.data)
+                        console.log(bankAccounts)
                     })
                     .catch(error => console.log(error))
             }
+        },
+        getTransactions() {
+            axios
+                .get('transactions/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.transactions = res.data;
 
-
-            // axios
-            //     .get('transactions/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
+                    console.log(res.data)
+                    console.log(this.transactions.id)
+                })
+                .catch(error => console.log(error))
         },
     },
 };

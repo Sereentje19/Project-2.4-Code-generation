@@ -31,6 +31,10 @@ public class BankAccountService {
         return (List<BankAccount>)bankAccountRepository.getAllByIban(iban);
     }
 
+    public BankAccount getBankAccountById(String id) {
+        return (BankAccount)bankAccountRepository.getAllById(id);
+    }
+
     public void deleteBankAccount(String iban) {
         bankAccountRepository.deleteByIban(iban);
     }
