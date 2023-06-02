@@ -1,13 +1,12 @@
 package SOT.Squad.code.generation.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,8 +19,12 @@ public class Transaction {
     private long id;
     private String description;
     private double amount;
-    private String accountFromtype;
-    private String accountTotype;
     private String bankAccountFrom;
     private String bankAccountTo;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AccountType> accountTypeFrom;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AccountType> accountTypeTo;
 }

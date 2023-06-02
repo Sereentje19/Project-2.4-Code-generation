@@ -5,26 +5,27 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>rekeningnummer....</p>
+                    <p><b>{{this.iban}}</b></p>
                 </div>
                 <div class="groupOptions">
                     <div class="option"></div>
                     <div class="option"></div>
                     <div class="option">
                         <button class="btn">
-                            delete
+                            Delete
                         </button>
                     </div>
                 </div>
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div class="bodyInfoText"> transaction number: {{ this.transactions.id }}</div>
-                    <div class="bodyInfoText"> amount: {{ this.transactions.amount }}</div>
-                    <div class="bodyInfoText"> description: {{ this.transactions.description }}</div>
-                    <div class="bodyInfoText"> type: {{ this.transactions.type }}</div>
-                    <div class="bodyInfoText"> bankAccountFrom: {{ this.transactions.bankAccountFrom }}</div>
-                    <div class="bodyInfoText"> bankAccountTo: {{ this.transactions.bankAccountTo }}</div>
+                    <div class="bodyInfoText"> <b>Transaction number:</b> {{ this.transaction.id }}</div>
+                    <div class="bodyInfoText"> <b>Amount:</b> {{ this.transaction.amount }}</div>
+                    <div class="bodyInfoText"> <b>Description:</b> {{ this.transaction.description }}</div>
+                    <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.bankAccountFrom }}</div>
+                    <div v-for="accFrom in this.transaction.accountTypeFrom" class="bodyInfoText"> <b>Account type from:</b> {{ accFrom }} </div>
+                    <div class="bodyInfoText"> <b>Bank account to:</b> {{ this.transaction.bankAccountTo }}</div>
+                    <div v-for="accTo in this.transaction.accountTypeTo" class="bodyInfoText"> <b>Account type to:</b> {{ accTo }}</div>
                 </div>
             </div>
         </div>
@@ -55,15 +56,17 @@ export default {
     name: "transactions",
     props: {
         id: Number,
+        iban: String,
     },
     data() {
         return {
-            transactions:
+            transaction:
             {
                 id: 0,
                 amount: '',
                 description: '',
-                type: '',
+                accountTypeFrom: [],
+                accountTypeTo: [],
                 bankAccountFrom: '',
                 bankAccountTo: ''
             }
@@ -75,16 +78,16 @@ export default {
     methods: {
         getAll() {
             axios
-                .get('transactions/' + this.id, {
+                .get('transactions/info/' + this.id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
-                    this.transactions = res.data;
+                    this.transaction = res.data;
 
                     console.log(res.data)
-                    console.log(this.transactions.id)
+                    console.log(this.transaction.id)
                 })
                 .catch(error => console.log(error))
 

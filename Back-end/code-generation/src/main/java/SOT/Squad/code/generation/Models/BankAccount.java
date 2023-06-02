@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -15,10 +17,13 @@ public class BankAccount {
     @GeneratedValue
     private long id;
     private String iban;
-    private String accountType;
-    private String currency;
     private double balance;
     private long userId;
     private boolean disabled;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Currency> currencies;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AccountType> accountType;
 }

@@ -31,10 +31,15 @@ public class TransactionRestController {
 
     @GetMapping("/{iban}") //Employee & Customer
     public List<Transaction> getTransactionsByIban(@PathVariable String iban) {
-        return transactionService.GetTransactionsByIban(iban);
+        try {
+            keyProvider.decodeJWT();
+            return transactionService.GetTransactionsByIban(iban);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
-    @GetMapping("/user/{id}") //Employee & Customer
+    @GetMapping("/info/{id}") //Employee & Customer
     public Transaction getTransactionById(@PathVariable long id) {
         try{
             keyProvider.decodeJWT();

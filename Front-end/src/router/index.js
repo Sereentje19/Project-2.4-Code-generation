@@ -21,9 +21,9 @@ const router = createRouter({
   routes: [
     { path: '/', component: Login },
     { path: '/home', component: Home },
-    { path: '/customer/transactions/:id' , component: CustomerTransactions, props: true },
+    { path: '/customer/transactions/:iban' , component: CustomerTransactions, props: true },
     { path: '/employee/transactions/:id' , component: EmployeeTransactions, props: true },
-    { path: '/customer/viewTransaction/:id' , component: CustomerViewTransaction, props: true },
+    { path: '/customer/viewTransaction/:iban/:id' , component: CustomerViewTransaction, props: true },
     { path: '/employee/viewTransaction/:id' , component: EmployeeViewTransaction, props: true },
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
     { path: '/customer/accountInfo/:id' , component: AccountInfo, props: true},

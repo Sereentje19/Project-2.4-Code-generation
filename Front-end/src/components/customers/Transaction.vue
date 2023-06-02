@@ -5,16 +5,16 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>{{ this.user.bankAccountList[0] }}</p>
+                    <p>{{ this.iban }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="goToWithDrawOrDeposit()">
                             Deposit
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn" @click="testje()">
+                        <button class="btn" @click="goToWithDrawOrDeposit()">
                             Withdraw
                         </button>
                     </div>
@@ -27,11 +27,17 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <a href="/customer/viewTransaction/1">
-                        <div v-for="list in this.user.bankAccountList" class="transaction">
-                            <h1>{{ list }}</h1>
+                    <div v-for="list in this.transactions" class="transaction" @click="goToViewTransactions(list.id)">
+                        <div id="transactionInfo">
+                            <div>
+                                <h1 v-if="list.bankAccountTo == this.iban">{{ list.bankAccountFrom }}</h1>
+                                <h1 v-else-if="list.bankAccountFrom == this.iban">{{ list.bankAccountTo }}</h1>
+                            </div>
+                            <div>
+                                <h1>{{ list.amount }}</h1>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,11 +45,26 @@
     <footerNavigation />
 </template>
 
+<style>
+#transactionInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: 25px;
+}
+</style>
+
+
 <script>
 
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
+
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
 
 export default {
     header: {
@@ -60,7 +81,7 @@ export default {
     },
     name: "transactions",
     props: {
-        id: Number,
+        iban: String,
     },
     data() {
         return {
@@ -69,8 +90,8 @@ export default {
                     id: '',
                     description: '',
                     amount: '',
-                    accountFromtype: '',
-                    accountTotype: '',
+                    accountTypeFrom: '',
+                    accountTypeTo: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',
                 }
@@ -90,69 +111,32 @@ export default {
                 city: '',
                 bankAccountList: [],
             },
-            bankAccounts: [
-                {
-                    id: 0,
-                    iban: '',
-                    accountType: '',
-                    currency: '',
-                    balance: '',
-                    userId: '',
-                    disabled: '',
-                }
-            ],
         };
     },
-
     mounted() {
         this.getUser();
     },
     methods: {
+        goToWithDrawOrDeposit(iban) {
+            this.$router.push("/customer/withdrawOrDeposit/" + iban);
+        },
+        goToViewTransactions(id) {
+            this.$router.push("/customer/viewTransaction/" + this.iban + "/" + id);
+        },
         getUser() {
             axios
-                .get('users/login', {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('users/login', headerToken)
                 .then((res) => {
                     this.user = res.data;
-                    this.getBankAccounts();
                     this.getTransactions();
                 })
                 .catch(error => console.log(error));
         },
-        getBankAccounts() {
-            for (let i = 0; i < this.user.bankAccountList.length; i++) {
-                console.log(i + "hoi")
-
-                axios
-                    .get('bankaccounts/user/' + this.user.bankAccountList[i], {
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("jwt")
-                        }
-                    })
-                    .then((res) => {
-                        this.bankAccounts = res.data;
-
-                        console.log(res.data)
-                        console.log(bankAccounts)
-                    })
-                    .catch(error => console.log(error))
-            }
-        },
         getTransactions() {
             axios
-                .get('transactions/user/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('transactions/' + this.iban, headerToken)
                 .then((res) => {
                     this.transactions = res.data;
-
-                    console.log(res.data)
-                    // console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
         },
