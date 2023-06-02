@@ -19,7 +19,7 @@ public class TransactionRestController {
     JWTKeyProvider keyProvider;
 
 
-    @PostMapping //Employee & Customer
+    @PostMapping("/post") //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();
         return transactionService.AddTransaction(transaction);

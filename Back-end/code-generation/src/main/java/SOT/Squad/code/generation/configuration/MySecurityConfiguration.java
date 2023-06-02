@@ -28,6 +28,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/login").permitAll()
                 .requestMatchers("/transactions").permitAll()
+                .requestMatchers("/transactions/post").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

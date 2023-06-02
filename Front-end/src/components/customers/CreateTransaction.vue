@@ -114,10 +114,11 @@ export default {
 
 
         createTransaction() {
+            console.log("test");
             console.log(this.transactions)
 
             axios
-                .post('transactions', this.transactions, {
+                .post('transactions/post', this.transactions, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
