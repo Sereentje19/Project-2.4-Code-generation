@@ -27,9 +27,10 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/login").permitAll()
-//                .requestMatchers("/bankaccounts/user/{id}").permitAll()
                 .requestMatchers("/transactions/{iban}").authenticated()
-                .requestMatchers("/transactions/info/{id}").authenticated();
+                .requestMatchers("/transactions/info/{id}").authenticated()
+                .requestMatchers("/bankaccounts/info/{id}").authenticated();
+
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

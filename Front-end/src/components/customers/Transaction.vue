@@ -5,21 +5,21 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>{{ this.iban }}</p>
+                    <p>{{ this.bankAccount.iban }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn" @click="goToWithDrawOrDeposit()">
+                        <button class="btn" @click="WithDrawOrDeposit()">
                             Deposit
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn" @click="goToWithDrawOrDeposit()">
+                        <button class="btn" @click="WithDrawOrDeposit()">
                             Withdraw
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="createTransaction()">
                             Transaction
                         </button>
                     </div>
@@ -27,14 +27,20 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div v-for="list in this.transactions" class="transaction" @click="goToViewTransactions(list.id)">
+                    <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
                         <div id="transactionInfo">
-                            <div>
-                                <h1 v-if="list.bankAccountTo == this.iban">{{ list.bankAccountFrom }}</h1>
-                                <h1 v-else-if="list.bankAccountFrom == this.iban">{{ list.bankAccountTo }}</h1>
+                            <div id="bankAccount">
+                                <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
+                                <h1 v-else-if="list.bankAccountFrom == this.bankAccount.iban">{{ list.bankAccountTo }}</h1>
                             </div>
+
                             <div>
-                                <h1>{{ list.amount }}</h1>
+                                <div id="currencies">
+                                    <div v-for="curr in this.bankAccount.currencies">{{ curr }}</div>
+                                </div>
+                                <div id="amount">
+                                    <h1>{{ list.amount }}</h1>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -45,17 +51,8 @@
     <footerNavigation />
 </template>
 
-<style>
-#transactionInfo {
-    display: flex;
-    justify-content: space-between;
-    padding: 25px;
-}
-</style>
-
 
 <script>
-
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
@@ -81,7 +78,7 @@ export default {
     },
     name: "transactions",
     props: {
-        iban: String,
+        id: Number,
     },
     data() {
         return {
@@ -96,45 +93,43 @@ export default {
                     bankAccountTo: '',
                 }
             ],
-            user:
+            bankAccount:
             {
                 id: 0,
-                username: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                email: '',
-                street: '',
-                houseNumber: '',
-                postalCode: '',
-                city: '',
-                bankAccountList: [],
+                iban: '',
+                balance: '',
+                userId: 0,
+                disabled: '',
+                currencies: [],
+                accountType: [],
             },
         };
     },
     mounted() {
-        this.getUser();
+        this.getBankAccount();
     },
     methods: {
-        goToWithDrawOrDeposit(iban) {
-            this.$router.push("/customer/withdrawOrDeposit/" + iban);
+        WithDrawOrDeposit() {
+            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
         },
-        goToViewTransactions(id) {
-            this.$router.push("/customer/viewTransaction/" + this.iban + "/" + id);
+        createTransaction() {
+            this.$router.push("/customer/createtransactions/" + this.bankAccount.iban);
         },
-        getUser() {
+        ViewTransactions(id) {
+            this.$router.push("/customer/viewTransaction/" + this.bankAccount.iban + "/" + id);
+        },
+        getBankAccount() {
             axios
-                .get('users/login', headerToken)
+                .get('/bankaccounts/info/' + this.id, headerToken)
                 .then((res) => {
-                    this.user = res.data;
+                    this.bankAccount = res.data;
                     this.getTransactions();
                 })
-                .catch(error => console.log(error));
+                .catch(error => console.log(error))
         },
         getTransactions() {
             axios
-                .get('transactions/' + this.iban, headerToken)
+                .get('transactions/' + this.bankAccount.iban, headerToken)
                 .then((res) => {
                     this.transactions = res.data;
                 })

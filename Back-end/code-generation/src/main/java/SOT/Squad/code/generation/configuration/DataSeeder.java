@@ -26,8 +26,8 @@ public class DataSeeder implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         BankAccount bankacc1 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, List.of(Currency.EURO), List.of(AccountType.CURRENT));
-        BankAccount bankacc2 = new BankAccount(2, "NL12INHO0123456788",  2000, 1, false, List.of(Currency.EURO), List.of(AccountType.SAVINGS));
-        BankAccount bankacc3 = new BankAccount(3, "NL12INHO0123456787",  100, 2, false, List.of(Currency.EURO), List.of(AccountType.DEPOSIT));
+        BankAccount bankacc2 = new BankAccount(2, "NL12INHO0123456788",  2000, 1, false, List.of(Currency.POUND), List.of(AccountType.SAVINGS));
+        BankAccount bankacc3 = new BankAccount(3, "NL12INHO0123456787",  100, 2, false, List.of(Currency.DOLLAR), List.of(AccountType.DEPOSIT));
         bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);
         bankAccountService.addBankAccount(bankacc3);

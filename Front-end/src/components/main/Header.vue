@@ -3,8 +3,7 @@
     <!-- <a href="/"><img id="logo" src="../../assets/images/logo.png" alt="Image is not shown"></a> -->
 
     <div class="navbar">
-      <!-- <a class="" id="" href="/">Home</a> -->
-      <!-- <a class="" id="" href="/">Quizes</a> -->
+      <a @click="logout()" class="grey btn" href="/">logout</a>
       <a class="grey btn" href="/">Login</a>
 
     </div>
@@ -15,12 +14,22 @@
 <script>
 export default {
   name: "header",
+
+  methods: {
+  logout(){
+    
+  }
+},
 };
+
+
 </script>
 <style>
 @import '../../assets/css/header.css';
 
 .grey{
-  color: grey;
+  color: black;
+  background-color: rgb(136, 136, 136);
+  margin-left: 20px;
 }
 </style>

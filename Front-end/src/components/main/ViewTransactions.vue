@@ -10,9 +10,9 @@
                 <div class="groupOptions">
                     <div class="option"></div>
                     <div class="option"></div>
-                    <div class="option">
-                        <button class="btn">
-                            Delete
+                    <div v-for="role in this.user.roles" class="option">
+                        <button v-if="role == 'EMPLOYEE'" class="btn">
+                            Delete 
                         </button>
                     </div>
                 </div>
@@ -35,10 +35,15 @@
 
 
 <script>
-
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
+
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
 
 export default {
     header: {
@@ -69,25 +74,43 @@ export default {
                 accountTypeTo: [],
                 bankAccountFrom: '',
                 bankAccountTo: ''
-            }
+            },
+            user:
+            {
+                id: 0,
+                username: '',
+                password: '',
+                firstName: '',
+                lastName: '',
+                phoneNumber: '',
+                email: '',
+                street: '',
+                houseNumber: '',
+                postalCode: '',
+                city: '',
+                bankAccountList: [],
+                roles: [],
+            },
         };
     },
     mounted() {
-        this.getAll();
+        this.getUser();
     },
     methods: {
-        getAll() {
+        getUser() {
             axios
-                .get('transactions/info/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
+                .get('users/login', headerToken)
+                .then((res) => {
+                    this.user = res.data;
+                    this.getTransaction();
                 })
+                .catch(error => console.log(error));
+        },
+        getTransaction() {
+            axios
+                .get('transactions/info/' + this.id, headerToken)
                 .then((res) => {
                     this.transaction = res.data;
-
-                    console.log(res.data)
-                    console.log(this.transaction.id)
                 })
                 .catch(error => console.log(error))
 
