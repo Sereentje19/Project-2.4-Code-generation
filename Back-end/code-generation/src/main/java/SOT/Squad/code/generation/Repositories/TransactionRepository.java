@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.Repositories;
 
+import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,10 +11,16 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    //Transaction findByBankAccount(BankAccount bankAccountFrom);
-//    @Query(value = "SELECT * FROM transactions WHERE BANK_ACCOUNT_FROM = ?1 OR BANK_ACCOUNT_TO = ?1", nativeQuery = true)
-//    List<Transaction> getByIban(String iban);
-
     List<Transaction> findByBankAccountFromOrBankAccountTo(String bankAccountFrom, String bankAccountTo);
+//    List<Transaction> findByBankAccountFromOrBankAccountToAndAccountType(String bankAccountFrom, String bankAccountTo, String accountType);
 
+//    List<Transaction> findByBankAccountFromAndAccountTypeFrom(
+//            String bankAccountFrom, List<AccountType> accountTypeFrom);
+
+    List<Transaction> findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(
+            String bankAccountTo, List<AccountType> accountTypeTo, String bankAccountFrom, List<AccountType> accountTypeFrom);
+
+
+//    List<Transaction> findByBankAccountFromOrBankAccountToAndAccountTypeIn(
+//            String bankAccountFrom, String bankAccountTo, List<AccountType> accountTypes);
 }

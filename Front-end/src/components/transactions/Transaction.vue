@@ -58,14 +58,12 @@
 
 
 <style>
-
-#inputField{
+#inputField {
     border-color: black;
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
 }
-
 </style>
 
 <script>
@@ -165,12 +163,13 @@ export default {
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();
+
                 })
                 .catch(error => console.log(error))
         },
         getTransactions() {
             axios
-                .get('transactions/' + this.bankAccount.iban, headerToken)
+                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], headerToken)
                 .then((res) => {
                     this.transactions = res.data;
                 })
