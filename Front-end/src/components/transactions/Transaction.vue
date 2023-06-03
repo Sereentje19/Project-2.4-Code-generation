@@ -26,13 +26,13 @@
                     <div v-if="role == 'CUSTOMER'" class="option"></div>
                     <div v-if="role == 'CUSTOMER'" class="option"></div>
                     <div v-if="role == 'CUSTOMER'" class="option">
-                        <input type="text" id="inputField" placeholder="Search">
+                        <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
                     </div>
                 </div>
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
+                    <div v-for="list in filteredTransactions" class="transaction" @click="ViewTransactions(list.id)">
                         <div id="transactionInfo">
                             <div id="bankAccount">
                                 <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
@@ -133,6 +133,7 @@ export default {
                 bankAccountList: [],
                 roles: [],
             },
+            searchQuery: ''
         };
     },
     mounted() {
@@ -176,6 +177,25 @@ export default {
                 .catch(error => console.log(error))
         },
     },
+    computed: {
+        filteredTransactions() {
+            const searchQuery = this.searchQuery.toLowerCase();
+
+            return this.transactions.filter(transaction => {
+                const fieldsToCheck = [
+                    'amount',
+                    'bankAccountFrom',
+                    'bankAccountTo'
+                ];
+
+                return fieldsToCheck.some(field => {
+                    const fieldValue = transaction[field];
+                    return fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery);
+                });
+            });
+        }
+    },
+
 };
 </script>
 
