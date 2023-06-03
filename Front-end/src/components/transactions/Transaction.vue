@@ -9,12 +9,12 @@
                 </div>
                 <div v-for="role in this.user.roles" class="groupOptions">
                     <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="WithDrawOrDeposit()">
+                        <button class="btn" @click="withDrawOrDeposit()">
                             Deposit
                         </button>
                     </div>
                     <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="WithDrawOrDeposit()">
+                        <button class="btn" @click="withDrawOrDeposit()">
                             Withdraw
                         </button>
                     </div>
@@ -32,7 +32,7 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div v-for="list in filteredTransactions" class="transaction" @click="ViewTransactions(list.id)">
+                    <div v-for="list in filteredTransactions" class="transaction" @click="viewTransactions(list.id)">
                         <div id="transactionInfo">
                             <div id="bankAccount">
                                 <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
@@ -141,14 +141,14 @@ export default {
         this.getBankAccount();
     },
     methods: {
-        WithDrawOrDeposit() {
-            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
+        withDrawOrDeposit() {
+            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.iban));
         },
         createTransaction() {
-            this.$router.push("/customer/createtransactions/" + this.bankAccount.iban);
+            this.$router.push("/customer/createtransactions/" + btoa(this.bankAccount.iban));
         },
-        ViewTransactions(id) {
-            this.$router.push("/viewTransaction/" + this.bankAccount.iban + "/" + id);
+        viewTransactions(id) {
+            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
         },
         getUser() {
             axios
@@ -159,8 +159,10 @@ export default {
                 .catch(error => console.log(error));
         },
         getBankAccount() {
+            const decodedId = atob(this.id);
+            
             axios
-                .get('/bankaccounts/info/' + this.id, headerToken)
+                .get('/bankaccounts/info/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();
