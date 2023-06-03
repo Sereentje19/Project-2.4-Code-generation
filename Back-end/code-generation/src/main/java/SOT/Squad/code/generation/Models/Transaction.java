@@ -21,10 +21,10 @@ public class Transaction {
     private double amount;
     private String bankAccountFrom;
     private String bankAccountTo;
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountTypeFrom;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountTypeTo;
+    private String betalingskenmerk;
 }
