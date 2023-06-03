@@ -26,7 +26,7 @@ public class MySecurityConfiguration {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/users/login").permitAll() 
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
                 .requestMatchers("/transactions/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()

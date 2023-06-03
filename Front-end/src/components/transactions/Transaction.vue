@@ -164,7 +164,6 @@ export default {
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();
-
                 })
                 .catch(error => console.log(error))
         },
