@@ -1,12 +1,11 @@
 package SOT.Squad.code.generation.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,9 +17,13 @@ public class BankAccount {
     @GeneratedValue
     private long id;
     private String iban;
-    private String accountType;
-    private String currency;
     private double balance;
     private long userId;
     private boolean disabled;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Currency> currencies;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AccountType> accountType;
 }

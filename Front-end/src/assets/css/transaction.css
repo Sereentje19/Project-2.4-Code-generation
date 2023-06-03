@@ -19,6 +19,24 @@
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
+#transactionInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+#bankAccount{
+  padding: 25px;
+}
+
+#currencies{
+  padding-top: 10px;
+  padding-right: 25px;
+}
+
+#amount{
+  padding-right: 25px;
+}
+
 .small{
   height: fit-content;
 }

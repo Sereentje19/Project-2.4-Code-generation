@@ -42,7 +42,7 @@ export default {
     },
     name: "transactions",
     props: {
-        id: Number,
+        iban: String,
     },
     data() {
         return {

@@ -27,6 +27,9 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/login").permitAll()
+                .requestMatchers("/transactions/{iban}").authenticated()
+                .requestMatchers("/transactions/info/{id}").authenticated()
+                .requestMatchers("/bankaccounts/info/{id}").authenticated();
                 .requestMatchers("/transactions").permitAll()
                 .requestMatchers("/transactions/post").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();

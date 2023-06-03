@@ -4,8 +4,7 @@ import Login from '../components/main/Login.vue';
 import Home from '../components/main/Home.vue';
 import CustomerTransactions from '../components/customers/Transaction.vue';
 import EmployeeTransactions from '../components/employees/Transaction.vue';
-import CustomerViewTransaction from '../components/customers/ViewTransactions.vue';
-import EmployeeViewTransaction from '../components/employees/ViewTransactions.vue';
+import ViewTransaction from '../components/main/ViewTransactions.vue';
 import Accounts from '../components/employees/Accounts.vue';
 import AccountInfo from '../components/customers/AccountInfo.vue';
 import CustomerAccountOverview from '../components/customers/AccountOverview.vue';
@@ -23,8 +22,7 @@ const router = createRouter({
     { path: '/home', component: Home },
     { path: '/customer/transactions/:id' , component: CustomerTransactions, props: true },
     { path: '/employee/transactions/:id' , component: EmployeeTransactions, props: true },
-    { path: '/customer/viewTransaction/:id' , component: CustomerViewTransaction, props: true },
-    { path: '/employee/viewTransaction/:id' , component: EmployeeViewTransaction, props: true },
+    { path: '/customer/viewTransaction/:iban/:id' , component: ViewTransaction, props: true },
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
     { path: '/customer/accountInfo/:id' , component: AccountInfo, props: true},
     { path: '/customer/customerAccountOverview/:id' , component: CustomerAccountOverview, props: true},

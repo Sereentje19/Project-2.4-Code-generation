@@ -5,21 +5,21 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>{{ this.user.rekeningnummer }}</p>
+                    <p>{{ this.bankAccount.iban }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="WithDrawOrDeposit()">
                             Deposit
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="WithDrawOrDeposit()">
                             Withdraw
                         </button>
                     </div>
                     <div class="option">
-                        <button class="btn">
+                        <button class="btn" @click="createTransaction()">
                             Transaction
                         </button>
                     </div>
@@ -27,11 +27,23 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <a href="/customer/viewTransaction/1">
-                        <div v-for="u in user" class="transaction">
-                            <h1>blabla ... {{ this.user.username }}</h1>
+                    <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
+                        <div id="transactionInfo">
+                            <div id="bankAccount">
+                                <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
+                                <h1 v-else-if="list.bankAccountFrom == this.bankAccount.iban">{{ list.bankAccountTo }}</h1>
+                            </div>
+
+                            <div>
+                                <div id="currencies">
+                                    <div v-for="curr in this.bankAccount.currencies">{{ curr }}</div>
+                                </div>
+                                <div id="amount">
+                                    <h1>{{ list.amount }}</h1>
+                                </div>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,11 +51,17 @@
     <footerNavigation />
 </template>
 
-<script>
 
+<script>
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
+
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
 
 export default {
     header: {
@@ -66,77 +84,56 @@ export default {
         return {
             transactions: [
                 {
-                    // id: '',
-                    // description: '',
-                    // amount: '',
-                    // accountFromtype: '',
-                    // accountTotype: '',
-                    // bankAccountFrom: '',
-                    // bankAccountTo: '',
+                    id: '',
+                    description: '',
+                    amount: '',
+                    accountTypeFrom: '',
+                    accountTypeTo: '',
+                    bankAccountFrom: '',
+                    bankAccountTo: '',
                 }
             ],
-            user: [
-                // {
-                //     id: 0,
-                //     username: '',
-                //     password: '',
-                //     firstName: '',
-                //     lastName: '',
-                //     phoneNumber: '',
-                //     email: '',
-                //     street: '',
-                //     houseNumber: '',
-                //     postalCode: '',
-                //     city: '',
-                //     bankAccountList: [],
-
-                // }
-            ],
+            bankAccount:
+            {
+                id: 0,
+                iban: '',
+                balance: '',
+                userId: 0,
+                disabled: '',
+                currencies: [],
+                accountType: [],
+            },
         };
     },
     mounted() {
-        this.getAll();
+        this.getBankAccount();
     },
     methods: {
-        getAll() {
+        WithDrawOrDeposit() {
+            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
+        },
+        createTransaction() {
+            this.$router.push("/customer/createtransactions/" + this.bankAccount.iban);
+        },
+        ViewTransactions(id) {
+            this.$router.push("/customer/viewTransaction/" + this.bankAccount.iban + "/" + id);
+        },
+        getBankAccount() {
             axios
-                .get('users/login', {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('/bankaccounts/info/' + this.id, headerToken)
                 .then((res) => {
-                    this.user = res.data;
-
-                    console.log(res.data)
-                    console.log(this.user.id)
+                    this.bankAccount = res.data;
+                    this.getTransactions();
                 })
                 .catch(error => console.log(error))
-
-            // axios
-            //     .get('bankaccounts/' + this.user.bankAccountList)
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
+        },
+        getTransactions() {
             axios
-                .get('transactions/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('transactions/' + this.bankAccount.iban, headerToken)
                 .then((res) => {
                     this.transactions = res.data;
-
-                    console.log(res.data)
-                    console.log(this.transactions.id)
                 })
                 .catch(error => console.log(error))
-
         },
     },
 };
