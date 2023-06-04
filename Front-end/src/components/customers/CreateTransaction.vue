@@ -30,43 +30,37 @@
     <footerNavigation />
 
     <Transition name="modal">
-      <div class="modal-mask" id="test">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-            <div class="modal-header">
-              <slot name="header">Please enter your pincode</slot>
+        <div class="modal-mask" id="test">
+            <div class="modal-wrapper">
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <slot name="header">Please enter your pincode</slot>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="text" class="input" v-model="pincode">
+                    </div>
+
+                    <div class="modal-footer">
+                        <slot name="footer">
+                            <button class="modal-default-button" @click="closePincode()">close</button>
+                            <button class="modal-default-button" @click="checkPincode()">OK</button>
+                        </slot>
+                    </div>
+                </div>
             </div>
-  
-            <div class="modal-body">
-              <input type="text" class="input" v-model="pincode">
-            </div>
-  
-            <div class="modal-footer">
-              <slot name="footer">
-                  <button
-                  class="modal-default-button"
-                  @click="closePincode()"
-                >close</button>
-                <button
-                  class="modal-default-button"
-                  @click="checkPincode()"
-                >OK</button>
-              </slot>
-            </div>
-          </div>
         </div>
-      </div>
     </Transition>
-  </template>
+</template>
   
-  <style>
-  .input{
-      max-width: 100%;
-      border: 1px solid black !important;
-  }
-  
-  .modal-mask {
-      display: none;
+<style>
+.input {
+    max-width: 100%;
+    border: 1px solid black !important;
+}
+
+.modal-mask {
+    display: none;
     position: fixed;
     z-index: 9998;
     top: 0;
@@ -75,14 +69,14 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s ease;
-  }
-  
-  .modal-wrapper {
+}
+
+.modal-wrapper {
     display: table-cell;
     vertical-align: middle;
-  }
-  
-  .modal-container {
+}
+
+.modal-container {
     width: 300px;
     margin: 0px auto;
     padding: 20px 30px;
@@ -90,22 +84,22 @@
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
-  }
-  
-  .modal-header h3 {
+}
+
+.modal-header h3 {
     margin-top: 0;
     color: #42b983;
-  }
-  
-  .modal-body {
+}
+
+.modal-body {
     margin: 20px 0;
-  }
-  
-  .modal-default-button {
+}
+
+.modal-default-button {
     float: right;
-  }
-  
-  /*
+}
+
+/*
    * The following styles are auto-applied to elements with
    * transition="modal" when their visibility is toggled
    * by Vue.js.
@@ -113,21 +107,21 @@
    * You can easily play with the modal transition by editing
    * these styles.
    */
-  
-  .modal-enter-from {
+
+.modal-enter-from {
     opacity: 0;
-  }
-  
-  .modal-leave-to {
+}
+
+.modal-leave-to {
     opacity: 0;
-  }
-  
-  .modal-enter-from .modal-container,
-  .modal-leave-to .modal-container {
+}
+
+.modal-enter-from .modal-container,
+.modal-leave-to .modal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
-  }
-  </style>
+}
+</style>
 
 <script>
 
@@ -206,6 +200,7 @@ export default {
                 .then((res) => {
                     this.user = res.data;
 
+
                     console.log(res.data)
                     console.log(this.user.id)
                 })
@@ -238,21 +233,17 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         checkPincode() {
-          console.log(this.pincode)
             axios
-            .get('users/pincode' , this.pincode
-            , {
-              headers: {
-                  Authorization: "Bearer " + localStorage.getItem("jwt")
-              }
-            }
-            )
-            .then((res) => {
-              console.log(res.data)
-              // this.$router.push("/home");
-            })
-            .catch((error) => console.log(error));
-
+                .get('users/pincode/' + this.pincode, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data)
+                    // this.$router.push("/home");
+                })
+                .catch((error) => console.log(error));
         },
 
 
