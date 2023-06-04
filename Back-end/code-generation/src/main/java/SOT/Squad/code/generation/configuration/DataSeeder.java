@@ -44,7 +44,7 @@ public class DataSeeder implements ApplicationRunner {
         transactionService.AddTransaction(new Transaction(10, "test", 10.20,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
 
         userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER)));
-        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER)));
+        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.EMPLOYEE)));
         userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER)));
 
     }
