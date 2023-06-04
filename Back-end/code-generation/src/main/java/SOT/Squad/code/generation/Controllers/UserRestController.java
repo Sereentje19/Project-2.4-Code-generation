@@ -71,11 +71,10 @@ public class UserRestController extends Controller {
         return userService.updateUser(user);
     }
 
-    @GetMapping("/pincode") //Employee & Customer
-    public User checkPincode(@RequestBody String pincode) {
-
+    @GetMapping("/pincode/{userId}") //Employee & Customer
+    public User checkPincode(@PathVariable long userId, @RequestBody String pincode) {
         keyProvider.decodeJWT();
-        return userService.checkPincode(pincode);
+        return userService.checkPincode(pincode, userId);
     }
 
 

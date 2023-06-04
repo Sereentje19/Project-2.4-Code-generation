@@ -240,7 +240,7 @@ export default {
         checkPincode() {
           console.log(this.pincode)
             axios
-            .get('users/pincode' , this.pincode
+            .get('users/pincode/'+3 , this.pincode
             , {
               headers: {
                   Authorization: "Bearer " + localStorage.getItem("jwt")

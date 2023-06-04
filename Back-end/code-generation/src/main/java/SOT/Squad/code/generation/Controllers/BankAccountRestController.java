@@ -50,4 +50,5 @@ public class BankAccountRestController {
     public void deleteBankAccount(@PathVariable String iban) {
         bankAccountService.deleteBankAccount(iban);
     }
+
 }

@@ -5,17 +5,24 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>van rekeningnummer....</p>
+                    <input type="text" class="input" placeholder="van rekeningnummer...." v-model="rekening">
                 </div>
             </div>
             <div class="body">
                 <div class="other">
-                    <p>bedrag</p>
+                    <input type="number" class="input" placeholder="bedrag" v-model="bedrag">
                 </div>
                 <div class="other">
-                    mededeling
+                    <input type="text" class="input" placeholder="description" v-model="omscrijving">
+                </div>
+                <div class="other">
+                    <select name="choice" v-model="choice">
+                        <option value="withdraw">withdraw</option>
+                        <option value="deposit">deposit</option>
+                    </select>
                 </div>
             </div>
+            <button @click="showPincode()">Create transaction</button>
         </div>
     </body>
     <footerNavigation />
@@ -46,7 +53,10 @@ export default {
     },
     data() {
         return {
-            transactions: [],
+            rekening: "",
+            bedrag: 0,
+            omscrijving: "",
+            choice: "",
         };
     },
     mounted() {
@@ -99,4 +109,8 @@ export default {
 
 <style>
 @import '../../assets/css/transaction.css';
+
+.structure{
+    max-width: 90%;
+}
 </style>

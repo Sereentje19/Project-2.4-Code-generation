@@ -32,7 +32,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/transactions").permitAll()
                 .requestMatchers("/transactions/post").permitAll()
-                .requestMatchers("/users/pincode").permitAll()
+                .requestMatchers("/users/pincode/{userId}").permitAll()
                 .requestMatchers("/users").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();
 
