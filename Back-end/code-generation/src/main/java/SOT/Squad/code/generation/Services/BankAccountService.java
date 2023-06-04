@@ -22,8 +22,8 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public BankAccount updateBankAccount(BankAccount bankAccount, String iban) {
-        bankAccount.setIban(iban);
+    public BankAccount updateBankAccount(BankAccount bankAccount, long id) {
+        bankAccount.setId(id);
         return bankAccountRepository.save(bankAccount);
     }
 
@@ -31,11 +31,12 @@ public class BankAccountService {
         return (List<BankAccount>)bankAccountRepository.getAllByIban(iban);
     }
 
-    public BankAccount getBankAccountById(String id) {
+    public BankAccount getBankAccountById(long id) {
         return (BankAccount)bankAccountRepository.getAllById(id);
     }
 
-    public void deleteBankAccount(String iban) {
-        bankAccountRepository.deleteByIban(iban);
+    public void deleteBankAccount(BankAccount bankAccount) {
+        bankAccount.setDisabled(true);
+        bankAccountRepository.save(bankAccount);
     }
 }

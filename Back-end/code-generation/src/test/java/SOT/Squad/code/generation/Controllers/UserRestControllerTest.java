@@ -138,7 +138,6 @@ public class UserRestControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 
-
     @Test
     public void testUpdateUser() throws Exception {
         User user = new User();
