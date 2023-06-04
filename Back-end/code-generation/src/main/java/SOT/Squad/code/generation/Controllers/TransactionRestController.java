@@ -21,7 +21,7 @@ public class TransactionRestController {
     JWTKeyProvider keyProvider;
 
 //    @RequestBody Transaction transaction
-    @PostMapping("/post") //Employee & Customer
+    @PostMapping //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();
         return transactionService.AddTransaction(transaction);
@@ -32,17 +32,7 @@ public class TransactionRestController {
         return transactionService.GetAllTransactions();
     }
 
-    @GetMapping("/{iban}") //Employee & Customer
-    public List<Transaction> getTransactionsByIban(@PathVariable String iban) {
-        try {
-            keyProvider.decodeJWT();
-            return transactionService.GetTransactionsByIban(iban);
-        }catch (Exception e) {
-            return null;
-        }
-    }
-
-    @GetMapping("/info/{id}") //Employee & Customer
+    @GetMapping("/{id}") //Employee & Customer
     public Transaction getTransactionById(@PathVariable long id) {
         try{
             keyProvider.decodeJWT();

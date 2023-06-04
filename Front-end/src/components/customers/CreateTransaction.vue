@@ -192,7 +192,7 @@ export default {
     methods: {
         getAll() {
             axios
-                .get('users/login', {
+                .get('users/current', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -217,7 +217,7 @@ export default {
         postTransaction(){
           console.log(this.transaction)
           axios
-                .post('transactions/post',this.transaction, {
+                .post('transactions',this.transaction, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }

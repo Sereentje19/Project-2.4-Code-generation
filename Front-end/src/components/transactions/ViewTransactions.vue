@@ -99,7 +99,7 @@ export default {
     methods: {
         getUser() {
             axios
-                .get('users/login', headerToken)
+                .get('users/current', headerToken)
                 .then((res) => {
                     this.user = res.data;
                     this.getTransaction();
@@ -108,7 +108,7 @@ export default {
         },
         getTransaction() {
             axios
-                .get('transactions/info/' + this.id, headerToken)
+                .get('transactions/' + this.id, headerToken)
                 .then((res) => {
                     this.transaction = res.data;
                 })

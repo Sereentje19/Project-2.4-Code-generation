@@ -152,7 +152,7 @@ export default {
         },
         getUser() {
             axios
-                .get('users/login', headerToken)
+                .get('users/current', headerToken)
                 .then((res) => {
                     this.user = res.data;
                 })
@@ -160,7 +160,7 @@ export default {
         },
         getBankAccount() {
             axios
-                .get('/bankaccounts/info/' + this.id, headerToken)
+                .get('/bankaccounts/' + this.id, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();

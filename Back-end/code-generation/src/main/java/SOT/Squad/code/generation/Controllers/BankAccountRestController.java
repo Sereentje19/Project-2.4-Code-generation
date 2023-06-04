@@ -29,18 +29,12 @@ public class BankAccountRestController {
         return bankAccountService.addBankAccount(bankAccount);
     }
 
-    @PutMapping("/{iban}") //Employee & Customer
-    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
-        return bankAccountService.updateBankAccount(bankAccount, iban);
+    @PutMapping("/{id}") //Employee & Customer
+    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable long id) {
+        return bankAccountService.updateBankAccount(bankAccount, id);
     }
 
-//    @GetMapping("/{iban}") //Employee & Customer
-//    public List<BankAccount> getAccountByIban(@PathVariable String iban) {
-//        keyProvider.decodeJWT();
-//        return bankAccountService.getBankAccountByIban(iban);
-//    }
-
-    @GetMapping("/info/{id}") //Employee & Customer
+    @GetMapping("/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable long id) {
         keyProvider.decodeJWT();
         return bankAccountService.getBankAccountById(id);

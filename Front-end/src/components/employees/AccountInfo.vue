@@ -75,7 +75,7 @@ export default {
   methods: {
     fetchUser() {
       axios
-        .get('/users/login')
+        .get('/users/current')
         .then((response) => {
           this.user = response.data;
           this.editedUser = { ...this.user };

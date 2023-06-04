@@ -22,8 +22,8 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public BankAccount updateBankAccount(BankAccount bankAccount, String iban) {
-        bankAccount.setIban(iban);
+    public BankAccount updateBankAccount(BankAccount bankAccount, long id) {
+        bankAccount.setId(id);
         return bankAccountRepository.save(bankAccount);
     }
 

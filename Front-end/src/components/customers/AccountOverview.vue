@@ -49,7 +49,7 @@ export default {
   methods: {
     getAll() {
       axios
-        .get('users/login', {
+        .get('users/current', {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt")
           }
