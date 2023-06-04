@@ -220,7 +220,7 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         postTransaction(){
-          console.log(this.transaction)
+          console.log(this.transaction);
           axios
                 .post('transactions',this.transaction, {
                     headers: {
@@ -234,6 +234,7 @@ export default {
                 .catch((error) => console.log(error));
         },
         checkPincode() {
+            console.log(this.pincode);
             axios
                 .get('users/pincode/' + this.pincode, {
                     headers: {

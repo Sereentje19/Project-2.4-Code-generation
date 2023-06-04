@@ -175,16 +175,6 @@ export default {
         this.getBankAccount();
     },
     methods: {
-        getAll() {
-            
-           axios
-                .get('/bankaccounts/' + this.id, headerToken)
-                .then((res) => {
-                    this.bankaccount = res.data;
-                    console.log(this.bankaccount);
-                })
-                .catch(error => console.log(error))
-        },
         getBankAccount() {
             axios
                 .get('/bankaccounts/' + this.id, headerToken)
@@ -202,11 +192,7 @@ export default {
         },
         checkPincode() {
             axios
-                .get('users/pincode/' + this.pincode, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('users/pincode/' + this.pincode, headerToken)
                 .then((res) => {
                     console.log(res.data)
                     this.withdrawOrDeposit();
