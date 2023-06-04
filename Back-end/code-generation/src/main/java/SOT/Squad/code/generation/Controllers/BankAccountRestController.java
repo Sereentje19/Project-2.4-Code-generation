@@ -24,16 +24,6 @@ public class BankAccountRestController {
         return bankAccountService.getAllBankAccounts();
     }
 
-    @PostMapping //Employee & Customer
-    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
-        return bankAccountService.addBankAccount(bankAccount);
-    }
-
-    @PutMapping("/{id}") //Employee & Customer
-    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable long id) {
-        return bankAccountService.updateBankAccount(bankAccount, id);
-    }
-
     @GetMapping("/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable long id) {
         keyProvider.decodeJWT();
@@ -47,9 +37,13 @@ public class BankAccountRestController {
         return true;
     }
 
-    @PutMapping("changebalance/{id}") //Employee
-    public BankAccount changeBalance(@RequestBody BankAccount bankAccount, @PathVariable long id) {
-        keyProvider.decodeJWT();
+    @PostMapping //Employee & Customer
+    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+        return bankAccountService.addBankAccount(bankAccount);
+    }
+
+    @PutMapping("/{id}") //Employee & Customer
+    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable long id) {
         return bankAccountService.updateBankAccount(bankAccount, id);
     }
 
