@@ -26,11 +26,13 @@ public class MySecurityConfiguration {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/transactions/{iban}").authenticated()
+                .requestMatchers("/users/login").permitAll() 
+                .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
                 .requestMatchers("/transactions/info/{id}").authenticated()
-                .requestMatchers("/bankaccounts/info/{id}").authenticated();
-
+                .requestMatchers("/bankaccounts/info/{id}").authenticated()
+                .requestMatchers("/transactions").permitAll()
+                .requestMatchers("/transactions/post").permitAll()
+                .requestMatchers("/transactions/{id}").authenticated();
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
