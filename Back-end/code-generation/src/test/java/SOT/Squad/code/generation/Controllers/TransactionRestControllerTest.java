@@ -19,9 +19,6 @@ import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

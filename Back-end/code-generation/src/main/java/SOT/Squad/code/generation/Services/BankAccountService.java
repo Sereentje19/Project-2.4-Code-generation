@@ -31,7 +31,7 @@ public class BankAccountService {
         return (List<BankAccount>)bankAccountRepository.getAllByIban(iban);
     }
 
-    public BankAccount getBankAccountById(String id) {
+    public BankAccount getBankAccountById(long id) {
         return (BankAccount)bankAccountRepository.getAllById(id);
     }
 

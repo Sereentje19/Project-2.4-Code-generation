@@ -29,24 +29,24 @@ public class BankAccountRestController {
         return bankAccountService.addBankAccount(bankAccount);
     }
 
-//    @PutMapping("/{iban}") //Employee & Customer
-//    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
-//        return bankAccountService.updateBankAccount(bankAccount, iban);
-//    }
-
-    @GetMapping("/{iban}") //Employee & Customer
-    public List<BankAccount> getAccountByIban(@PathVariable String iban) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountByIban(iban);
+    @PutMapping("/{iban}") //Employee & Customer
+    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
+        return bankAccountService.updateBankAccount(bankAccount, iban);
     }
 
+//    @GetMapping("/{iban}") //Employee & Customer
+//    public List<BankAccount> getAccountByIban(@PathVariable String iban) {
+//        keyProvider.decodeJWT();
+//        return bankAccountService.getBankAccountByIban(iban);
+//    }
+
     @GetMapping("/info/{id}") //Employee & Customer
-    public BankAccount getAccountById(@PathVariable String id) {
+    public BankAccount getAccountById(@PathVariable long id) {
         keyProvider.decodeJWT();
         return bankAccountService.getBankAccountById(id);
     }
 
-    @PutMapping("/delete") //Employee
+    @PutMapping //Employee
     public boolean deleteBankAccount(@RequestBody BankAccount bankAccount) {
         keyProvider.decodeJWT();
         bankAccountService.deleteBankAccount(bankAccount);

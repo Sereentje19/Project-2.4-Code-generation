@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface BankAccountRepository extends CrudRepository<BankAccount, Long> {
     //    public Iterable<BankAccount> getAllByUserId(long userId);
     public Iterable<BankAccount> getAllByIban(String iban);
-    public BankAccount getAllById(String id);
+    public BankAccount getAllById(long id);
 //        @Modifying
 //        @Query( value = "UPDATE BankAccount e SET e.disabled = true WHERE e.id = :id", nativeQuery = true)
 //        void setDisabledTrueById(@Param("id") long id);
