@@ -3,126 +3,109 @@
     <h2>Personal Details</h2>
     <div>
       <label>First Name:</label>
-      <span>{{ customer.firstName }}</span>
+      <span v-if="!editMode">{{ user.firstName }}</span>
+      <input type="text" v-else v-model="editedUser.firstName" />
     </div>
     <div>
       <label>Last Name:</label>
-      <span>{{ customer.lastName }}</span>
+      <span v-if="!editMode">{{ user.lastName }}</span>
+      <input type="text" v-else v-model="editedUser.lastName" />
     </div>
     <div>
       <label>Phone Number:</label>
-      <span>{{ customer.phoneNumber }}</span>
+      <span v-if="!editMode">{{ user.phoneNumber }}</span>
+      <input type="text" v-else v-model="editedUser.phoneNumber" />
     </div>
     <div>
       <label>Email Address:</label>
-      <span>{{ customer.emailAddress }}</span>
+      <span v-if="!editMode">{{ user.email }}</span>
+      <input type="text" v-else v-model="editedUser.email" />
     </div>
     <div>
       <label>Postal Code:</label>
-      <span>{{ customer.postalCode }}</span>
+      <span v-if="!editMode">{{ user.postalCode }}</span>
+      <input type="text" v-else v-model="editedUser.postalCode" />
     </div>
     <div>
       <label>City:</label>
-      <span>{{ customer.city }}</span>
+      <span v-if="!editMode">{{ user.city }}</span>
+      <input type="text" v-else v-model="editedUser.city" />
     </div>
     <div>
       <label>Street:</label>
-      <span>{{ customer.street }}</span>
+      <span v-if="!editMode">{{ user.street }}</span>
+      <input type="text" v-else v-model="editedUser.street" />
     </div>
     <div>
-      <label>Street Number:</label>
-      <span>{{ customer.streetNumber }}</span>
+      <label>House Number:</label>
+      <span v-if="!editMode">{{ user.houseNumber }}</span>
+      <input type="text" v-else v-model="editedUser.houseNumber" />
     </div>
     <div v-if="!editMode">
       <label>Account Status:</label>
-      <span>{{ customer.accountStatus }}</span>
+      <span>{{ user.accountStatus }}</span>
     </div>
     <div v-else>
       <label>Account Status:</label>
-      <select v-model="editedCustomer.accountStatus">
+      <select v-model="editedUser.accountStatus">
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
       </select>
-      <br />
-      <label>First Name:</label>
-      <input type="text" v-model="editedCustomer.firstName" />
-      <br />
-      <label>Last Name:</label>
-      <input type="text" v-model="editedCustomer.lastName" />
-      <br />
-      <label>Phone Number:</label>
-      <input type="text" v-model="editedCustomer.phoneNumber" />
-      <br />
-      <label>Email Address:</label>
-      <input type="text" v-model="editedCustomer.emailAddress" />
-      <br />
-      <label>Postal Code:</label>
-      <input type="text" v-model="editedCustomer.postalCode" />
-      <br />
-      <label>City:</label>
-      <input type="text" v-model="editedCustomer.city" />
-      <br />
-      <label>Street:</label>
-      <input type="text" v-model="editedCustomer.street" />
-      <br />
-      <label>Street Number:</label>
-      <input type="text" v-model="editedCustomer.streetNumber" />
-      <br />
     </div>
-    <button v-if="!editMode" @click="editMode = true">Edit Info</button>
-    <div v-else>
-      <button @click="updateInfo">Change</button>
-      <button @click="cancelEdit">Cancel</button>
+    <div>
+      <button v-if="!editMode" @click="editMode = true">Edit Info</button>
+      <button v-else @click="updateInfo">Save Changes</button>
+      <button v-if="editMode" @click="cancelEdit">Cancel</button>
     </div>
   </div>
 </template>
-  
+
 <script>
 import axios from '../../axios-auth.js';
 
 export default {
+  
   data() {
     return {
-      customer: {
-        firstName: 'John',
-        lastName: 'Doe',
-        phoneNumber: '1234567890',
-        emailAddress: 'johndoe@example.com',
-        postalCode: '12345',
-        city: 'City',
-        street: 'Street',
-        streetNumber: '123',
-        accountStatus: 'active', // Default account status
-      },
-      editedCustomer: {},
+      user: {},
+      editedUser: {},
       editMode: false,
     };
   },
   methods: {
-    updateInfo() {
-      // Make a PUT request to update the customer's information
+    fetchUser() {
       axios
-        .put('/api/customer', this.editedCustomer)
+        .get('/users/current')
         .then((response) => {
-          // Handle the response after updating the information
-          console.log('Customer information updated successfully!');
-          // Update the original customer object with the edited values
-          this.customer = { ...this.editedCustomer };
-          this.editMode = false; // Exit edit mode
+          this.user = response.data;
+          this.editedUser = { ...this.user };
         })
         .catch((error) => {
-          console.error('Error updating customer information:', error);
-          // Handle the error case if necessary
+          console.error('Error fetching user information:', error);
+        });
+    },
+    updateInfo() {
+      axios
+        .put('/users/' + this.user.id, this.editedUser)
+        .then((response) => {
+          console.log('User information updated successfully!');
+          this.user = { ...this.editedUser };
+          this.editMode = false;
+        })
+        .catch((error) => {
+          console.error('Error updating user information:', error);
         });
     },
     cancelEdit() {
-      this.editMode = false; // Cancel the editing and exit edit mode
+      this.editMode = false;
     },
+  },
+  mounted() {
+    this.fetchUser();
   },
 };
 </script>
-  
+
 <style>
 @import '../../assets/css/accountInfoForEmployee.css';
 </style>
-  

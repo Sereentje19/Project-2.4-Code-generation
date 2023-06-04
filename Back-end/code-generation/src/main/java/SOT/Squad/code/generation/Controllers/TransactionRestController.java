@@ -7,6 +7,7 @@ import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -20,7 +21,7 @@ public class TransactionRestController {
     JWTKeyProvider keyProvider;
 
 //    @RequestBody Transaction transaction
-    @PostMapping("/post") //Employee & Customer
+    @PostMapping //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();
         return transactionService.AddTransaction(transaction);
@@ -31,21 +32,21 @@ public class TransactionRestController {
         return transactionService.GetAllTransactions();
     }
 
-    @GetMapping("/{iban}") //Employee & Customer
-    public List<Transaction> getTransactionsByIban(@PathVariable String iban) {
-        try {
+    @GetMapping("/{id}") //Employee & Customer
+    public Transaction getTransactionById(@PathVariable long id) {
+        try{
             keyProvider.decodeJWT();
-            return transactionService.GetTransactionsByIban(iban);
+            return transactionService.GetTransactionById(id);
         }catch (Exception e) {
             return null;
         }
     }
 
-    @GetMapping("/info/{id}") //Employee & Customer
-    public Transaction getTransactionById(@PathVariable long id) {
+    @GetMapping("/account/{iban}/{type}") //Employee & Customer
+    public List<Transaction> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.GetTransactionById(id);
+            return transactionService.findByBankAccountAndAccountType(iban, type);
         }catch (Exception e) {
             return null;
         }

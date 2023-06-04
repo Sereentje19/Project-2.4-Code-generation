@@ -57,7 +57,7 @@ public class UserRestController extends Controller {
         return userService.getUser(id);
     }
 
-    @GetMapping("/login") //Employee & Customer
+    @GetMapping("/users/current") //Employee & Customer
     public User getUserOnUsername() {
         String username = keyProvider.decodeJWT();
         return userService.getUserByUsername(username);

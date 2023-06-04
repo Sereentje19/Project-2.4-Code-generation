@@ -25,17 +25,25 @@ public class MySecurityConfiguration {
         httpSecurity.cors().and().csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
+                //login
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/transactions/{iban}").authenticated()
-                .requestMatchers("/transactions/info/{id}").authenticated()
+                .requestMatchers("/users/current").authenticated()
+
+                //users
+                .requestMatchers("/users/pincode/{pincode}").authenticated()
+                .requestMatchers("/users").authenticated()
+
+                //transactions
+                .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
+                .requestMatchers("/transactions").authenticated()
+                .requestMatchers("/transactions/{id}").authenticated()
+
+                //bankaccounts
+                .requestMatchers("/bankaccounts/{id}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
-                .requestMatchers("/transactions").permitAll()
-                .requestMatchers("/transactions/post").permitAll()
-                .requestMatchers("/users/pincode/{pincode}").permitAll()
-                .requestMatchers("/users").permitAll()
-                .requestMatchers("/bankaccounts/info/{id}").authenticated()
-                .requestMatchers("/transactions/{id}").authenticated();
+                .requestMatchers("/bankaccounts").authenticated();
+                
+
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

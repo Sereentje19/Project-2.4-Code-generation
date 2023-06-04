@@ -9,11 +9,25 @@
         </div>
     </div>
 </template>
-  
+
 <script>
+import headerNavigation from '../main/Header.vue'
+import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 export default {
+    header: {
+        name: "header",
+        components: {
+            headerNavigation
+        }
+    },
+    footer: {
+        name: "footer",
+        components: {
+            footerNavigation
+        },
+    },
     data() {
         return {
             accounts: [],
@@ -36,7 +50,7 @@ export default {
         fetchAccounts() {
             // Make an API call to fetch all bank accounts
             axios
-                .get('/api/accounts')
+                .get('/bankaccounts') // Use the correct API endpoint
                 .then((response) => {
                     // Handle the response and update the accounts data
                     this.accounts = response.data;
@@ -48,13 +62,12 @@ export default {
         },
         selectAccount(account) {
             // Set the selected account for displaying owner's name
-            this.selectedAccount = account;
+            this.selectedAccount = { ...account }; // Create a copy of the account object
         },
     },
 };
 </script>
-  
+
 <style>
 @import '../../assets/css/allAccounts.css';
 </style>
-  
