@@ -6,7 +6,7 @@
             <h1>Already a customer?</h1>
 
             <div id="btns">
-                <button id="btn" @click="addBankAccount()">Yess</button>
+                <button id="btn" @click="addBankAccount()">Yes</button>
                 <button id="btn" @click="addUser()">No</button>
             </div>
         </div>
