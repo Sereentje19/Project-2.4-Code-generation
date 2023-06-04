@@ -129,6 +129,12 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
+
 export default {
     header: {
         name: "header",
@@ -152,25 +158,39 @@ export default {
             bedrag: 0,
             omscrijving: "",
             choice: "",
-            bankaccount: [],
+            bankAccount:
+            {
+                id: 0,
+                iban: '',
+                balance: '',
+                userId: 0,
+                disabled: '',
+                currencies: [],
+                accountType: [],
+            },
         };
     },
     mounted() {
         // console.log(this.id);
-        // this.getAll();
+        this.getBankAccount();
     },
     methods: {
         getAll() {
             
            axios
-                .get('bankaccounts/info/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
+                .get('/bankaccounts/' + this.id, headerToken)
                 .then((res) => {
                     this.bankaccount = res.data;
                     console.log(this.bankaccount);
+                })
+                .catch(error => console.log(error))
+        },
+        getBankAccount() {
+            axios
+                .get('/bankaccounts/' + this.id, headerToken)
+                .then((res) => {
+                    this.bankAccount = res.data;
+                    // this.getTransactions();
                 })
                 .catch(error => console.log(error))
         },
@@ -200,7 +220,20 @@ export default {
             }else if(this.choice == "deposit"){
                 this.deposit();
             }
-        }
+        },
+        withdraw(){
+            this.bankaccount.balance = this.bankaccount.balance - this.bedrag;
+            console.log(this.bankaccount);
+            // axios
+            //     .put("/bankaccounts/changebalance/" + this.id , this.bankaccount, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+        },
+        deposit(){
+
+        },
     },
 };
 </script>

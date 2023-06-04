@@ -47,4 +47,10 @@ public class BankAccountRestController {
         return true;
     }
 
+    @PutMapping("changebalance/{id}") //Employee
+    public BankAccount changeBalance(@RequestBody BankAccount bankAccount, @PathVariable long id) {
+        keyProvider.decodeJWT();
+        return bankAccountService.updateBankAccount(bankAccount, id);
+    }
+
 }
