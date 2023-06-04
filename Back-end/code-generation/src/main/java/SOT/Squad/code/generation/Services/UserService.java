@@ -81,4 +81,7 @@ public class UserService {
     }
 
 
+    public User checkPincode(String pincode) {
+        return userRepository.findUserByPincode(pincode);
+    }
 }

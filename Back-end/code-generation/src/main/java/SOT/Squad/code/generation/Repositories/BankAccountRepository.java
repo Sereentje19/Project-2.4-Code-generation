@@ -13,4 +13,7 @@ public interface BankAccountRepository extends CrudRepository<BankAccount, Long>
     public Iterable<BankAccount> getAllByUserId(long userId);
     @Query(value = "UPDATE BankAccount Set disabled = true WHERE iban = ?1", nativeQuery = true)
     public void deleteByIban(String iban);
+
+//    @Query(value = "UPDATE BankAccount Set balance = balance + ?1 WHERE iban = ?2", nativeQuery = true)
+//    public void increaseBalance(double amount, String iban);
 }

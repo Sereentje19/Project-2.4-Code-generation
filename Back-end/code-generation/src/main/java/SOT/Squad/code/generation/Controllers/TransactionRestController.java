@@ -19,7 +19,7 @@ public class TransactionRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
-
+//    @RequestBody Transaction transaction
     @PostMapping("/post") //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();
