@@ -22,7 +22,7 @@
                     </select>
                 </div>
             </div>
-            <button @click="showPincode()">Create transaction</button>
+            <button @click="withdrawOrDeposit()">Create transaction</button>
         </div>
     </body>
     <footerNavigation />
@@ -103,6 +103,9 @@ export default {
                 .catch(error => console.log(error))
 
         },
+        withdrawOrDeposit(){
+            axios
+        }
     },
 };
 </script>
