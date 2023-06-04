@@ -1,7 +1,7 @@
 <template>
     <headerNavigation />
 
-    <body class="bodyStructure">
+    <body class="bodyStructure2">
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
@@ -17,11 +17,12 @@
                     </div>
                 </div>
             </div>
-            <div id="extraPadding">
+            <div id="padding">
                 <div class="bodyInfo">
                     <div class="bodyInfoText"> <b>Transaction number:</b> {{ this.transaction.id }}</div>
                     <div class="bodyInfoText"> <b>Amount:</b> {{ this.transaction.amount }}</div>
                     <div class="bodyInfoText"> <b>Description:</b> {{ this.transaction.description }}</div>
+                    <div class="bodyInfoText"> <b>payment reference:</b> {{ this.transaction.paymentReference }}</div>
                     <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.bankAccountFrom }}</div>
                     <div v-for="accFrom in this.transaction.accountTypeFrom" class="bodyInfoText"> <b>Account type from:</b> {{ accFrom }} </div>
                     <div class="bodyInfoText"> <b>Bank account to:</b> {{ this.transaction.bankAccountTo }}</div>
@@ -73,7 +74,8 @@ export default {
                 accountTypeFrom: [],
                 accountTypeTo: [],
                 bankAccountFrom: '',
-                bankAccountTo: ''
+                bankAccountTo: '',
+                paymentReference: ''
             },
             user:
             {

@@ -41,7 +41,7 @@
 
                             <div>
                                 <div id="currencies">
-                                    <div v-for="curr in this.bankAccount.currencies">{{ curr }}</div>
+                                    <div>{{ this.bankAccount.currencies }}</div>
                                 </div>
                                 <div id="amount">
                                     <h1>{{ list.amount.toFixed(2) }}</h1>
