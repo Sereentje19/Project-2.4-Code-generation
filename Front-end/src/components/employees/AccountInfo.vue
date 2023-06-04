@@ -64,6 +64,7 @@
 import axios from '../../axios-auth.js';
 
 export default {
+  
   data() {
     return {
       user: {},
