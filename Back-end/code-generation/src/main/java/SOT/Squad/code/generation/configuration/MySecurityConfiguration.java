@@ -27,9 +27,9 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 //login
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/current").authenticated()
 
                 //users
+                .requestMatchers("/users/current").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
 
