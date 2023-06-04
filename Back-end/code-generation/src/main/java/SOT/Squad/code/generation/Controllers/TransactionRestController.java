@@ -7,6 +7,7 @@ import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -19,7 +20,7 @@ public class TransactionRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
-
+//    @RequestBody Transaction transaction
     @PostMapping("/post") //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();

@@ -66,8 +66,16 @@ public class UserRestController extends Controller {
 
     @PutMapping("/{id}") //Employee & Customer
     public User updateUser(@PathVariable long id, @RequestBody User user) {
+        keyProvider.decodeJWT();
         user.setId(id);
         return userService.updateUser(user);
+    }
+
+    @GetMapping("/pincode/{pincode}") //Employee & Customer
+    public User checkPincode(@PathVariable String pincode) {
+
+        keyProvider.decodeJWT();
+        return userService.checkPincode(pincode);
     }
 
 

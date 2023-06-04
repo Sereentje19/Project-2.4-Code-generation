@@ -30,5 +30,6 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+    private String pincode;
 
 }

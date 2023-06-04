@@ -35,9 +35,9 @@ public class BankAccountRestController {
 //    }
 
     @GetMapping("/{iban}") //Employee & Customer
-    public List<BankAccount> getAccountByIban(@PathVariable String id) {
+    public List<BankAccount> getAccountByIban(@PathVariable String iban) {
         keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountByIban(id);
+        return bankAccountService.getBankAccountByIban(iban);
     }
 
     @GetMapping("/info/{id}") //Employee & Customer
@@ -52,4 +52,5 @@ public class BankAccountRestController {
         bankAccountService.deleteBankAccount(bankAccount);
         return true;
     }
+
 }

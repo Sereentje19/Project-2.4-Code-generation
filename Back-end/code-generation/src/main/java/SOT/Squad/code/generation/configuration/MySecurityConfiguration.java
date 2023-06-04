@@ -33,7 +33,10 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/delete").authenticated()
                 .requestMatchers("/transactions").permitAll()
                 .requestMatchers("/transactions/post").permitAll()
+                .requestMatchers("/users/pincode/{pincode}").permitAll()
+                .requestMatchers("/users").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();
+
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

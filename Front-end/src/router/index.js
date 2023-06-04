@@ -24,11 +24,11 @@ const router = createRouter({
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
     { path: '/customer/accountInfo/:id' , component: AccountInfo, props: true},
     { path: '/customer/customerAccountOverview/:id' , component: CustomerAccountOverview, props: true},
-    { path: '/employee/allAccounts' , component: AllAccounts, props: true},
-    { path: '/emplyee/accountInfoforEmployee/:id' , component: AccountInfoforEmployee, props: true},
+    { path: '/allAccounts/:id' , component: AllAccounts, props: true},
+    { path: '/accountInfoforEmployee/:id' , component: AccountInfoforEmployee, props: true},
     { path: '/customer/createtransactions/:iban', component: CustomerCreateTransactions, props: true},
     { path: '/customer/withdrawOrDeposit/:iban', component: CustomerWithdrawOrDeposit, props: true},
-    { path: '/customer/pincode', component: pincode, props: true},
+    { path: '/customer/pincode/', component: pincode, props: true},
   ]
 })
 
