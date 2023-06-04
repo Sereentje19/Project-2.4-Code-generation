@@ -54,11 +54,19 @@
     </div>
     <div>
       <button v-if="!editMode" @click="editMode = true">Edit Info</button>
-      <button v-else @click="updateInfo">Save Changes</button>
-      <button v-if="editMode" @click="cancelEdit">Cancel</button>
+      <button id="btnUpdate" v-else @click="cancelEdit">Cancel</button>
+      <button  v-if="editMode" @click="updateInfo">Save Changes</button>
     </div>
   </div>
 </template>
+
+<style>
+
+#btnUpdate{
+  margin-right: 150px;
+}
+
+</style>
 
 <script>
 import axios from '../../axios-auth.js';
