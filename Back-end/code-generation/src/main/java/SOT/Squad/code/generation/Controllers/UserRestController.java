@@ -60,6 +60,4 @@ public class UserRestController {
         return userService.checkPincode(pincode);
     }
 
-
-
 }
