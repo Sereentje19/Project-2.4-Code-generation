@@ -34,6 +34,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/transactions/post").permitAll()
                 .requestMatchers("/users/pincode/{pincode}").permitAll()
                 .requestMatchers("/users").permitAll()
+                .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/transactions/{id}").authenticated();
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

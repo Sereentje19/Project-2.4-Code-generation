@@ -184,7 +184,15 @@ export default {
                 betalingskenmerk: "",
             },
             pincode: "",
-            bankaccount : [],
+            bankaccount : {
+                id: 0,
+                iban: "",
+                balance: 0,
+                userId: 0,
+                disabled: false,
+                currencies: [],
+                accountType:[],
+            }
         };
     },
     mounted() {
@@ -192,16 +200,16 @@ export default {
     },
     methods: {
         getAll() {
-            axios
-                .get('bankaccounts/info/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    this.bankaccount = res.data;
-                })
-                .catch(error => console.log(error))
+            // axios
+            //     .get('bankaccounts/info/' + this.id, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         this.bankaccount = res.data;
+            //     })
+            //     .catch(error => console.log(error))
         },
 
 
