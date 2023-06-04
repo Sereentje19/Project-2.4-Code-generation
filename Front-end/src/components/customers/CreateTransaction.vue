@@ -5,30 +5,129 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="rekening van" v-model="transactions.bankAccountFrom">
+                    <input type="text" class="input" placeholder="rekening van" v-model="transaction.bankAccountFrom">
                 </div>
                 <div class="accountNumber mr-2">
-                    <input type="text" class="input" placeholder="rekening naar" v-model="transactions.bankAccountTo">
+                    <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo">
 
                 </div>
             </div>
             <div class="body">
                 <div class="other">
-                    <input type="text" class="input" placeholder="bedrag" v-model="transactions.amount">
+                    <input type="text" class="input" placeholder="bedrag" v-model="transaction.amount">
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="description" v-model="transactions.description">
+                    <input type="text" class="input" placeholder="description" v-model="transaction.description">
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transactions.betalingskenmerk">
+                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.betalingskenmerk">
                 </div>
             </div>
-            <button @click="createTransaction()">Create transaction</button>
+            <button @click="showPincode()">Create transaction</button>
 
         </div>
     </body>
     <footerNavigation />
-</template>
+
+    <Transition name="modal">
+      <div class="modal-mask" id="test">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+            <div class="modal-header">
+              <slot name="header">Please enter your pincode</slot>
+            </div>
+  
+            <div class="modal-body">
+              <input type="text" class="input" v-model="pincode">
+            </div>
+  
+            <div class="modal-footer">
+              <slot name="footer">
+                  <button
+                  class="modal-default-button"
+                  @click="closePincode()"
+                >close</button>
+                <button
+                  class="modal-default-button"
+                  @click="checkPincode()"
+                >OK</button>
+              </slot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </template>
+  
+  <style>
+  .input{
+      max-width: 100%;
+      border: 1px solid black !important;
+  }
+  
+  .modal-mask {
+      display: none;
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+  }
+  
+  .modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  .modal-container {
+    width: 300px;
+    margin: 0px auto;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    transition: all 0.3s ease;
+  }
+  
+  .modal-header h3 {
+    margin-top: 0;
+    color: #42b983;
+  }
+  
+  .modal-body {
+    margin: 20px 0;
+  }
+  
+  .modal-default-button {
+    float: right;
+  }
+  
+  /*
+   * The following styles are auto-applied to elements with
+   * transition="modal" when their visibility is toggled
+   * by Vue.js.
+   *
+   * You can easily play with the modal transition by editing
+   * these styles.
+   */
+  
+  .modal-enter-from {
+    opacity: 0;
+  }
+  
+  .modal-leave-to {
+    opacity: 0;
+  }
+  
+  .modal-enter-from .modal-container,
+  .modal-leave-to .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  </style>
 
 <script>
 
@@ -79,7 +178,7 @@ export default {
                     // }
                 ],
             },
-            transactions:
+            transaction:
             {
                 id: 0,
                 description: "",
@@ -90,6 +189,7 @@ export default {
                 bankAccountTo: "",
                 betalingskenmerk: "",
             },
+            pincode: "",
         };
     },
     mounted() {
@@ -113,22 +213,46 @@ export default {
         },
 
 
-        createTransaction() {
-            console.log("test");
-            console.log(this.transactions)
+        showPincode() {
+            document.getElementById("test").style.display = "table";
+            // this.$router.push({ path: "/customer/pincode", params: { transactionData: "test" } });
+            // localStorage.setItem("transactionData", this.transactions);
+            // this.$router.push("/customer/pincode");
 
+            // console.log("test");
+            // console.log(this.transactions)
+
+            // axios
+            //     .post('transactions/post', this.transactions, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         console.log(res.data)
+            //         this.$router.push("/home");
+            //     })
+            //     .catch((error) => console.log(error));
+        },
+        closePincode() {
+            document.getElementById("test").style.display = "none";
+        },
+        checkPincode() {
+          console.log(this.pincode)
             axios
-                .post('transactions/post', this.transactions, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    console.log(res.data)
-                    this.$refs.form.reset();
-                    this.$router.push("/home");
-                })
-                .catch((error) => console.log(error));
+            .get('users/pincode' , this.pincode
+            , {
+              headers: {
+                  Authorization: "Bearer " + localStorage.getItem("jwt")
+              }
+            }
+            )
+            .then((res) => {
+              console.log(res.data)
+              // this.$router.push("/home");
+            })
+            .catch((error) => console.log(error));
+
         },
 
 

@@ -113,7 +113,7 @@ export default {
             this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
         },
         createTransaction() {
-            this.$router.push("/customer/createtransactions/" + this.bankAccount.iban);
+            this.$router.push("/customer/createtransactions/" + this.id);
         },
         ViewTransactions(id) {
             this.$router.push("/customer/viewTransaction/" + this.bankAccount.iban + "/" + id);

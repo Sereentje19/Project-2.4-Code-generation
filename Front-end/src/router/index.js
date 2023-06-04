@@ -28,9 +28,9 @@ const router = createRouter({
     { path: '/customer/customerAccountOverview/:id' , component: CustomerAccountOverview, props: true},
     { path: '/employee/allAccounts' , component: AllAccounts, props: true},
     { path: '/emplyee/accountInfoforEmployee/:id' , component: AccountInfoforEmployee, props: true},
-    { path: '/customer/createtransactions/:iban', component: CustomerCreateTransactions, props: true},
+    { path: '/customer/createtransactions/:id', component: CustomerCreateTransactions, props: true},
     { path: '/customer/withdrawOrDeposit/:iban', component: CustomerWithdrawOrDeposit, props: true},
-    { path: '/customer/pincode', component: pincode, props: true},
+    { path: '/customer/pincode/', component: pincode, props: true},
   ]
 })
 

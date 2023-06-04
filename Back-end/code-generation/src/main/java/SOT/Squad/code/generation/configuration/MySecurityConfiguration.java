@@ -29,10 +29,13 @@ public class MySecurityConfiguration {
                 .requestMatchers("/users/login").permitAll()
                 .requestMatchers("/transactions/{iban}").authenticated()
                 .requestMatchers("/transactions/info/{id}").authenticated()
-                .requestMatchers("/bankaccounts/info/{id}").authenticated();
+                .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/transactions").permitAll()
                 .requestMatchers("/transactions/post").permitAll()
+                .requestMatchers("/users/pincode").permitAll()
+                .requestMatchers("/users").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();
+
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
