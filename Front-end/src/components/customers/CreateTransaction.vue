@@ -184,6 +184,7 @@ export default {
                 betalingskenmerk: "",
             },
             pincode: "",
+            bankaccount : [],
         };
     },
     mounted() {
@@ -192,17 +193,13 @@ export default {
     methods: {
         getAll() {
             axios
-                .get('users/login', {
+                .get('bankaccounts/info/' + this.id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
-                    this.user = res.data;
-
-
-                    console.log(res.data)
-                    console.log(this.user.id)
+                    this.bankaccount = res.data;
                 })
                 .catch(error => console.log(error))
         },
