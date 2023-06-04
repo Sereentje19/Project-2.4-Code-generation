@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
+import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class TransactionRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
-
+//    @RequestBody Transaction transaction
     @PostMapping("/post") //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
         keyProvider.decodeJWT();

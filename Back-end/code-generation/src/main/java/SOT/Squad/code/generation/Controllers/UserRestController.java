@@ -75,7 +75,7 @@ public class UserRestController extends Controller {
     public User checkPincode(@PathVariable String pincode) {
 
         keyProvider.decodeJWT();
-        return userService.checkPincode(pincode, userId);
+        return userService.checkPincode(pincode);
     }
 
 

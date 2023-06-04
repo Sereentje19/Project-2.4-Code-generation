@@ -210,27 +210,23 @@ export default {
 
         showPincode() {
             document.getElementById("test").style.display = "table";
-            // this.$router.push({ path: "/customer/pincode", params: { transactionData: "test" } });
-            // localStorage.setItem("transactionData", this.transactions);
-            // this.$router.push("/customer/pincode");
-
-            // console.log("test");
-            // console.log(this.transactions)
-
-            // axios
-            //     .post('transactions/post', this.transactions, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         console.log(res.data)
-            //         this.$router.push("/home");
-            //     })
-            //     .catch((error) => console.log(error));
         },
         closePincode() {
             document.getElementById("test").style.display = "none";
+        },
+        postTransaction(){
+          console.log(this.transaction)
+          axios
+                .post('transactions/post',this.transaction, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data)
+                    this.$router.push("/customer/transactions/" + this.id);
+                })
+                .catch((error) => console.log(error));
         },
         checkPincode() {
             axios
@@ -241,23 +237,12 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    // this.$router.push("/home");
+                    this.postTransaction();
                 })
                 .catch((error) => console.log(error));
 
         },
-
-
-        // axios
-        //     .get('bankaccounts/' + this.id)
-        //     .then((res) => {
-        //         this.transactions = res.data;
-
-        //         console.log(res.data)
-        //         console.log(this.transactions.id)
-        //     })
-        //     .catch(error => console.log(error))
-
+        
 
     },
 };
