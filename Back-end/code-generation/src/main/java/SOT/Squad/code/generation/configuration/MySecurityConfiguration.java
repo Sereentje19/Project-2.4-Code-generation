@@ -30,6 +30,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
                 .requestMatchers("/transactions/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
+                .requestMatchers("/bankaccounts/delete").authenticated()
                 .requestMatchers("/transactions").permitAll()
                 .requestMatchers("/transactions/post").permitAll()
                 .requestMatchers("/transactions/{id}").authenticated();

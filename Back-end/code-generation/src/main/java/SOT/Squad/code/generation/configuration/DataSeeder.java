@@ -27,13 +27,14 @@ public class DataSeeder implements ApplicationRunner {
 
         BankAccount bankacc1 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, List.of(Currency.EURO), List.of(AccountType.CURRENT));
         BankAccount bankacc2 = new BankAccount(2, "NL12INHO0123456788",  2000, 1, false, List.of(Currency.POUND), List.of(AccountType.SAVINGS));
-        BankAccount bankacc3 = new BankAccount(3, "NL12INHO0123456787",  100, 2, false, List.of(Currency.DOLLAR), List.of(AccountType.DEPOSIT));
+        BankAccount bankacc3 = new BankAccount(3, "NL12INHO0123456787",  100, 2, false, List.of(Currency.DOLLAR), List.of(AccountType.SAVINGS));
+
         bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);
         bankAccountService.addBankAccount(bankacc3);
 
         transactionService.AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
-        transactionService.AddTransaction(new Transaction(2, "test", 100,  "NL12INHO0123456788", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.DEPOSIT), "kenmerk"));
+        transactionService.AddTransaction(new Transaction(2, "test", 100,  "NL12INHO0123456788", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
         transactionService.AddTransaction(new Transaction(3, "test", 100,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk"));
         transactionService.AddTransaction(new Transaction(4, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
         transactionService.AddTransaction(new Transaction(5, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456785", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));

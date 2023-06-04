@@ -29,10 +29,10 @@ public class BankAccountRestController {
         return bankAccountService.addBankAccount(bankAccount);
     }
 
-    @PutMapping("/{iban}") //Employee & Customer
-    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
-        return bankAccountService.updateBankAccount(bankAccount, iban);
-    }
+//    @PutMapping("/{iban}") //Employee & Customer
+//    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
+//        return bankAccountService.updateBankAccount(bankAccount, iban);
+//    }
 
     @GetMapping("/{iban}") //Employee & Customer
     public List<BankAccount> getAccountByIban(@PathVariable String id) {
@@ -46,8 +46,10 @@ public class BankAccountRestController {
         return bankAccountService.getBankAccountById(id);
     }
 
-    @DeleteMapping("/{iban}") //Employee
-    public void deleteBankAccount(@PathVariable String iban) {
-        bankAccountService.deleteBankAccount(iban);
+    @PutMapping("/delete") //Employee
+    public boolean deleteBankAccount(@RequestBody BankAccount bankAccount) {
+        keyProvider.decodeJWT();
+        bankAccountService.deleteBankAccount(bankAccount);
+        return true;
     }
 }

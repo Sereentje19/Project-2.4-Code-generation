@@ -26,5 +26,5 @@ public class Transaction {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountTypeTo;
-    private String betalingskenmerk;
+    private String paymentReference;
 }

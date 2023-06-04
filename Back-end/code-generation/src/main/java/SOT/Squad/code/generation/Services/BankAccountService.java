@@ -35,7 +35,8 @@ public class BankAccountService {
         return (BankAccount)bankAccountRepository.getAllById(id);
     }
 
-    public void deleteBankAccount(String iban) {
-        bankAccountRepository.deleteByIban(iban);
+    public void deleteBankAccount(BankAccount bankAccount) {
+        bankAccount.setDisabled(true);
+        bankAccountRepository.save(bankAccount);
     }
 }
