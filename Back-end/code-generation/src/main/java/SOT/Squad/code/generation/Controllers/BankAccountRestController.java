@@ -43,7 +43,7 @@ public class BankAccountRestController {
     }
 
     @PutMapping("/change/{id}") //Employee & Customer
-    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable long id) {
+    public BankAccount updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
         keyProvider.decodeJWT();
         return bankAccountService.updateBankAccount(bankAccount, id);
     }

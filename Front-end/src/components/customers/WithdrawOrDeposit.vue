@@ -221,13 +221,15 @@ export default {
             this.changeBankAcount();
         },
         changeBankAcount() {
+            console.log(this.bankAccount);
+            console.log(this.id);
             axios
                 .put("/bankaccounts/change/" + this.id , this.bankaccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
                     this.closePincode();
                 })
-                .catch(error => console.log(error));
+                .catch((error) => console.log(error));
         }
     },
 };
