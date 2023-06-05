@@ -162,7 +162,7 @@ export default {
             {
                 id: 0,
                 iban: '',
-                balance: '',
+                balance: 0,
                 userId: 0,
                 disabled: '',
                 currencies: [],
@@ -171,8 +171,9 @@ export default {
         };
     },
     mounted() {
-        // console.log(this.id);
+        console.log(this.id);
         this.getBankAccount();
+        
     },
     methods: {
         getBankAccount() {
@@ -181,6 +182,8 @@ export default {
                 .then((res) => {
                     this.bankAccount = res.data;
                     // this.getTransactions();
+                    console.log(this.bankAccount);
+                    
                 })
                 .catch(error => console.log(error))
         },
@@ -208,14 +211,17 @@ export default {
             }
         },
         withdraw(){
-            this.bankaccount.balance = this.bankaccount.balance - this.bedrag;
-            console.log(this.bankaccount);
-            // axios
-            //     .put("/bankaccounts/changebalance/" + this.id , this.bankaccount, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
+            this.bankAccount.balance = this.bankAccount.balance - this.bedrag;
+            console.log(this.bankAccount);
+            // this.bankaccount.balance - this.bedrag;
+            // console.log(this.bankaccount);
+            axios
+                .put("/bankaccounts/change/" + this.id , this.bankaccount, headerToken)
+                .then((res) => {
+                    console.log(res.data);
+                    this.closePincode();
+                })
+                .catch(error => console.log(error));
         },
         deposit(){
 

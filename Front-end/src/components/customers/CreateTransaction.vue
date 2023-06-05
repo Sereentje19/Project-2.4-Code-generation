@@ -229,7 +229,7 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/customer/transactions/" + this.id);
+                    this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
         },
