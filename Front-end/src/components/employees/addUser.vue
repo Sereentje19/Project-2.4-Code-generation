@@ -75,23 +75,22 @@ export default {
             bankAccount: [],
             accountTypes: ['CURRENT', 'SAVINGS'],
             selectedAccountType: '',
-            newBankAccount: 
-                {
-                    id: 0,
-                    iban: '',
-                    balance: 0,
-                    userId: 0,
-                    disabled: false,
-                    currencies: "EUR",
-                    accountType: [],
-                },
+            newBankAccount:
+            {
+                id: 0,
+                iban: '',
+                balance: 0,
+                userId: 0,
+                disabled: false,
+                currencies: "EUR",
+                accountType: [],
+            },
         };
     },
     mounted() {
         this.generatePassword();
         this.generatePincode();
         this.generateIBAN();
-        console.log(this.generatedIban)
     },
     methods: {
         generatePassword() {
@@ -131,27 +130,25 @@ export default {
                 .then((res) => {
                     this.bankAccount = res.data;
 
-                    this.bankAccount.forEach(element => {
+                    for (const element of this.bankAccount) {
                         if (element.iban == this.generatedIban) {
                             this.generateIBAN();
                         }
-                    });
+                    }
+                    
                 }).catch((error) => console.log(error));
-
         },
         addUser() {
             this.user.iban = this.generatedIban;
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.username = this.user.firstName;
-            console.log(this.user)
 
             axios
                 .post('users', this.user, headerToken)
                 .then((res) => {
                     this.addBankAccount(res.data.id);
-                    console.log(res.data)
-                    // this.$router.push("/customer/transactions/" + this.id);
+                    // this.$router.push("/");
                 })
                 .catch((error) => console.log(error));
         },
@@ -159,16 +156,13 @@ export default {
             this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.userId = userId;
             this.newBankAccount.accountType.push(this.selectedAccountType);
-            console.log(this.newBankAccount)
-
-            console.log(this.newBankAccount)
 
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
 
                     console.log(res.data)
-                    // this.$router.push("/customer/transactions/" + this.id);
+                    // this.$router.push("/");
                 })
                 .catch((error) => console.log(error));
 
