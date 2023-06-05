@@ -26,6 +26,7 @@ public class UserRestController {
 
     @PostMapping //Employee
     public User addUser(@RequestBody User user) {
+        keyProvider.decodeJWT();
         return userService.addUser(user);
     }
 

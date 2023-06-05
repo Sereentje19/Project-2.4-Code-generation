@@ -34,16 +34,22 @@
             <input type="text" v-model="user.houseNumber" />
         </div>
         <div>
+            <label>Account type:</label>
+            <select v-model="this.selectedAccountType">
+                <option v-for="accountType in this.accountTypes" :value="accountType">{{ accountType }}</option>
+            </select>
+        </div>
+        <div>
             <label>Password:</label>
-            <input type="text" v-model="this.password" />
+            <input type="text" v-model="this.generatedPassword" />
         </div>
         <div>
             <label>Pincode:</label>
-            <input type="text" v-model="this.pincode" />
+            <input type="text" v-model="this.generatedPincode" />
         </div>
         <div>
             <button id="btn2" class="btnUpdate" @click="cancel()">Cancel</button>
-            <button id="btn2" @click="updateInfo()">Save Changes</button>
+            <button id="btn2" @click="addUser()">Save Changes</button>
         </div>
     </div>
 </template>
@@ -51,18 +57,41 @@
 <script>
 import axios from '../../axios-auth.js';
 
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
+
 export default {
 
     data() {
         return {
             user: {},
-            password: '',
-            pincode: 0
+            generatedPassword: '',
+            generatedPincode: 0,
+            generatedIban: '',
+            ibanExists: false,
+            bankAccount: [],
+            accountTypes: ['CURRENT', 'SAVINGS'],
+            selectedAccountType: '',
+            newBankAccount: 
+                {
+                    id: 0,
+                    iban: '',
+                    balance: 0,
+                    userId: 0,
+                    disabled: false,
+                    currencies: "EUR",
+                    accountType: [],
+                },
         };
     },
     mounted() {
         this.generatePassword();
         this.generatePincode();
+        this.generateIBAN();
+        console.log(this.generatedIban)
     },
     methods: {
         generatePassword() {
@@ -73,7 +102,7 @@ export default {
                 const randomIndex = Math.floor(Math.random() * charset.length);
                 password += charset[randomIndex];
             }
-            this.password = password;
+            this.generatedPassword = password;
         },
         generatePincode() {
             const length = 4;
@@ -82,10 +111,67 @@ export default {
                 const digit = Math.floor(Math.random() * 10); // Generate a random number between 0 and 9
                 pincode += digit;
             }
-            this.pincode = pincode;
+            this.generatedPincode = pincode;
+        },
+        generateIBAN() {
+            const countryCode = 'NL';
+            const additionalDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+            const bankCode = 'INHO';
+            const accountNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+
+            this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
+            this.checkIbanExists();
         },
         cancel() {
             this.$router.push("/employee/question");
+        },
+        checkIbanExists() {
+            axios
+                .get('/bankaccounts', headerToken)
+                .then((res) => {
+                    this.bankAccount = res.data;
+
+                    this.bankAccount.forEach(element => {
+                        if (element.iban == this.generatedIban) {
+                            this.generateIBAN();
+                        }
+                    });
+                }).catch((error) => console.log(error));
+
+        },
+        addUser() {
+            this.user.iban = this.generatedIban;
+            this.user.password = this.generatedPassword;
+            this.user.pincode = this.generatedPincode;
+            this.user.username = this.user.firstName;
+            console.log(this.user)
+
+            axios
+                .post('users', this.user, headerToken)
+                .then((res) => {
+                    this.addBankAccount(res.data.id);
+                    console.log(res.data)
+                    // this.$router.push("/customer/transactions/" + this.id);
+                })
+                .catch((error) => console.log(error));
+        },
+        addBankAccount(userId) {
+            this.newBankAccount.iban = this.generatedIban;
+            this.newBankAccount.userId = userId;
+            this.newBankAccount.accountType.push(this.selectedAccountType);
+            console.log(this.newBankAccount)
+
+            console.log(this.newBankAccount)
+
+            axios
+                .post('bankaccounts', this.newBankAccount, headerToken)
+                .then((res) => {
+
+                    console.log(res.data)
+                    // this.$router.push("/customer/transactions/" + this.id);
+                })
+                .catch((error) => console.log(error));
+
         },
     },
 };
