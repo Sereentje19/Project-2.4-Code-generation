@@ -212,9 +212,15 @@ export default {
         },
         withdraw(){
             this.bankAccount.balance = this.bankAccount.balance - this.bedrag;
-            console.log(this.bankAccount);
-            // this.bankaccount.balance - this.bedrag;
-            // console.log(this.bankaccount);
+            this.changeBankAcount();
+
+            
+        },
+        deposit(){
+            this.bankAccount.balance = this.bankAccount.balance + this.bedrag;
+            this.changeBankAcount();
+        },
+        changeBankAcount() {
             axios
                 .put("/bankaccounts/change/" + this.id , this.bankaccount, headerToken)
                 .then((res) => {
@@ -222,10 +228,7 @@ export default {
                     this.closePincode();
                 })
                 .catch(error => console.log(error));
-        },
-        deposit(){
-
-        },
+        }
     },
 };
 </script>
