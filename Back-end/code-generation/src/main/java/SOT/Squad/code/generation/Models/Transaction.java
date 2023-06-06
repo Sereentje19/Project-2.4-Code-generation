@@ -31,5 +31,6 @@ public class Transaction {
     private List<AccountType> accountTypeTo;
     private String paymentReference;
     private LocalDateTime date;
+    @OneToOne
     private User PerformedByUser;
 }

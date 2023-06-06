@@ -171,6 +171,8 @@ export default {
                     //     email: "test",
                     // }
                 ],
+                dailyLimit: 0,
+                transactionLimit: 0,
             },
             transaction:
             {
@@ -182,6 +184,8 @@ export default {
                 bankAccountFrom: "",
                 bankAccountTo: "",
                 betalingskenmerk: "",
+                date: "",
+                user: this.user
             },
             pincode: "",
             bankaccount : {
@@ -192,24 +196,26 @@ export default {
                 disabled: false,
                 currencies: [],
                 accountType:[],
+                absoluutLimit: 0,
             }
         };
     },
     mounted() {
-        this.getAll();
+        this.getUser();
     },
     methods: {
-        getAll() {
-            // axios
-            //     .get('bankaccounts/info/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.bankaccount = res.data;
-            //     })
-            //     .catch(error => console.log(error))
+        getUser() {
+            axios
+                .get('users/current', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
+                    this.transaction.user = res.data;
+                })
+                .catch(error => console.log(error))
         },
 
 
@@ -220,8 +226,11 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         postTransaction(){
-          console.log(this.transaction);
-          axios
+        //   console.log(this.transaction);
+          this.transaction.date = new Date();
+          
+          if(this.transaction.amount < this.user.transactionLimit){
+              axios
                 .post('transactions',this.transaction, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
@@ -232,6 +241,8 @@ export default {
                     this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
+          }
+          
         },
         checkPincode() {
             console.log(this.pincode);
@@ -243,7 +254,13 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.postTransaction();
+                    if(res.data != ""){
+                        this.postTransaction();
+                    }
+                    else{
+                        console.log("wrong pincode")
+                    }
+                    
                 })
                 .catch((error) => console.log(error));
 

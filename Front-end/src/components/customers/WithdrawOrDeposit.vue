@@ -167,6 +167,7 @@ export default {
                 disabled: '',
                 currencies: [],
                 accountType: [],
+                absoluutLimit: 0,
             },
         };
     },
@@ -212,6 +213,10 @@ export default {
         },
         withdraw(){
             this.bankAccount.balance = this.bankAccount.balance - this.bedrag;
+            if(this.bankAccount.balance < 0){
+                this.bankAccount.balance = this.bankAccount.balance + this.bedrag;
+                alert("You don't have enough money on your bankaccount");
+            }
             this.changeBankAcount();
 
             
