@@ -224,10 +224,10 @@ export default {
             console.log(this.bankAccount);
             console.log(this.id);
             axios
-                .put("/bankaccounts/change/" + this.id , this.bankaccount, headerToken)
+                .put("/bankaccounts/change/" + this.id , this.bankAccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
-                    this.closePincode();
+                    this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
         }
