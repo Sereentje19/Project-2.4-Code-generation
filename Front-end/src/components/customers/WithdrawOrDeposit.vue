@@ -182,7 +182,7 @@ export default {
                 .get('/bankaccounts/' + this.id, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
-                    // this.getTransactions();
+                    this.getTransactions();
                     console.log(this.bankAccount);
                     
                 })
@@ -223,6 +223,7 @@ export default {
         },
         deposit(){
             this.bankAccount.balance = this.bankAccount.balance + this.bedrag;
+            
             this.changeBankAcount();
         },
         changeBankAcount() {

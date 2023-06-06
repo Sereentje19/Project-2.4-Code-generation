@@ -29,13 +29,15 @@ public class DataSeeder implements ApplicationRunner {
         //Bankaccounts
 //        BankAccount bankacc1 = new BankAccount(4, "NL01INHO0000000001",   0, 4, false, "EUR", List.of(AccountType.CURRENT));
         BankAccount bankacc2 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
-        BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  0, 2, false, "EUR", List.of(AccountType.SAVINGS),10);
+        BankAccount bankacc5 = new BankAccount(4, "NL12INHO0123456786",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
+        BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  100, 2, false, "EUR", List.of(AccountType.SAVINGS),10);
         BankAccount bankacc4 = new BankAccount(3, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.SAVINGS),10);
 
 //      bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);
         bankAccountService.addBankAccount(bankacc3);
         bankAccountService.addBankAccount(bankacc4);
+        bankAccountService.addBankAccount(bankacc5);
 
 
         //Users

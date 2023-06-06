@@ -239,7 +239,6 @@ export default {
                 })
                 .then((res) => {
                     this.bankaccount = res.data;
-                    // this.getTransactions();
                     console.log(this.bankaccount);
                     
                 })
@@ -256,27 +255,17 @@ export default {
         //   console.log(this.transaction);
           this.transaction.date = new Date();
           
-          if(this.transaction.amount < this.user.transactionLimit){
-            var newbalance = this.bankaccount.balance - this.transaction.amount;
-            if(newbalance > this.bankaccount.absoluutLimit && this.newbalance > 0){
-                if(this.bankaccount.accountType[0] == "CURRENT"){
-                    this.bankaccount.balance = newbalance;
-                    axios
+          axios
                     .post('transactions',this.transaction, {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("jwt")
                         }
                     })
                     .then((res) => {
-                        console.log(res.data)
+                        console.log(res.data);
+                        this.updateBalance();
                     })
                     .catch((error) => console.log(error));
-                }
-                
-            }
-            alert("you will end below your absolute limit or below 0") 
-              
-          }
           
         },
         verifyRequest(){
@@ -299,16 +288,21 @@ export default {
                 alert("you can't transfer more than your transaction limit");
                 this.$router.push("/customer/createtransactions/" + this.id);
             }
-            var newbalance = this.bankaccount.balance - this.transaction.amount;
+            var newbalance = this.bankaccount.balance -= this.transaction.amount;
+            var othernewbalance = this.otherBankAccount.balance += this.transaction.amount;
+            // console.log(newbalance);
             if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
                 alert("you will end below your absolute limit or below 0");
                 this.$router.push("/customer/createtransactions/" + this.id);
             }
+            this.bankaccount.balance = newbalance;
+            this.otherBankAccount.balance = othernewbalance;
             var dailylimit = this.user.dailyLimit - this.transaction.amount;
             if(dailylimit < 0){
                 alert("you will end below your daily limit");
                 this.$router.push("/customer/createtransactions/" + this.id);
             }
+            this.postTransaction();
         },
         getOtherBankAccount(){
             axios
@@ -318,11 +312,17 @@ export default {
                         }
                     })
                     .then((res) => {
+                        if(res.data == null || res.data == undefined || res.data == ""){
+                            alert("this account doesn't exist");
+                            location.reload();
+                        }
                         this.otherBankAccount = res.data;
+                        this.verifyRequest();
                     })
                     .catch((error) => console.log(error));
         },
         updateBalance(){
+            alert("something is not right");
             axios
                 .put('bankaccounts/change/' + this.id, this.bankaccount, {
                     headers: {
@@ -330,8 +330,19 @@ export default {
                     }
                 })
                 .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((error) => console.log(error));
+
+            axios
+            .put('bankaccounts/change/' + this.otherBankAccount.id, this.otherBankAccount, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/transactions/" + this.id);
+                    // this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
         },
