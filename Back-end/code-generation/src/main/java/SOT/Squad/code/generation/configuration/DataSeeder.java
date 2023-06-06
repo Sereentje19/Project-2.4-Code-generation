@@ -27,9 +27,9 @@ public class DataSeeder implements ApplicationRunner {
 
         //Bankaccounts
 //        BankAccount bankacc1 = new BankAccount(4, "NL01INHO0000000001",   0, 4, false, "EUR", List.of(AccountType.CURRENT));
-        BankAccount bankacc2 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT));
-        BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  2000, 2, false, "EUR", List.of(AccountType.SAVINGS));
-        BankAccount bankacc4 = new BankAccount(3, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.SAVINGS));
+        BankAccount bankacc2 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),150);
+        BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  2000, 2, false, "EUR", List.of(AccountType.SAVINGS),250);
+        BankAccount bankacc4 = new BankAccount(3, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.SAVINGS),1000);
 
 //      bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);
@@ -50,9 +50,9 @@ public class DataSeeder implements ApplicationRunner {
 
         //Users
 //        userService.addUser(new User(4, "SOTBank", "SOTBank", "SOTBank", "SOTBank", 061234567, "SOTBank@gmail.com", "BankStreet", 1, "1234AB", "Haarlem", List.of(bankacc1.getId()), List.of(Role.EMPLOYEE), "4677"));
-        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "5781"));
-        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "2595"));
-        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId(), bankacc3.getId()), List.of(Role.CUSTOMER), "3685"));
+        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "5781", 2000, 100));
+        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "2595",1000,150));
+        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId(), bankacc3.getId()), List.of(Role.CUSTOMER), "3685",2500, 503));
 
     }
 }
