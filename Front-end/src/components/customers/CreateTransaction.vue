@@ -182,6 +182,8 @@ export default {
                 bankAccountFrom: "",
                 bankAccountTo: "",
                 betalingskenmerk: "",
+                date: "",
+                user: this.user
             },
             pincode: "",
             bankaccount : {
@@ -192,24 +194,25 @@ export default {
                 disabled: false,
                 currencies: [],
                 accountType:[],
+                absoluutLimit: 0,
             }
         };
     },
     mounted() {
-        this.getAll();
+        this.getUser();
     },
     methods: {
-        getAll() {
-            // axios
-            //     .get('bankaccounts/info/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.bankaccount = res.data;
-            //     })
-            //     .catch(error => console.log(error))
+        getUser() {
+            axios
+                .get('users/current', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
+                })
+                .catch(error => console.log(error))
         },
 
 
@@ -221,17 +224,21 @@ export default {
         },
         postTransaction(){
           console.log(this.transaction);
-          axios
-                .post('transactions',this.transaction, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    console.log(res.data)
-                    this.$router.push("/transactions/" + this.id);
-                })
-                .catch((error) => console.log(error));
+          this.transaction.date = new Date();
+          
+          if(this.transaction )
+            console.log(this.transaction)
+          //   axios
+        //         .post('transactions',this.transaction, {
+        //             headers: {
+        //                 Authorization: "Bearer " + localStorage.getItem("jwt")
+        //             }
+        //         })
+        //         .then((res) => {
+        //             console.log(res.data)
+        //             this.$router.push("/transactions/" + this.id);
+        //         })
+        //         .catch((error) => console.log(error));
         },
         checkPincode() {
             console.log(this.pincode);
