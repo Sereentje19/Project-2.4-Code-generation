@@ -197,11 +197,24 @@ export default {
                 currencies: [],
                 accountType:[],
                 absoluutLimit: 0,
+            },
+            otherBankAccount :
+            {
+                id: 0,
+                iban: "",
+                balance: 0,
+                userId: 0,
+                disabled: false,
+                currencies: [],
+                accountType:[],
+                absoluutLimit: 0,
             }
+            
         };
     },
     mounted() {
         this.getUser();
+        this.getBankAccount();
     },
     methods: {
         getUser() {
@@ -217,7 +230,21 @@ export default {
                 })
                 .catch(error => console.log(error))
         },
-
+        getBankAccount() {
+            axios
+                .get('/bankaccounts/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.bankaccount = res.data;
+                    // this.getTransactions();
+                    console.log(this.bankaccount);
+                    
+                })
+                .catch(error => console.log(error))
+        },
 
         showPincode() {
             document.getElementById("test").style.display = "table";
@@ -230,8 +257,74 @@ export default {
           this.transaction.date = new Date();
           
           if(this.transaction.amount < this.user.transactionLimit){
-              axios
-                .post('transactions',this.transaction, {
+            var newbalance = this.bankaccount.balance - this.transaction.amount;
+            if(newbalance > this.bankaccount.absoluutLimit && this.newbalance > 0){
+                if(this.bankaccount.accountType[0] == "CURRENT"){
+                    this.bankaccount.balance = newbalance;
+                    axios
+                    .post('transactions',this.transaction, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        console.log(res.data)
+                    })
+                    .catch((error) => console.log(error));
+                }
+                
+            }
+            alert("you will end below your absolute limit or below 0") 
+              
+          }
+          
+        },
+        verifyRequest(){
+            if(this.otherBankAccount.iban == this.bankaccount.iban){
+                if(this.otherBankAccount.accountType[0] == "CURRENT" && this.bankaccount.accountType[0] == "CURRENT" || this.otherBankAccount.accountType[0] == "SAVINGS" && this.bankaccount.accountType[0] == "SAVINGS"){
+                    alert("you can't transfer to the same account");
+                    this.$router.push("/customer/createtransactions/" + this.id);   
+                }
+                
+            }
+            if(this.otherBankAccount.accountType[0] != "CURRENT"){
+                alert("you can only transfer to a current account");
+                this.$router.push("/customer/createtransactions/" + this.id);
+            }
+            if(this.otherBankAccount.disabled == true || this.bankaccount.disabled == true){
+                alert("you can't transfer to and / or from a disabled account");
+                this.$router.push("/customer/createtransactions/" + this.id);
+            }
+            if(this.transaction.amount > this.user.transactionLimit){
+                alert("you can't transfer more than your transaction limit");
+                this.$router.push("/customer/createtransactions/" + this.id);
+            }
+            var newbalance = this.bankaccount.balance - this.transaction.amount;
+            if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
+                alert("you will end below your absolute limit or below 0");
+                this.$router.push("/customer/createtransactions/" + this.id);
+            }
+            var dailylimit = this.user.dailyLimit - this.transaction.amount;
+            if(dailylimit < 0){
+                alert("you will end below your daily limit");
+                this.$router.push("/customer/createtransactions/" + this.id);
+            }
+        },
+        getOtherBankAccount(){
+            axios
+                .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        this.otherBankAccount = res.data;
+                    })
+                    .catch((error) => console.log(error));
+        },
+        updateBalance(){
+            axios
+                .put('bankaccounts/change/' + this.id, this.bankaccount, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -241,8 +334,6 @@ export default {
                     this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
-          }
-          
         },
         checkPincode() {
             console.log(this.pincode);
@@ -255,10 +346,10 @@ export default {
                 .then((res) => {
                     console.log(res.data)
                     if(res.data != ""){
-                        this.postTransaction();
+                        this.getOtherBankAccount();
                     }
                     else{
-                        console.log("wrong pincode")
+                        alert("wrong pincode")
                     }
                     
                 })
