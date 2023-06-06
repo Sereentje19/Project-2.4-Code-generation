@@ -27,9 +27,4 @@ export default {
 <style>
 @import '../../assets/css/header.css';
 
-.grey{
-  color: black;
-  background-color: rgb(136, 136, 136);
-  margin-left: 20px;
-}
 </style>

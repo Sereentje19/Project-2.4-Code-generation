@@ -12,6 +12,9 @@ import AccountInfoforEmployee from '../components/employees/AccountInfo.vue';
 import CustomerCreateTransactions from '../components/customers/CreateTransaction.vue';
 import CustomerWithdrawOrDeposit from '../components/customers/WithdrawOrDeposit.vue';
 import pincode from '../components/customers/pincode.vue';
+import QuestionCustomer from '../components/employees/QuestionCustomer.vue';
+import AddBankAccount from '../components/employees/AddBankAccount.vue';
+import AddUser from '../components/employees/addUser.vue';
 
 
 const router = createRouter({
@@ -29,6 +32,9 @@ const router = createRouter({
     { path: '/customer/createtransactions/:id', component: CustomerCreateTransactions, props: true},
     { path: '/customer/withdrawOrDeposit/:id', component: CustomerWithdrawOrDeposit, props: true},
     { path: '/customer/pincode/', component: pincode, props: true},
+    { path: '/employee/question', component: QuestionCustomer},
+    { path: '/employee/AddBankAccount', component: AddBankAccount},
+    { path: '/employee/AddUser', component: AddUser},
   ]
 })
 

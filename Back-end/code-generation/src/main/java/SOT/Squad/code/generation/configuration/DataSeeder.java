@@ -25,14 +25,18 @@ public class DataSeeder implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        BankAccount bankacc1 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, List.of(Currency.EURO), List.of(AccountType.CURRENT));
-        BankAccount bankacc2 = new BankAccount(2, "NL12INHO0123456788",  2000, 1, false, List.of(Currency.POUND), List.of(AccountType.SAVINGS));
-        BankAccount bankacc3 = new BankAccount(3, "NL12INHO0123456787",  100, 2, false, List.of(Currency.DOLLAR), List.of(AccountType.SAVINGS));
+        //Bankaccounts
+//        BankAccount bankacc1 = new BankAccount(4, "NL01INHO0000000001",   0, 4, false, "EUR", List.of(AccountType.CURRENT));
+        BankAccount bankacc2 = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT));
+        BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  2000, 2, false, "EUR", List.of(AccountType.SAVINGS));
+        BankAccount bankacc4 = new BankAccount(3, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.SAVINGS));
 
-        bankAccountService.addBankAccount(bankacc1);
+//      bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);
         bankAccountService.addBankAccount(bankacc3);
+        bankAccountService.addBankAccount(bankacc4);
 
+        //Transactions
         transactionService.AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
         transactionService.AddTransaction(new Transaction(2, "test", 100,  "NL12INHO0123456788", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
         transactionService.AddTransaction(new Transaction(3, "test", 100,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk"));
@@ -44,9 +48,11 @@ public class DataSeeder implements ApplicationRunner {
         transactionService.AddTransaction(new Transaction(9, "test", 1.8,  "NL12INHO0123456789", "NL12INHO0123456781", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
         transactionService.AddTransaction(new Transaction(10, "test", 10.20,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
 
-        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER), "4321"));
-        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER), "1234"));
-        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc1.getId(), bankacc2.getId()), List.of(Role.CUSTOMER), "0000"));
+        //Users
+//        userService.addUser(new User(4, "SOTBank", "SOTBank", "SOTBank", "SOTBank", 061234567, "SOTBank@gmail.com", "BankStreet", 1, "1234AB", "Haarlem", List.of(bankacc1.getId()), List.of(Role.EMPLOYEE), "4677"));
+        userService.addUser(new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "5781"));
+        userService.addUser(new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "2595"));
+        userService.addUser(new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId(), bankacc3.getId()), List.of(Role.CUSTOMER), "3685"));
 
     }
 }

@@ -26,6 +26,7 @@ public class UserRestController {
 
     @PostMapping //Employee
     public User addUser(@RequestBody User user) {
+        keyProvider.decodeJWT();
         return userService.addUser(user);
     }
 
@@ -59,7 +60,5 @@ public class UserRestController {
         keyProvider.decodeJWT();
         return userService.checkPincode(pincode);
     }
-
-
 
 }
