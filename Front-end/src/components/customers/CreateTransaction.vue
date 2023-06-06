@@ -184,7 +184,15 @@ export default {
                 betalingskenmerk: "",
             },
             pincode: "",
-            bankaccount : [],
+            bankaccount : {
+                id: 0,
+                iban: "",
+                balance: 0,
+                userId: 0,
+                disabled: false,
+                currencies: [],
+                accountType:[],
+            }
         };
     },
     mounted() {
@@ -192,16 +200,16 @@ export default {
     },
     methods: {
         getAll() {
-            axios
-                .get('bankaccounts/info/' + this.id, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    this.bankaccount = res.data;
-                })
-                .catch(error => console.log(error))
+            // axios
+            //     .get('bankaccounts/info/' + this.id, {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         this.bankaccount = res.data;
+            //     })
+            //     .catch(error => console.log(error))
         },
 
 
@@ -212,7 +220,7 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         postTransaction(){
-          console.log(this.transaction)
+          console.log(this.transaction);
           axios
                 .post('transactions',this.transaction, {
                     headers: {
@@ -221,11 +229,12 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/customer/transactions/" + this.id);
+                    this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
         },
         checkPincode() {
+            console.log(this.pincode);
             axios
                 .get('users/pincode/' + this.pincode, {
                     headers: {
