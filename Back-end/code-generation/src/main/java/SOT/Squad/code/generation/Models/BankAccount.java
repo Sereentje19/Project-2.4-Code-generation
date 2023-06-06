@@ -24,4 +24,5 @@ public class BankAccount {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountType;
+    private int absoluutLimit;
 }
