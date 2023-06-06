@@ -171,6 +171,8 @@ export default {
                     //     email: "test",
                     // }
                 ],
+                dailyLimit: 0,
+                transactionLimit: 0,
             },
             transaction:
             {
@@ -211,6 +213,7 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
+                    this.transaction.user = res.data;
                 })
                 .catch(error => console.log(error))
         },
@@ -223,22 +226,23 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         postTransaction(){
-          console.log(this.transaction);
+        //   console.log(this.transaction);
           this.transaction.date = new Date();
           
-          if(this.transaction )
-            console.log(this.transaction)
-          //   axios
-        //         .post('transactions',this.transaction, {
-        //             headers: {
-        //                 Authorization: "Bearer " + localStorage.getItem("jwt")
-        //             }
-        //         })
-        //         .then((res) => {
-        //             console.log(res.data)
-        //             this.$router.push("/transactions/" + this.id);
-        //         })
-        //         .catch((error) => console.log(error));
+          if(this.transaction.amount < this.user.transactionLimit){
+              axios
+                .post('transactions',this.transaction, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data)
+                    this.$router.push("/transactions/" + this.id);
+                })
+                .catch((error) => console.log(error));
+          }
+          
         },
         checkPincode() {
             console.log(this.pincode);
@@ -250,7 +254,13 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.postTransaction();
+                    if(res.data != ""){
+                        this.postTransaction();
+                    }
+                    else{
+                        console.log("wrong pincode")
+                    }
+                    
                 })
                 .catch((error) => console.log(error));
 
