@@ -3,16 +3,16 @@
     <headerNavigation />
 
     <div class="container">
-      <h2>Personal Info</h2>
+      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <button @click="goToUserInfo">User Info</button>
       <div>
-        <h3>Name: {{ user.firstName }} {{ user.lastName }}</h3>
-        <!-- <h4>IBAN: {{ user.bankAccountList[i].iban }}</h4> -->
+        <!-- <h2>IBAN: {{ user.bankAccountList[1].iban }}</h2> -->
+        
       </div>
-      <p>Total Amount: {{ totalAmount }}</p>
+      <h3>Total: Є{{ totalAmount }}</h3>
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-        <span class="wide-field">{{ account.accountType }} {{ account.amount }}</span>
+        <span class="wide-field">{{ account.accountType }} Є{{ account.amount }}</span>
       </div>
     </div>
 

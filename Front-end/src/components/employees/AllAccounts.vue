@@ -1,73 +1,90 @@
 <template>
-    <div class="container">
-        <h2>All Bank Accounts</h2>
-        <input type="text" v-model="searchQuery" placeholder="Search..." />
-        <div v-for="account in filteredAccounts" :key="account.id" @click="selectAccount(account)">
-            <span>{{ account.accountNumber }}</span>
-            <span v-if="selectedAccount && selectedAccount.id === account.id">- Owner: {{ selectedAccount.ownerName
-            }}</span>
-        </div>
-    </div>
-</template>
+    <headerNavigation />
 
+    <div class="container">
+        <h2>All Users</h2>
+        <input type="text" v-model="searchQuery" placeholder="Search..." />
+        <!-- <div v-for="user in user.bankAccountList" :key="user.id"> -->
+            <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
+                <span>{{ account.firstName }} {{ account.lastName }} - IBAN: {{ account.bankAccountList }}</span>
+                <span v-if="selectedUser && selectedUser.id === account.id">- Email: {{ selectedUser.email }}</span>
+            </div>
+        </div>
+    <!-- </div> -->
+    <footerNavigation />
+</template>
+  
+  
 <script>
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 export default {
-    header: {
-        name: "header",
-        components: {
-            headerNavigation
-        }
-    },
-    footer: {
-        name: "footer",
-        components: {
-            footerNavigation
-        },
+    components: {
+        headerNavigation,
+        footerNavigation
     },
     data() {
         return {
-            accounts: [],
-            searchQuery: '',
-            selectedAccount: null,
+            users: [],
+            selectedUser: null,
+            searchQuery: ''
         };
     },
     mounted() {
-        this.fetchAccounts();
+        this.getUsers();
     },
     computed: {
-        filteredAccounts() {
-            // Filter accounts based on the search query
-            return this.accounts.filter((account) =>
-                account.accountNumber.includes(this.searchQuery)
-            );
-        },
+        filteredUsers() {
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                return this.users.filter(user => {
+                    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+                    return fullName.includes(query);
+                });
+            }
+            return this.users;
+        }
     },
     methods: {
-        fetchAccounts() {
-            // Make an API call to fetch all bank accounts
+        getUsers() {
             axios
-                .get('/bankaccounts') // Use the correct API endpoint
-                .then((response) => {
-                    // Handle the response and update the accounts data
-                    this.accounts = response.data;
+                .get('/users', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
                 })
-                .catch((error) => {
-                    console.error('Error fetching accounts:', error);
-                    // Handle the error case if necessary
-                });
+                .then((res) => {
+                    this.users = res.data;
+                    this.getBankAccounts();
+                })
+                .catch(error => console.log(error));
         },
-        selectAccount(account) {
-            // Set the selected account for displaying owner's name
-            this.selectedAccount = { ...account }; // Create a copy of the account object
+        getBankAccounts() {
+            // Iterate over the bank accounts and fetch their details
+            for (let i = 0; i < this.user.bankAccountList.length; i++) {
+                const accountId = this.user.bankAccountList[i];
+                axios
+                    .get(`/bankaccounts/` + accountId, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        this.user.bankAccountList[i] = res.data;
+                    })
+                    .catch(error => console.log(error));
+            }
         },
-    },
+        selectUser(user) {
+            this.selectedUser = user;
+        }
+    }
 };
 </script>
-
+  
 <style>
 @import '../../assets/css/allAccounts.css';
 </style>
+  
