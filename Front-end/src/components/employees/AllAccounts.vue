@@ -62,7 +62,6 @@ export default {
                 .catch(error => console.log(error));
         },
         getBankAccounts() {
-            // Iterate over the bank accounts and fetch their details
             for (let i = 0; i < this.user.bankAccountList.length; i++) {
                 const accountId = this.user.bankAccountList[i];
                 axios

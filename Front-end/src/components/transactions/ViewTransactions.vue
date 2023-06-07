@@ -5,7 +5,7 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p><b>{{this.iban}}</b></p>
+                    <p><b>{{ this.decodedIban }}</b></p>
                 </div>
                 <div class="groupOptions">
                     <div class="option"></div>
@@ -66,6 +66,7 @@ export default {
     },
     data() {
         return {
+            decodedIban: atob(this.iban),
             transaction:
             {
                 id: 0,
@@ -109,8 +110,9 @@ export default {
                 .catch(error => console.log(error));
         },
         getTransaction() {
+            const decodedId = atob(this.id)
             axios
-                .get('transactions/' + this.id, headerToken)
+                .get('transactions/' + decodedId, headerToken)
                 .then((res) => {
                     this.transaction = res.data;
                 })

@@ -50,7 +50,6 @@
             </div>
         </div>
     </Transition>
-
 </template>
 
 <style>
@@ -169,22 +168,20 @@ export default {
                 accountType: [],
                 absoluutLimit: 0,
             },
+            decodedId: atob(this.id),
         };
     },
     mounted() {
-        console.log(this.id);
         this.getBankAccount();
-        
     },
     methods: {
         getBankAccount() {
             axios
-                .get('/bankaccounts/' + this.id, headerToken)
+                .get('/bankaccounts/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     // this.getTransactions();
                     console.log(this.bankAccount);
-                    
                 })
                 .catch(error => console.log(error))
         },
@@ -202,37 +199,32 @@ export default {
                     this.withdrawOrDeposit();
                 })
                 .catch((error) => console.log(error));
-
         },
-        withdrawOrDeposit(){
-            if(this.choice == "withdraw"){
+        withdrawOrDeposit() {
+            if (this.choice == "withdraw") {
                 this.withdraw();
-            }else if(this.choice == "deposit"){
+            } else if (this.choice == "deposit") {
                 this.deposit();
             }
         },
-        withdraw(){
+        withdraw() {
             this.bankAccount.balance = this.bankAccount.balance - this.bedrag;
-            if(this.bankAccount.balance < 0){
+            if (this.bankAccount.balance < 0) {
                 this.bankAccount.balance = this.bankAccount.balance + this.bedrag;
                 alert("You don't have enough money on your bankaccount");
             }
             this.changeBankAcount();
-
-            
         },
-        deposit(){
+        deposit() {
             this.bankAccount.balance = this.bankAccount.balance + this.bedrag;
             this.changeBankAcount();
         },
         changeBankAcount() {
-            console.log(this.bankAccount);
-            console.log(this.id);
             axios
-                .put("/bankaccounts/change/" + this.id , this.bankAccount, headerToken)
+                .put("/bankaccounts/change/" + decodedId, this.bankAccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
-                    this.$router.push("/transactions/" + this.id);
+                    this.$router.push("/transactions/" + decodedId);
                 })
                 .catch((error) => console.log(error));
         }
@@ -243,7 +235,7 @@ export default {
 <style>
 @import '../../assets/css/transaction.css';
 
-.structure{
+.structure {
     max-width: 90%;
 }
 </style>

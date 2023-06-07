@@ -92,8 +92,10 @@ export default {
             //     })
             //     .catch(error => console.log(error))
 
+               const decodedId = atob(this.id)
+
             axios
-                .get('transactions/' + this.id, {
+                .get('transactions/' + decodedId, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
