@@ -213,8 +213,7 @@ export default {
                 Iban: "",
                 accountType: [],
             },
-            
-            
+            decodedId: atob(this.id)
         };
     },
     mounted() {
@@ -264,7 +263,7 @@ export default {
         },
         getBankAccount() {
             axios
-                .get('/bankaccounts/' + this.id, {
+                .get('/bankaccounts/' + this.decodedId, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -309,7 +308,6 @@ export default {
                         this.updateBalance();
                     })
                     .catch((error) => console.log(error));
-          
         },
         verifyRequest(){
             if(this.otherBankAccount.iban == this.bankaccount.iban){
@@ -392,7 +390,7 @@ export default {
         },
         updateBalance(){
             axios
-                .put('bankaccounts/change/' + this.id, this.bankaccount, {
+                .put('bankaccounts/change/' + this.decodedId, this.bankaccount, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -410,7 +408,7 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/transactions/" + this.id);
+                    this.$router.push("/transactions/" + this.decodedId);
                 })
                 .catch((error) => console.log(error));
         },
