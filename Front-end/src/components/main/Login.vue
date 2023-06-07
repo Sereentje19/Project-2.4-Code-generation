@@ -35,6 +35,10 @@ export default {
             ]
         };
     },
+    mounted() {
+        delete axios.defaults.headers.common['Authorization'];
+        localStorage.removeItem("jwt");
+    },
     methods: {
         login() {
             axios.post("login", {
