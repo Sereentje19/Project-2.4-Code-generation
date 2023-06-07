@@ -48,7 +48,7 @@ export default {
                 axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
                 localStorage.setItem("jwt", res.data.token);
                 console.log(res.data.token);
-                this.$router.push(`/customerAccountOverview/${this.username}`);
+                this.$router.push(`/customerAccountOverview`);
             }).catch((error) => {
                 alert(error.response.data.token);
             });

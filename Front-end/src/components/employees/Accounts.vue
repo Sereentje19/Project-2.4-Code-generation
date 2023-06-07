@@ -5,28 +5,23 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <p>persoonsinfo....</p>
+                    <p>{{ user.firstName }} {{ user.lastName }}</p>
                 </div>
                 <div class="groupOptions">
                     <div class="option">
                         <button class="btn">
-                            edit 
+                            edit
                         </button>
                     </div>
                     <div class="option"></div>
-
-                    <div class="option">
-                        <input id="inputField" type="text">
-                    </div>
                 </div>
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <a href="/employee/viewTransaction/1">
-                        <div v-for="trans in transactions" class="transaction">
-                            <h1>blabla ... {{ this.transactions.id }}</h1>
-                        </div>
-                    </a>
+                    <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
+                        <span class="wide-field">{{ account.accountType }} EURO {{ account.amount }}</span>
+                    </div>
+                    <h3>Total: Є{{ totalAmount }}</h3>
                 </div>
             </div>
         </div>
@@ -34,80 +29,87 @@
     <footerNavigation />
 </template>
 
-
 <script>
-
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 export default {
-    header: {
-        name: "header",
-        components: {
-            headerNavigation
-        }
-    },
-    footer: {
-        name: "footer",
-        components: {
-            footerNavigation
-        },
-    },
-    name: "transactions",
-    props: {
-        id: Number,
+    components: {
+        headerNavigation,
+        footerNavigation
     },
     data() {
         return {
-            transactions: [],
+            user: {
+                id: 0,
+                username: "",
+                password: "",
+                firstName: "",
+                lastName: "",
+                phoneNumber: "",
+                email: "",
+                street: "",
+                houseNumber: "",
+                postalCode: "",
+                city: "",
+                bankAccountList: []
+            },
+
+
+
         };
     },
+    computed: {
+        totalAmount() {
+            return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
+        }
+    },
     mounted() {
-        this.getAll();
+        this.getUserInfo();
     },
     methods: {
-        getAll() {
-            axios
-            //     .get('users/' + this.id, {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
-            // axios
-            //     .get('bankaccounts/' + this.id)
-            //     .then((res) => {
-            //         this.transactions = res.data;
-
-            //         console.log(res.data)
-            //         console.log(this.transactions.id)
-            //     })
-            //     .catch(error => console.log(error))
-
-               const decodedId = atob(this.id)
-
+        getUserInfo() {
+            const userId = this.$route.params.id;
             axios
                 .get('transactions/' + decodedId, {
+
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
-                    this.transactions = res.data;
-
-                    // console.log(res.data)
-                    // console.log(this.transactions.id)
+                    this.user = res.data;
+                    this.getBankAccounts();
                 })
                 .catch(error => console.log(error))
-
+        },
+        getBankAccounts() {
+            // Iterate over the bank accounts and fetch their details
+            for (let i = 0; i < this.user.bankAccountList.length; i++) {
+                const accountId = this.user.bankAccountList[i];
+                axios
+                    .get(`/bankaccounts/` + accountId, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        this.user.bankAccountList[i] = res.data;
+                        this.user.bankAccountList[i].amount = res.data.balance;
+                        this.user.bankAccountList[i].iban = res.data.iban;
+                        this.user.bankAccountList[i].accountType = res.data.accountType;
+                    })
+                    .catch(error => console.log(error));
+            }
+            this.bankacc = this.user.bankAccountList[1];
+            console.log(this.bankacc);
+        },
+        goToUserInfo() {
+            this.$router.push(`/accountInfo`);
+        },
+        goToTransactions(account) {
+            this.$router.push(`/transactions/${account.id}`);
         },
     },
 };

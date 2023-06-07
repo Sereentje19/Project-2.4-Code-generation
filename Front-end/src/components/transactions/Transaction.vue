@@ -161,13 +161,13 @@ export default {
     },
     methods: {
         WithDrawOrDeposit() {
-            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.iban));
+            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.id));
         },
         createTransaction() {
-            this.$router.push("/customer/createtransactions/" + btoa(this.user.username));
+            this.$router.push("/customer/createtransactions/" + btoa(this.bankAccount.id));
         },
         ViewTransactions(id) {
-            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(this.user.username) + "/" + btoa(id));
+            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
         },
         getUser() {
             axios

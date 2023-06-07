@@ -29,8 +29,6 @@
                     <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.betalingskenmerk">
                 </div>
             </div>
-            <button @click="showPincode()">Create transaction</button>
-
         </div>
     </body>
     <footerNavigation />
@@ -213,7 +211,7 @@ export default {
                 Iban: "",
                 accountType: [],
             },
-            decodedId: atob(this.id)
+            decodedId: atob(this.id),
         };
     },
     mounted() {
@@ -308,6 +306,7 @@ export default {
                         this.updateBalance();
                     })
                     .catch((error) => console.log(error));
+          
         },
         verifyRequest(){
             if(this.otherBankAccount.iban == this.bankaccount.iban){
