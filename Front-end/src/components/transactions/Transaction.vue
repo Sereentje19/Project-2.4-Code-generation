@@ -183,10 +183,10 @@ export default {
             console.log(this.testArray)
         },
         WithDrawOrDeposit() {
-            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
+            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.id);
         },
         createTransaction() {
-            this.$router.push("/customer/createtransactions");
+            this.$router.push("/customer/createtransactions/" + this.user.id);
         },
         ViewTransactions(id) {
             this.$router.push("/viewTransaction/" + this.bankAccount.iban + "/" + id);
