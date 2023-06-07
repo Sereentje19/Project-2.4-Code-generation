@@ -23,13 +23,16 @@
                             Transaction
                         </button>
                     </div>
-                    <div v-if="role == 'CUSTOMER'" class="option">
-                        <input type="date" id="datepicker" />
+                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
+                        <h4>From</h4>
+                        <input type="date"  v-model="fromDate"/>
+                    </div>
+                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
+                        <h4>To</h4>
+                        <input type="date"  v-model="toDate"/>
                     </div>
                     <div v-if="role == 'CUSTOMER'" class="option">
-                        <input type="date" id="datepicker" />
-                    </div>
-                    <div v-if="role == 'CUSTOMER'" class="option">
+                        <!-- <input type="text" placeholder="Search" v-model="searchQuery"> -->
                         <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
                     </div>
                 </div>
@@ -66,6 +69,14 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
+    width: 150px;
+    right: 0;
+}
+
+#datepicker {
+    display: flex;
+    flex-direction: column;
+    float: left;
 }
 </style>
 
@@ -108,6 +119,7 @@ export default {
                     accountTypeTo: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',
+                    date: '',
                 }
             ],
             bankAccount:
@@ -136,7 +148,9 @@ export default {
                 bankAccountList: [],
                 roles: [],
             },
-            searchQuery: ''
+            searchQuery: '',
+            fromDate: null,
+            toDate: null
         };
     },
     mounted() {
@@ -182,6 +196,8 @@ export default {
     computed: {
         filteredTransactions() {
             const searchQuery = this.searchQuery.toLowerCase();
+            const fromDate = this.fromDate;
+            const toDate = this.toDate;
 
             return this.transactions.filter(transaction => {
                 const fieldsToCheck = [
@@ -190,12 +206,17 @@ export default {
                     'bankAccountTo'
                 ];
 
-                return fieldsToCheck.some(field => {
+                const isInDateRange = (!fromDate || transaction.date >= fromDate) &&
+                    (!toDate || transaction.date <= toDate);
+
+                const matchesSearchQuery = fieldsToCheck.some(field => {
                     const fieldValue = transaction[field];
                     return fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery);
                 });
+
+                return isInDateRange && matchesSearchQuery;
             });
-        }
+        },
     },
 
 };
