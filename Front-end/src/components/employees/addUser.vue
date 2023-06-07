@@ -107,7 +107,7 @@ export default {
             const length = 4;
             let pincode = '';
             for (let i = 0; i < length; i++) {
-                const digit = Math.floor(Math.random() * 10); // Generate a random number between 0 and 9
+                const digit = Math.floor(Math.random() * 10);
                 pincode += digit;
             }
             this.generatedPincode = pincode;
