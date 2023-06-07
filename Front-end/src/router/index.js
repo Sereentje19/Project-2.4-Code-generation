@@ -20,7 +20,6 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', component: Login },
-    { path: '/home', component: Home },
     { path: '/transactions/:id' , component: Transactions, props: true },
     { path: '/viewTransaction/:iban/:id' , component: ViewTransaction, props: true },
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
@@ -30,7 +29,6 @@ const router = createRouter({
     { path: '/accountInfoforEmployee' , component: AccountInfoforEmployee, props: true},
     { path: '/customer/createtransactions/:id', component: CustomerCreateTransactions, props: true},
     { path: '/customer/withdrawOrDeposit/:id', component: CustomerWithdrawOrDeposit, props: true},
-    { path: '/customer/pincode/', component: pincode, props: true},
     { path: '/employee/question', component: QuestionCustomer},
     { path: '/employee/AddBankAccount', component: AddBankAccount},
     { path: '/AddUser', component: AddUser},

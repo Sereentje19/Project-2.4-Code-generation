@@ -117,7 +117,7 @@ export default {
     goToTransactions(account) {
 
       const username = this.user.username;
-      this.$router.push("/transactions/" + username + "/" + btoa(account.id));
+      this.$router.push("/transactions/" + btoa(account.id));
     },
   },
 };
