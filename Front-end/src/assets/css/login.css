@@ -35,8 +35,11 @@
 }
 
 body {
-  background-image: url("../images/pexels-photo-5935254.jpeg");
+  /* background-image: url("../images/pexels-photo-5935254.jpeg"); */
   background-size: 100%;
 }
 
-/* background-color: rgb(208, 45, 125); */
+#register{
+  margin: 0 auto;
+}
+

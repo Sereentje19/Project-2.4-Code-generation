@@ -25,11 +25,31 @@ public class MySecurityConfiguration {
         httpSecurity.cors().and().csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
+                //login
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/users/login").permitAll()
-                .requestMatchers("/transactions/{iban}").authenticated()
-                .requestMatchers("/transactions/info/{id}").authenticated()
-                .requestMatchers("/bankaccounts/info/{id}").authenticated();
+                .requestMatchers("/login/register").permitAll()
+
+                //users
+                .requestMatchers("/users/current").authenticated()
+                .requestMatchers("/users/pincode/{pincode}").authenticated()
+                .requestMatchers("/users").authenticated()
+                .requestMatchers("/users/register").permitAll()
+
+
+                //transactions
+                .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
+                .requestMatchers("/transactions").authenticated()
+                .requestMatchers("/transactions/{id}").authenticated()
+
+                //bankaccounts
+                .requestMatchers("/bankaccounts/{id}").authenticated()
+                .requestMatchers("/bankaccounts/change/{id}").authenticated()
+                .requestMatchers("/bankaccounts/info/{id}").authenticated()
+                .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
+                .requestMatchers("/bankaccounts").authenticated();
+
+                
+
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

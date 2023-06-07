@@ -24,30 +24,28 @@ public class BankAccountRestController {
         return bankAccountService.getAllBankAccounts();
     }
 
+    @GetMapping("/{id}") //Employee & Customer
+    public BankAccount getAccountById(@PathVariable long id) {
+        keyProvider.decodeJWT();
+        return bankAccountService.getBankAccountById(id);
+    }
+
+    @PutMapping //Employee
+    public boolean deleteBankAccount(@RequestBody BankAccount bankAccount) {
+        keyProvider.decodeJWT();
+        bankAccountService.deleteBankAccount(bankAccount);
+        return true;
+    }
+
     @PostMapping //Employee & Customer
     public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
         return bankAccountService.addBankAccount(bankAccount);
     }
 
-    @PutMapping("/{iban}") //Employee & Customer
-    public BankAccount updateBankAccount(@RequestBody BankAccount bankAccount, @PathVariable String iban) {
-        return bankAccountService.updateBankAccount(bankAccount, iban);
-    }
-
-    @GetMapping("/{iban}") //Employee & Customer
-    public List<BankAccount> getAccountByIban(@PathVariable String id) {
+    @PutMapping("/change/{id}") //Employee & Customer
+    public BankAccount updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
         keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountByIban(id);
+        return bankAccountService.updateBankAccount(bankAccount, id);
     }
 
-    @GetMapping("/info/{id}") //Employee & Customer
-    public BankAccount getAccountById(@PathVariable String id) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountById(id);
-    }
-
-    @DeleteMapping("/{iban}") //Employee
-    public void deleteBankAccount(@PathVariable String iban) {
-        bankAccountService.deleteBankAccount(iban);
-    }
 }

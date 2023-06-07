@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,10 +24,13 @@ public class Transaction {
     private double amount;
     private String bankAccountFrom;
     private String bankAccountTo;
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountTypeFrom;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountTypeTo;
+    private String paymentReference;
+    private LocalDateTime date;
+    @OneToOne
+    private User PerformedByUser;
 }

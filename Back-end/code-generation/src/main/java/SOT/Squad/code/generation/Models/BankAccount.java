@@ -20,10 +20,9 @@ public class BankAccount {
     private double balance;
     private long userId;
     private boolean disabled;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<Currency> currencies;
+    private String currencies;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountType;
+    private int absoluutLimit;
 }

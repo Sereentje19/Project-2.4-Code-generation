@@ -4,14 +4,17 @@
             <div class="divBtns">
                 <h2 class="">Sign in</h2>
             </div><br>
-            <label ><b>Username</b></label>
+            <label><b>Username</b></label>
             <input v-model="username" class="input" type="text" placeholder="Enter username" required><br>
-            
-            <label ><b>Password</b></label>
+
+            <label><b>Password</b></label>
             <input v-model="password" class="input" type="password" placeholder="Enter password" required>
 
             <div class="divBtn">
                 <button @click="login()" class="loginBtn btn" id="" type="button">Sign in</button>
+            </div>
+            <div id="register">
+                <a href="/AddUser">Register</a>
             </div>
         </div>
     </div>
@@ -41,7 +44,7 @@ export default {
                 axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
                 localStorage.setItem("jwt", res.data.token);
                 console.log(res.data.token);
-                this.$router.push("/customer/transactions/1");
+                this.$router.push("/transactions/1");
             }).catch((error) => {
                 alert(error.response.data.token);
             });
