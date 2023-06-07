@@ -114,3 +114,4 @@ lerna-debug.log
 .DS_Store
 Thumbs.db
 Back-end/Project-2.4-Code-generation/
+Front-end/src/components/customers/AccountOverview.vue

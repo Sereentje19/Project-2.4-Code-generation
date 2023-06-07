@@ -7,6 +7,9 @@
                 <div class="accountNumber">
                     <p>{{ this.bankAccount.iban }}</p>
                 </div>
+                <div class="option">
+                    <button class="btn" @click="createTransaction()">Create Transaction</button>
+                </div>
                 <div v-for="role in this.user.roles" class="groupOptions">
                     <div v-if="role == 'EMPLOYEE'" class="option">
                         <button class="btn" @click="WithDrawOrDeposit()">
@@ -145,10 +148,10 @@ export default {
             this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
         },
         createTransaction() {
-            this.$router.push("/customer/createtransactions/" + this.id);
+            this.$router.push("/customer/createtransactions/" + this.user.username);
         },
         ViewTransactions(id) {
-            this.$router.push("/viewTransaction/" + this.bankAccount.iban + "/" + id);
+            this.$router.push("/viewTransaction/" + this.bankAccount.iban + "/" + this.user.username + "/" + id);
         },
         getUser() {
             axios
