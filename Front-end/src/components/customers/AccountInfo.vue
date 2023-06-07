@@ -75,7 +75,7 @@ export default {
         .catch(error => console.log(error));
     },
     goBack() {
-      // Perform the logic to go back to the previous page
+      this.$router.go(-1);
     }
   }
 };

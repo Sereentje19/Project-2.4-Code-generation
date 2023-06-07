@@ -43,11 +43,13 @@
       <span v-if="!editMode">{{ customer.houseNumber }}</span>
       <input type="text" v-else v-model="editedUser.houseNumber" />
     </div>
-    <div v-if="!editMode" v-for="account in customer.bankAccountList" :key="account.id">
+    <div v-if="!editMode">
+      <div v-if="customer.bankAccountList.length > 0">
       <label>Account Status:</label>
-      <span>{{ account.disabled ? 'Inactive' : 'Active' }}</span>
+      <span>{{ customer.bankAccountList[0].disabled ? 'Inactive' : 'Active' }}</span>
       <label>IBAN:</label>
-      <span>{{ account.iban }}</span>
+      <span>{{ customer.bankAccountList[0].iban }}</span>
+    </div>
     </div>
 
     <div v-else>
@@ -76,6 +78,12 @@
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
+
+const headerToken = {
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
+};
 
 export default {
   components: {
@@ -132,18 +140,27 @@ export default {
           })
           .then((res) => {
             this.customer.bankAccountList[i] = res.data;
-            
+            this.customer.bankAccountList[i].amount = res.data.balance;
+            this.customer.bankAccountList[i].iban = res.data.iban;
+            this.customer.bankAccountList[i].accountType = res.data.accountType;            
           })
           .catch(error => console.log(error));
       }
     },
     updateInfo() {
+      console.log(this.editedUser);
+      console.log(this.customer);
+      console.log(this.customer.id);
+      console.log(this.editedUser.id);
+      console.log(this.editedUser.accountStatus);
+      console.log(this.headerToken);
       axios
-        .put('/users/' + this.customer.id, this.editedUser)
+        .put('/users/' + this.customer.id, this.editedUser, headerToken)
         .then((response) => {
           console.log('User information updated successfully!');
           this.customer = { ...this.editedUser };
           this.editMode = false;
+          console.log(this.response )
         })
         .catch((error) => {
           console.error('Error updating user information:', error);

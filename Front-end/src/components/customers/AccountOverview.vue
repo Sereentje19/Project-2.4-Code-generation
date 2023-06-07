@@ -5,7 +5,7 @@
     <div class="container">
       <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <button @click="goToUserInfo">User Info</button>
-      
+
       <div v-if="user.bankAccountList.length > 0">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
       </div>
@@ -45,35 +45,16 @@ export default {
         houseNumber: "",
         postalCode: "",
         city: "",
-        bankAccountList:
-        {
-          id: 0,
-          iban: "",
-          balance: 0,
-          userId: 0,
-          disabled: false,
-          currencies: [],
-          accountType: [],
-          absoluutLimit: 0,
-        }
-        ,
+        bankAccountList: []
       },
-      bankacc: {
-        id: 0,
-        iban: "",
-        balance: 0,
-        userId: 0,
-        disabled: false,
-        currencies: [],
-        accountType: [],
-        absoluutLimit: 0,
-      }
+
+
 
     };
   },
   computed: {
     totalAmount() {
-      // return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
+      return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
     }
   },
   mounted() {
@@ -117,10 +98,12 @@ export default {
       console.log(this.bankacc);
     },
     goToUserInfo() {
-      this.$router.push('/personal-details');
+      const username = this.user.username;
+      this.$router.push(`/customer/accountInfo/${username}`);
     },
     goToTransactions(account) {
-      this.$router.push({ name: 'transactions', params: { accountId: account.id } });
+      const username = this.user.username;
+      this.$router.push(`/transactions/${username}/${account.id}`);
     },
   },
 };
