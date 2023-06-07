@@ -27,11 +27,14 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 //login
                 .requestMatchers("/login").permitAll()
+                .requestMatchers("/login/register").permitAll()
 
                 //users
                 .requestMatchers("/users/current").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
+                .requestMatchers("/users/register").permitAll()
+
 
                 //transactions
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()

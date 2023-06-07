@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../components/main/Login.vue';
+import Register from '../components/main/Register.vue';
 import Home from '../components/main/Home.vue';
 import Transactions from '../components/transactions/Transaction.vue';
 import ViewTransaction from '../components/transactions/ViewTransactions.vue';
@@ -23,6 +24,7 @@ const router = createRouter({
   routes: [
     { path: '/', component: Login },
     { path: '/home', component: Home },
+    { path: '/register', component: Register },
     { path: '/transactions/:id' , component: Transactions, props: true },
     { path: '/viewTransaction/:iban/:id' , component: ViewTransaction, props: true },
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
@@ -35,7 +37,7 @@ const router = createRouter({
     { path: '/customer/pincode/', component: pincode, props: true},
     { path: '/employee/question', component: QuestionCustomer},
     { path: '/employee/AddBankAccount', component: AddBankAccount},
-    { path: '/employee/AddUser', component: AddUser},
+    { path: '/AddUser', component: AddUser},
     { path: '/question', component: QuestionEmployee},
   ]
 })

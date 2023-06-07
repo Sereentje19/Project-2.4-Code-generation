@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         addUser() {
-            this.$router.push("/employee/AddUser");
+            this.$router.push("/AddUser");
         },
         addBankAccount() {
             this.$router.push("/employee/AddBankAccount");

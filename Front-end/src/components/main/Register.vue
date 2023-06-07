@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>Personal Details</h2>
+        <h2>Register</h2>
         <div>
             <label>First Name:</label>
             <input type="text" v-model="user.firstName" />
@@ -68,7 +68,6 @@ export default {
     data() {
         return {
             user: {},
-            currentUser: '',
             generatedPassword: '',
             generatedPincode: 0,
             generatedIban: '',
@@ -91,7 +90,7 @@ export default {
     mounted() {
         this.generatePassword();
         this.generatePincode();
-        this.checkUser();
+        this.generateIBAN();
     },
     methods: {
         generatePassword() {
@@ -123,11 +122,11 @@ export default {
             this.checkIbanExists();
         },
         cancel() {
-            this.$router.push("/employee/question");
+            this.$router.push("/");
         },
         checkIbanExists() {
             axios
-                .get('bankaccounts', headerToken)
+                .get('/bankaccounts', headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
 
@@ -136,14 +135,8 @@ export default {
                             this.generateIBAN();
                         }
                     }
+                    
                 }).catch((error) => console.log(error));
-        },
-        checkUser() {
-            if (localStorage.getItem("jwt") !== null) {
-                this.currentUser = "EMPLOYEE";
-            } else {
-                this.currentUser = "CUSTOMER";
-            }
         },
         addUser() {
             this.user.iban = this.generatedIban;
@@ -151,31 +144,13 @@ export default {
             this.user.pincode = this.generatedPincode;
             this.user.username = this.user.firstName;
 
-            if (this.currentUser == "EMPLOYEE") {
-                axios
-                    .post('users', this.user, headerToken)
-                    .then((res) => {
-                        this.addBankAccount(res.data.id);
-                        // this.$router.push("/");
-                    })
-                    .catch((error) => console.log(error));
-            }
-            else {
-                axios
-                    .post('login/register', this.user)
-                    .then((res) => {
-                        axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
-                        localStorage.setItem("jwt", res.data.token);
-                        console.log(localStorage.getItem("jwt"))
-                        // this.addBankAccount(res.data.id);
-                        // this.$router.push("/");
-                    }).catch((error) => {
-                        alert(error.response.data.token);
-                    });
-            }
-
-            // this.generateIBAN();
-
+            axios
+                .post('users', this.user, headerToken)
+                .then((res) => {
+                    this.addBankAccount(res.data.id);
+                    // this.$router.push("/");
+                })
+                .catch((error) => console.log(error));
         },
         addBankAccount(userId) {
             this.newBankAccount.iban = this.generatedIban;

@@ -1,9 +1,13 @@
 package SOT.Squad.code.generation.Controllers;
 
+import SOT.Squad.code.generation.JWT.JWTTokenProvider;
+import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,10 @@ public class UserRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
+
+    @Autowired
+    JWTTokenProvider tokenProvider;
+
     @GetMapping() //Employee
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -29,6 +37,27 @@ public class UserRestController {
         keyProvider.decodeJWT();
         return userService.addUser(user);
     }
+
+//    @PostMapping("/register")//Employee
+//    public User register(@RequestBody User user) {
+//        return userService.addUser(user);
+//    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            User addedUser = userService.addUser(user);
+            String token = tokenProvider.createToken(addedUser.getUsername(), addedUser.getRoles());
+
+            LoginResponseDTO response = new LoginResponseDTO(token);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
+        }
+    }
+
 
     @DeleteMapping("/{id}") //Employee
     public void deleteUser(@PathVariable long id) {
@@ -44,7 +73,6 @@ public class UserRestController {
     public User getUserOnUsername() {
         String username = keyProvider.decodeJWT();
         return userService.getUserByUsername(username);
-
     }
 
     @PutMapping("/{id}") //Employee & Customer
