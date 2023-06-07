@@ -26,9 +26,26 @@
                             Transaction
                         </button>
                     </div>
-                    <div v-if="role == 'CUSTOMER'" class="option"></div>
-                    <div v-if="role == 'CUSTOMER'" class="option"></div>
+                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
+                        <h4>From</h4>
+                        <input type="date" v-model="fromDate" />
+                    </div>
+                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
+                        <h4>To</h4>
+                        <input type="date" v-model="toDate" />
+                    </div>
                     <div v-if="role == 'CUSTOMER'" class="option">
+                        <select v-model="balanceFilter.comparison">
+                            <option value="<">Less than</option>
+                            <option value="==">Equal to</option>
+                            <option value=">">Greater than</option>
+                        </select>
+                    </div>
+                    <div v-if="role == 'CUSTOMER' && balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
+                        class="option">
+                        <input type="number" id="inputField" placeholder="Balance" v-model="balanceFilter.value" />
+                    </div>
+                    <div v-else class="option">
                         <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
                     </div>
                 </div>
@@ -59,13 +76,20 @@
     <footerNavigation />
 </template>
 
-
 <style>
 #inputField {
     border-color: black;
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
+    width: 150px;
+    right: 0;
+}
+
+#datepicker {
+    display: flex;
+    flex-direction: column;
+    float: left;
 }
 </style>
 
@@ -99,6 +123,10 @@ export default {
     },
     data() {
         return {
+            balanceFilter: {
+                comparison: '',
+                value: null,
+            },
             transactions: [
                 {
                     id: '',
@@ -108,6 +136,7 @@ export default {
                     accountTypeTo: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',
+                    date: '',
                 }
             ],
             bankAccount:
@@ -136,7 +165,10 @@ export default {
                 bankAccountList: [],
                 roles: [],
             },
-            searchQuery: ''
+            searchQuery: '',
+            fromDate: null,
+            toDate: null,
+            testArray: [],
         };
     },
     mounted() {
@@ -144,6 +176,15 @@ export default {
         this.getBankAccount();
     },
     methods: {
+        test() {
+            this.transactions.forEach(element => {
+                // console.log(element)
+                if (parseInt(element.amount) > 100) {
+                    this.testArray.push(element);
+                }
+            });
+            console.log(this.testArray)
+        },
         WithDrawOrDeposit() {
             this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.iban);
         },
@@ -175,6 +216,8 @@ export default {
                 .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], headerToken)
                 .then((res) => {
                     this.transactions = res.data;
+                    this.test();
+
                 })
                 .catch(error => console.log(error))
         },
@@ -182,22 +225,37 @@ export default {
     computed: {
         filteredTransactions() {
             const searchQuery = this.searchQuery.toLowerCase();
+            const fromDate = this.fromDate;
+            const toDate = this.toDate;
+            const balanceFilter = this.balanceFilter;
 
-            return this.transactions.filter(transaction => {
-                const fieldsToCheck = [
-                    'amount',
-                    'bankAccountFrom',
-                    'bankAccountTo'
-                ];
+            return this.transactions.filter((transaction) => {
+                const fieldsToCheck = ['amount', 'bankAccountFrom', 'bankAccountTo'];
 
-                return fieldsToCheck.some(field => {
+                const isInDateRange =
+                    (!fromDate || transaction.date >= fromDate) &&
+                    (!toDate || transaction.date <= toDate);
+
+                const matchesSearchQuery = fieldsToCheck.some((field) => {
                     const fieldValue = transaction[field];
-                    return fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery);
+                    return (
+                        fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery)
+                    );
                 });
-            });
-        }
-    },
 
+                let matchesBalanceFilter = true;
+                if (balanceFilter.comparison === '<') {
+                    matchesBalanceFilter = parseFloat(transaction.amount) < balanceFilter.value;
+                } else if (balanceFilter.comparison === '==') {
+                    matchesBalanceFilter = parseFloat(transaction.amount) === balanceFilter.value;
+                } else if (balanceFilter.comparison === '>') {
+                    matchesBalanceFilter = parseFloat(transaction.amount) > balanceFilter.value;
+                }
+
+                return isInDateRange && matchesSearchQuery && matchesBalanceFilter;
+            });
+        },
+    },
 };
 </script>
 
