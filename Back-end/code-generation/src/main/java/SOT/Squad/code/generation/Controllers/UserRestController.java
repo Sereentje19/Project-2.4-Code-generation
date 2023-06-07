@@ -38,25 +38,27 @@ public class UserRestController {
         return userService.addUser(user);
     }
 
-//    @PostMapping("/register")//Employee
-//    public User register(@RequestBody User user) {
-//        return userService.addUser(user);
-//    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        try {
-            User addedUser = userService.addUser(user);
-            String token = tokenProvider.createToken(addedUser.getUsername(), addedUser.getRoles());
-
-            LoginResponseDTO response = new LoginResponseDTO(token);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
-        }
+    @PostMapping("/register")//Employee
+    public User register(@RequestBody User user) {
+        return userService.addUser(user);
     }
+
+
+
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@RequestBody User user) {
+//        try {
+//            User addedUser = userService.addUser(user);
+//            String token = tokenProvider.createToken(addedUser.getUsername(), addedUser.getRoles());
+//
+//            LoginResponseDTO response = new LoginResponseDTO(token);
+//            return ResponseEntity.ok(response);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
+//        }
+//    }
 
 
     @DeleteMapping("/{id}") //Employee

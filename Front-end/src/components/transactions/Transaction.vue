@@ -23,8 +23,12 @@
                             Transaction
                         </button>
                     </div>
-                    <div v-if="role == 'CUSTOMER'" class="option"></div>
-                    <div v-if="role == 'CUSTOMER'" class="option"></div>
+                    <div v-if="role == 'CUSTOMER'" class="option">
+                        <input type="date" id="datepicker" />
+                    </div>
+                    <div v-if="role == 'CUSTOMER'" class="option">
+                        <input type="date" id="datepicker" />
+                    </div>
                     <div v-if="role == 'CUSTOMER'" class="option">
                         <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
                     </div>
@@ -55,7 +59,6 @@
     </body>
     <footerNavigation />
 </template>
-
 
 <style>
 #inputField {

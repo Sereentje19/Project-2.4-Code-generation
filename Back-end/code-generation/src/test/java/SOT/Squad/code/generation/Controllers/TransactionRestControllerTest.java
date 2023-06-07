@@ -1,6 +1,8 @@
 package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
+import SOT.Squad.code.generation.Models.Role;
+import SOT.Squad.code.generation.Models.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -19,6 +21,8 @@ import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,8 +103,8 @@ class TransactionRestControllerTest {
     void getTransactionById() throws Exception {
         // Arrange
         long transactionId = 1;
-        Transaction transaction = new Transaction(1, "test", 100.0, "NL12INHO0123456789", "NL12INHO0123456787",
-                List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk");
+        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null, List.of(Role.CUSTOMER), "5781",2000,300);
+        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1);
         when(transactionService.GetTransactionById(transactionId)).thenReturn(transaction);
 
         // Act and Assert
@@ -120,9 +124,11 @@ class TransactionRestControllerTest {
         List<AccountType> accountTypes = List.of(AccountType.CURRENT, AccountType.SAVINGS);
         List<Transaction> transactions = new ArrayList<>();
 
+        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null, List.of(Role.CUSTOMER), "5781",2000,300);
+        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1);
+
         // Add some transactions to the list that match the provided IBAN and account types
-        transactions.add(new Transaction(1, "test", 100.0, "NL12INHO0123456789", "NL12INHO0123456787",
-                List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
+        transactions.add(transaction);
         // Mock the service method call
         when(transactionService.findByBankAccountAndAccountType(iban, accountTypes)).thenReturn(transactions);
 

@@ -33,7 +33,7 @@
             <label>House Number:</label>
             <input type="text" v-model="user.houseNumber" />
         </div>
-        <div>
+        <div v-if="this.currentUser == 'EMPLOYEE'">
             <label>Account type:</label>
             <select v-model="this.selectedAccountType">
                 <option v-for="accountType in this.accountTypes" :value="accountType">{{ accountType }}</option>
@@ -122,9 +122,6 @@ export default {
             this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
             this.checkIbanExists();
         },
-        cancel() {
-            this.$router.push("/employee/question");
-        },
         checkIbanExists() {
             axios
                 .get('bankaccounts', headerToken)
@@ -145,13 +142,34 @@ export default {
                 this.currentUser = "CUSTOMER";
             }
         },
+        cancel() {
+            if (this.currentUser == "CUSTOMER") {
+                this.$router.push("/");
+            }
+            else {
+                this.$router.push("/employee/question");
+            }
+        },
         addUser() {
-            this.user.iban = this.generatedIban;
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.username = this.user.firstName;
 
-            if (this.currentUser == "EMPLOYEE") {
+            if (this.currentUser == "CUSTOMER") {
+
+                console.log(this.user)
+                axios
+                    .post('users/register', this.user)
+                    .then((res) => {
+                    }).catch((error) => {
+                        alert(error.response.data.token);
+                    });
+            }
+            else {
+                this.checkIbanExists();
+                this.user.iban = this.generatedIban;
+
+                console.log(headerToken)
                 axios
                     .post('users', this.user, headerToken)
                     .then((res) => {
@@ -160,22 +178,7 @@ export default {
                     })
                     .catch((error) => console.log(error));
             }
-            else {
-                axios
-                    .post('users/register', this.user)
-                    .then((res) => {
-                        axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
-                        localStorage.setItem("jwt", res.data.token);
-                        console.log(localStorage.getItem("jwt"))
-                        // this.addBankAccount(res.data.id);
-                        // this.$router.push("/");
-                    }).catch((error) => {
-                        alert(error.response.data.token);
-                    });
-            }
-
             // this.generateIBAN();
-
         },
         addBankAccount(userId) {
             this.newBankAccount.iban = this.generatedIban;
