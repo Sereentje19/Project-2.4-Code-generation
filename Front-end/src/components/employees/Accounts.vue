@@ -72,11 +72,6 @@ export default {
         getUserInfo() {
             const userId = this.$route.params.id;
             axios
-                .get(`/users/${userId}`, {
-
-               const decodedId = atob(this.id)
-
-            axios
                 .get('transactions/' + decodedId, {
 
                     headers: {
