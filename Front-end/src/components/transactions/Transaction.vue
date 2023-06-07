@@ -3,53 +3,60 @@
 
     <body class="bodyStructure">
         <div class="structure">
-            <div class="headInfo">
-                <div class="accountNumber">
-                    <p>{{ this.bankAccount.iban }}</p>
+            <!-- <div class="headInfo"> -->
+                <div class="contain">
+                    <div id="rowAbove">
+                        <div class="accountNumber">
+                            <p>{{ this.bankAccount.iban }}</p>
+                        </div>
+                        <!-- <div class="option">
+                            <button class="btn" @click="createTransaction()">Create Transaction</button>
+                        </div> -->
+                        <div v-for="role in this.user.roles" class="groupOptions">
+                            <div v-if="role == 'EMPLOYEE'" class="option">
+                                <button class="btn" @click="WithDrawOrDeposit()">
+                                    Deposit
+                                </button>
+                            </div>
+                            <div v-if="role == 'EMPLOYEE'" class="option">
+                                <button class="btn" @click="WithDrawOrDeposit()">
+                                    Withdraw
+                                </button>
+                            </div>
+                            <div v-if="role == 'EMPLOYEE'" class="option">
+                                <button class="btn" @click="createTransaction()">
+                                    Transaction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="rowBelow">
+                        <div class="options" id="datepicker">
+                            <h4>From</h4>&nbsp;&nbsp;
+                            <input type="date" v-model="fromDate" />
+                        </div>
+                        <div class="options" id="datepicker">
+                            <h4>To</h4> &nbsp;&nbsp;
+                            <input type="date" v-model="toDate" />
+                        </div>
+                        <div class="options">
+                            <select id="inputField" v-model="balanceFilter.comparison">
+                                <option value="<">Less than</option>
+                                <option value="==">Equal to</option>
+                                <option value=">">Greater than</option>
+                            </select>
+                        </div>
+                        <div v-if="balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
+                            class="options">
+                            <input type="number" id="inputField" placeholder="Balance" v-model="balanceFilter.value" />
+                        </div>
+                        <div v-else class="options">
+                            <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
+                        </div>
+                    </div>
                 </div>
-                <div class="option">
-                    <button class="btn" @click="createTransaction()">Create Transaction</button>
-                </div>
-                <div v-for="role in this.user.roles" class="groupOptions">
-                    <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="WithDrawOrDeposit()">
-                            Deposit
-                        </button>
-                    </div>
-                    <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="WithDrawOrDeposit()">
-                            Withdraw
-                        </button>
-                    </div>
-                    <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="createTransaction()">
-                            Transaction
-                        </button>
-                    </div>
-                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
-                        <h4>From</h4>
-                        <input type="date" v-model="fromDate" />
-                    </div>
-                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
-                        <h4>To</h4>
-                        <input type="date" v-model="toDate" />
-                    </div>
-                    <div v-if="role == 'CUSTOMER'" class="option">
-                        <select v-model="balanceFilter.comparison">
-                            <option value="<">Less than</option>
-                            <option value="==">Equal to</option>
-                            <option value=">">Greater than</option>
-                        </select>
-                    </div>
-                    <div v-if="role == 'CUSTOMER' && balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
-                        class="option">
-                        <input type="number" id="inputField" placeholder="Balance" v-model="balanceFilter.value" />
-                    </div>
-                    <div v-else class="option">
-                        <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
-                    </div>
-                </div>
-            </div>
+            <!-- </div> -->
             <div id="extraPadding">
                 <div class="bodyInfo">
                     <div v-for="list in filteredTransactions" class="transaction" @click="ViewTransactions(list.id)">
@@ -77,6 +84,17 @@
 </template>
 
 <style>
+#rowBelow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+#rowAbove {
+    display: flex;
+    flex-direction: row;
+}
+
 #inputField {
     border-color: black;
     border-style: solid;
@@ -84,13 +102,27 @@
     border-radius: 10px;
     width: 150px;
     right: 0;
+    height: 35px;
 }
 
 #datepicker {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     float: left;
+    height: 45px;
 }
+
+.contain {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.options{
+    padding: 5px;
+    margin-right:2.5%;
+}
+
 </style>
 
 <script>

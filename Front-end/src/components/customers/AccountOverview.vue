@@ -13,7 +13,9 @@
       <h3>Total: Є{{ totalAmount }}</h3>
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-        <span class="wide-field">{{ account.accountType }} Є{{ account.amount }}</span>
+        <div v-for="accType in account.accountType">
+        <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+      </div>
       </div>
     </div>
 
