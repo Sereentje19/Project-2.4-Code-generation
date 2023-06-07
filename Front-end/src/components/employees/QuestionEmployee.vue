@@ -6,8 +6,8 @@
             <h1>How do you want to login?</h1>
 
             <div id="btns">
-                <button id="btn" @click="addBankAccount()">Employee</button>
-                <button id="btn" @click="addUser()">Customer</button>
+                <button id="btn" @click="goToEmployee()">Employee</button>
+                <button id="btn" @click="goToCustomer()">Customer</button>
             </div>
         </div>
     </body>
@@ -32,11 +32,11 @@ export default {
         }
     },
     methods: {
-        addUser() {
-            this.$router.push("/AddUser");
+        goToEmployee() {
+            this.$router.push(`/allAccounts`);
         },
-        addBankAccount() {
-            this.$router.push("/employee/AddBankAccount");
+        goToCustomer() {
+            this.$router.push(`/customerAccountOverview`);
         },
     },
     

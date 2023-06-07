@@ -4,12 +4,12 @@
     <div class="container">
         <h2>All Users</h2>
         <input type="text" v-model="searchQuery" placeholder="Search..." />
+        <button class="add-user-button" @click="goToAddUser">Add User</button>
         <!-- <div v-for="user in user.bankAccountList" :key="user.id"> -->
-            <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
-                <span>{{ account.firstName }} {{ account.lastName }} - IBAN: {{ account.bankAccountList }}</span>
-                <span v-if="selectedUser && selectedUser.id === account.id">- Email: {{ selectedUser.email }}</span>
-            </div>
+        <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
+            <span>{{ account.firstName }} {{ account.lastName }}</span>
         </div>
+    </div>
     <!-- </div> -->
     <footerNavigation />
 </template>
@@ -57,28 +57,14 @@ export default {
                 })
                 .then((res) => {
                     this.users = res.data;
-                    this.getBankAccounts();
                 })
                 .catch(error => console.log(error));
         },
-        getBankAccounts() {
-            // Iterate over the bank accounts and fetch their details
-            for (let i = 0; i < this.user.bankAccountList.length; i++) {
-                const accountId = this.user.bankAccountList[i];
-                axios
-                    .get(`/bankaccounts/` + accountId, {
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("jwt")
-                        }
-                    })
-                    .then((res) => {
-                        this.user.bankAccountList[i] = res.data;
-                    })
-                    .catch(error => console.log(error));
-            }
+        goToAddUser() {
+            this.$router.push('/AddUser');
         },
         selectUser(user) {
-            this.selectedUser = user;
+            this.$router.push(`/employee/accounts/${user.id}`);
         }
     }
 };
