@@ -10,8 +10,8 @@
                 <div class="accountNumber mr-2">
                     <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
                     <datalist id="ibanList">
-                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban">
-                            {{ nameAndDto.name }}
+                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
+                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }})
                             </option>
                     </datalist>
 
@@ -207,8 +207,10 @@ export default {
                 absoluutLimit: 0,
             },
             nameAndDtoList: {
+                id: 0,
                 Name: "",
                 Iban: "",
+                accountType: [],
             },
             
             
@@ -264,6 +266,7 @@ export default {
                 })
                 .then((res) => {
                     this.bankaccount = res.data;
+                    this.transaction.bankAccountFrom = this.bankaccount.iban;
                     console.log(this.bankaccount);
                     
                 })
@@ -279,7 +282,7 @@ export default {
         postTransaction(){
         //   console.log(this.transaction);
           this.transaction.date = new Date();
-          
+          console.log(this.transaction);
           axios
                     .post('transactions',this.transaction, {
                         headers: {
@@ -297,21 +300,21 @@ export default {
             if(this.otherBankAccount.iban == this.bankaccount.iban){
                 if(this.otherBankAccount.accountType[0] == "CURRENT" && this.bankaccount.accountType[0] == "CURRENT" || this.otherBankAccount.accountType[0] == "SAVINGS" && this.bankaccount.accountType[0] == "SAVINGS"){
                     alert("you can't transfer to the same account");
-                    this.$router.push("/customer/createtransactions/" + this.id);   
+                    location.reload();
                 }
                 
             }
             if(this.otherBankAccount.accountType[0] != "CURRENT"){
                 alert("you can only transfer to a current account");
-                this.$router.push("/customer/createtransactions/" + this.id);
+                location.reload();
             }
             if(this.otherBankAccount.disabled == true || this.bankaccount.disabled == true){
                 alert("you can't transfer to and / or from a disabled account");
-                this.$router.push("/customer/createtransactions/" + this.id);
+                location.reload();
             }
             if(this.transaction.amount > this.user.transactionLimit){
                 alert("you can't transfer more than your transaction limit");
-                this.$router.push("/customer/createtransactions/" + this.id);
+                location.reload();
             }
 
             let amount = parseInt(this.transaction.amount);
@@ -322,7 +325,7 @@ export default {
             // console.log(newbalance);
             if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
                 alert("you will end below your absolute limit or below 0");
-                this.$router.push("/customer/createtransactions/" + this.id);
+                location.reload();
             }
             this.bankaccount.balance = newbalance;
             this.otherBankAccount.balance = othernewbalance;
@@ -330,11 +333,26 @@ export default {
             var dailylimit = this.user.dailyLimit - this.transaction.amount;
             if(dailylimit < 0){
                 alert("you will end below your daily limit");
-                this.$router.push("/customer/createtransactions/" + this.id);
+                location.reload();
             }
             this.postTransaction();
         },
         getOtherBankAccount(){
+            // axios
+            //     .get('/bankaccounts/' + this., {
+            //         headers: {
+            //             Authorization: "Bearer " + localStorage.getItem("jwt")
+            //         }
+            //     })
+            //     .then((res) => {
+            //         this.bankaccount = res.data;
+            //         this.transaction.bankAccountFrom = this.bankaccount.iban;
+            //         console.log(this.bankaccount);
+                    
+            //     })
+            //     .catch(error => console.log(error))
+
+
             axios
                 .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
                         headers: {

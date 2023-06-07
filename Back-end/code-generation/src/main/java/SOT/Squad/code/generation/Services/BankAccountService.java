@@ -54,6 +54,8 @@ public class BankAccountService {
             ibanAndNameDTO.setIban(bankAccount.getIban());
             User user = (User)userService.getUser(bankAccount.getUserId());
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
+            ibanAndNameDTO.setAccountType(bankAccount.getAccountType());
+            ibanAndNameDTO.setId(bankAccount.getId());
             dtoList.add(ibanAndNameDTO);
         }
         return dtoList;

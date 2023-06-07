@@ -5,7 +5,7 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="van rekeningnummer...." :value="bankAccount.iban">
+                    <input type="text" class="input" placeholder="van rekeningnummer...." v-model="rekening">
                 </div>
             </div>
             <div class="body">
@@ -286,6 +286,9 @@ export default {
             }
             if(this.rekening == "" || this.bedrag == 0 || this.choice == ""){
                 alert("you need to fill in all the fields");
+                alert(this.rekening);
+                alert(this.bedrag);
+                alert(this.choice);
                 location.reload();
             }
         },
