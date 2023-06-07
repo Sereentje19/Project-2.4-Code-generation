@@ -3,10 +3,21 @@
 
     <body class="bodyStructure">
         <div class="structure">
+            <div class="headInfo">
+                <div class="accountNumber">
+                    <p>{{ this.bankAccount.iban }}</p>
+                </div>
+                <div v-for="role in this.user.roles" class="groupOptions">
+                    <div v-if="role == 'EMPLOYEE'" class="option">
+                        <button class="btn" @click="WithDrawOrDeposit()">
+                            Deposit
+                        </button>
+
             <div class="contain">
                 <div id="rowAbove">
                     <div class="accountNumber">
                         <p>{{ this.bankAccount.iban }}</p>
+
                     </div>
                     <div v-for="role in this.user.roles" class="groupOptions">
                         <div v-if="role == 'EMPLOYEE'" class="option">
@@ -161,6 +172,13 @@ export default {
     },
     methods: {
         WithDrawOrDeposit() {
+            this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.id);
+        },
+        createTransaction() {
+            this.$router.push("/customer/createtransactions/" + this.user.id);
+        },
+        ViewTransactions(id) {
+
             this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.iban));
         },
         createTransaction() {

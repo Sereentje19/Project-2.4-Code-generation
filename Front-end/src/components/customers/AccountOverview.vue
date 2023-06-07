@@ -4,24 +4,36 @@
 
     <div class="container">
       <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-      <button @click="goToUserInfo">User Info</button>
-
+      <div class="user-info-button">
+        <button @click="goToUserInfo">User Info</button>
+      </div>
       <div v-if="user.bankAccountList.length > 0">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
       </div>
 
-      <h3>Total: Є{{ totalAmount }}</h3>
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
         <div v-for="accType in account.accountType">
         <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
       </div>
       </div>
+      <h3>Total: Є{{ totalAmount }}</h3>
     </div>
 
     <footerNavigation />
   </div>
 </template>
+
+<style>
+.user-info-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-info-button button {
+  margin-left: auto;
+}
+</style>
 
 <script>
 import headerNavigation from '../main/Header.vue'
@@ -100,10 +112,10 @@ export default {
       console.log(this.bankacc);
     },
     goToUserInfo() {
-      const username = this.user.username;
-      this.$router.push(`/customer/accountInfo/${username}`);
+      this.$router.push(`/customer/accountInfo/`);
     },
     goToTransactions(account) {
+
       const username = this.user.username;
       this.$router.push("/transactions/" + username + "/" + btoa(account.id));
     },

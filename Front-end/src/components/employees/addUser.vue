@@ -143,12 +143,13 @@ export default {
             }
         },
         cancel() {
-            if (this.currentUser == "CUSTOMER") {
-                this.$router.push("/");
-            }
-            else {
-                this.$router.push("/employee/question");
-            }
+            this.$router.go(-1);
+            // if (this.currentUser == "CUSTOMER") {
+            //     this.$router.push("/");
+            // }
+            // else {
+            //     this.$router.push("/employee/question");
+            // }
         },
         addUser() {
             this.user.password = this.generatedPassword;
