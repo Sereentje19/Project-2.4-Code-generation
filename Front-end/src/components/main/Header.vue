@@ -15,11 +15,6 @@
 export default {
   name: "header",
 
-  methods: {
-  logout(){
-    
-  }
-},
 };
 
 

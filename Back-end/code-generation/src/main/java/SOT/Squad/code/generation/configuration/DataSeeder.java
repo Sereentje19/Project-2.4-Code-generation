@@ -49,11 +49,11 @@ public class DataSeeder implements ApplicationRunner {
 
 
         //Transactions
-        transactionService.AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(2, "test", 100,  "NL12INHO0123456788", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(3, "test", 100,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(4, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(5, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456785", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
+        transactionService.AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now().minusDays(3),user1));
+        transactionService.AddTransaction(new Transaction(2, "test", 100,  "NL12INHO0123456788", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now().plusDays(4),user1));
+        transactionService.AddTransaction(new Transaction(3, "test", 100,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().plusDays(4),user1));
+        transactionService.AddTransaction(new Transaction(4, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now().plusDays(4),user1));
+        transactionService.AddTransaction(new Transaction(5, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456785", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(6, "test", 400,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(7, "test", 90,  "NL12INHO0123456789", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(8, "test", 10,  "NL12INHO0123456789", "NL12INHO0123456782", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1));

@@ -1,7 +1,9 @@
 package SOT.Squad.code.generation.Controllers;
 
+import SOT.Squad.code.generation.JWT.JWTTokenProvider;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
+import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class LoginRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    JWTTokenProvider tokenProvider;
+
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
         try {
@@ -27,4 +32,19 @@ public class LoginRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
         }
     }
+
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@RequestBody User user) {
+//        try {
+//            User addedUser = userService.addUser(user);
+//            String token = tokenProvider.createToken(addedUser.getUsername(), addedUser.getRoles());
+//
+//            LoginResponseDTO response = new LoginResponseDTO(token);
+//            return ResponseEntity.ok(response);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
+//        }
+//    }
 }

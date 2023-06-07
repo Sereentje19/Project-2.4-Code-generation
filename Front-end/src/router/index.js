@@ -35,7 +35,7 @@ const router = createRouter({
     { path: '/customer/pincode/', component: pincode, props: true},
     { path: '/employee/question', component: QuestionCustomer},
     { path: '/employee/AddBankAccount', component: AddBankAccount},
-    { path: '/employee/AddUser', component: AddUser},
+    { path: '/AddUser', component: AddUser},
     { path: '/question', component: QuestionEmployee},
   ]
 })
