@@ -37,7 +37,6 @@
 #transactionInfo {
   display: flex;
   justify-content: space-between;
-  padding-left: 0;
 }
 
 #bankAccount{
@@ -92,7 +91,7 @@
 }
 
 .accountNumber {
-  width: 50%;
+  width: 30%;
   background-color: rgb(158, 153, 153);
   display: flex;
   justify-content: center;
