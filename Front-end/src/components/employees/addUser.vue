@@ -162,7 +162,7 @@ export default {
             }
             else {
                 axios
-                    .post('login/register', this.user)
+                    .post('users/register', this.user)
                     .then((res) => {
                         axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
                         localStorage.setItem("jwt", res.data.token);
