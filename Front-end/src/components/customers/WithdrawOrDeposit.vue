@@ -147,7 +147,7 @@ export default {
             footerNavigation
         },
     },
-    name: "transactions",
+    name: "withdrawOrDeposit",
     props: {
         id: Number,
     },
@@ -193,7 +193,6 @@ export default {
                 ],
                 dailyLimit: 0,
                 transactionLimit: 0,
-                decodedId: atob(this.id),
             },
         };
     },
@@ -216,8 +215,9 @@ export default {
                 .catch(error => console.log(error))
         },
         getBankAccount() {
+            const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + this.decodedId, headerToken)
+                .get('/bankaccounts/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     console.log(this.bankAccount);
@@ -292,11 +292,12 @@ export default {
             }
         },
         changeBankAcount() {
+            const decodedId = atob(this.id)
             axios
-                .put("/bankaccounts/change/" + this.decodedId, this.bankAccount, headerToken)
+                .put("/bankaccounts/change/" + decodedId, this.bankAccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
-                    this.$router.push("/transactions/" + this.decodedId);
+                    this.$router.push("/transactions/" + decodedId);
                 })
                 .catch((error) => console.log(error));
         }
