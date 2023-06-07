@@ -5,10 +5,11 @@
     <div class="container">
       <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <button @click="goToUserInfo">User Info</button>
-      <div>
-        <!-- <h2>IBAN: {{ user.bankAccountList[1].iban }}</h2> -->
-        
+      
+      <div v-if="user.bankAccountList.length > 0">
+        <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
       </div>
+
       <h3>Total: Є{{ totalAmount }}</h3>
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
@@ -44,13 +45,35 @@ export default {
         houseNumber: "",
         postalCode: "",
         city: "",
-        bankAccountList: [],
+        bankAccountList:
+        {
+          id: 0,
+          iban: "",
+          balance: 0,
+          userId: 0,
+          disabled: false,
+          currencies: [],
+          accountType: [],
+          absoluutLimit: 0,
+        }
+        ,
       },
+      bankacc: {
+        id: 0,
+        iban: "",
+        balance: 0,
+        userId: 0,
+        disabled: false,
+        currencies: [],
+        accountType: [],
+        absoluutLimit: 0,
+      }
+
     };
   },
   computed: {
     totalAmount() {
-      return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
+      // return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
     }
   },
   mounted() {
@@ -90,6 +113,8 @@ export default {
           })
           .catch(error => console.log(error));
       }
+      this.bankacc = this.user.bankAccountList[1];
+      console.log(this.bankacc);
     },
     goToUserInfo() {
       this.$router.push('/personal-details');
