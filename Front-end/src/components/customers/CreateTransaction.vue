@@ -8,10 +8,11 @@
                     <input type="text" class="input" placeholder="rekening van" :value="this.bankaccount.iban" id="fromInput">
                 </div>
                 <div class="accountNumber mr-2">
-                    <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
-                    <datalist id="ibanList">
+                    <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
+                    <datalist id="ibanList" >
                         <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
-                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }})
+                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }}) 
+                                <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
                             </option>
                     </datalist>
 
@@ -222,6 +223,10 @@ export default {
         this.getNameAndDtoList();
     },
     methods: {
+        safething(id){
+            alert("yeah" +id);
+            // this.otherBankAccount.id = id;
+        },
         getNameAndDtoList(){
             axios
                 .get('bankaccounts/All', {
@@ -274,6 +279,16 @@ export default {
         },
 
         showPincode() {
+            let accountToID = document.querySelectorAll("#accountToID");
+            accountToID.forEach(thing => {
+                if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
+                    if(thing.getAttribute("thing") != "SAVINGS"){
+                        console.log(thing.getAttribute("value"));
+            this.otherBankAccount.id = thing.getAttribute("value");
+                    }
+
+                }
+            });
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
@@ -338,36 +353,42 @@ export default {
             this.postTransaction();
         },
         getOtherBankAccount(){
-            // axios
-            //     .get('/bankaccounts/' + this., {
-            //         headers: {
-            //             Authorization: "Bearer " + localStorage.getItem("jwt")
-            //         }
-            //     })
-            //     .then((res) => {
-            //         this.bankaccount = res.data;
-            //         this.transaction.bankAccountFrom = this.bankaccount.iban;
-            //         console.log(this.bankaccount);
-                    
-            //     })
-            //     .catch(error => console.log(error))
-
-
+            alert(this.otherBankAccount.id);
             axios
-                .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("jwt")
-                        }
-                    })
-                    .then((res) => {
-                        if(res.data == null || res.data == undefined || res.data == ""){
+                .get('/bankaccounts/' + this.otherBankAccount.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    if(res.data == null || res.data == undefined || res.data == ""){
                             alert("this account doesn't exist");
                             location.reload();
                         }
-                        this.otherBankAccount = res.data;
-                        this.verifyRequest();
-                    })
-                    .catch((error) => console.log(error));
+                    this.otherBankAccount = res.data;
+                    this.transaction.bankAccountTo = this.otherBankAccount.iban;
+                    this.verifyRequest();
+                    console.log(this.otherBankAccount);
+                    
+                })
+                .catch(error => console.log(error))
+
+
+            // axios
+            //     .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
+            //             headers: {
+            //                 Authorization: "Bearer " + localStorage.getItem("jwt")
+            //             }
+            //         })
+            //         .then((res) => {
+            //             if(res.data == null || res.data == undefined || res.data == ""){
+            //                 alert("this account doesn't exist");
+            //                 location.reload();
+            //             }
+            //             this.otherBankAccount = res.data;
+            //             this.verifyRequest();
+            //         })
+            //         .catch((error) => console.log(error));
         },
         updateBalance(){
             axios
