@@ -73,6 +73,12 @@ export default {
             const userId = this.$route.params.id;
             axios
                 .get(`/users/${userId}`, {
+
+               const decodedId = atob(this.id)
+
+            axios
+                .get('transactions/' + decodedId, {
+
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }

@@ -36,6 +36,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/users/register").permitAll()
 
 
+
                 //transactions
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
                 .requestMatchers("/transactions").authenticated()
@@ -44,6 +45,7 @@ public class MySecurityConfiguration {
                 //bankaccounts
                 .requestMatchers("/bankaccounts/{id}").authenticated()
                 .requestMatchers("/bankaccounts/change/{id}").authenticated()
+                .requestMatchers("/bankaccounts/iban/{iban}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts").authenticated();

@@ -5,10 +5,16 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="rekening van" v-model="transaction.bankAccountFrom">
+                    <input type="text" class="input" placeholder="rekening van" :value="this.bankaccount.iban" id="fromInput">
                 </div>
                 <div class="accountNumber mr-2">
-                    <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo">
+                    <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
+                    <datalist id="ibanList" >
+                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
+                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }}) 
+                                <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
+                            </option>
+                    </datalist>
 
                 </div>
             </div>
@@ -159,16 +165,8 @@ export default {
                 houseNumber: "",
                 postalCode: "",
                 city: "",
-                bankAccountList: [
-                    // {
-                    //     id: 0,
-                    //     accountNumber: "BE00 0000 0000 0000",
-                    //     saldo: 1000,
-                    //     firstName: "test",
-                    //     lastName: "test",
-                    //     email: "test",
-                    // }
-                ],
+                bankAccountList: [],
+                roles: [],
                 dailyLimit: 0,
                 transactionLimit: 0,
             },
@@ -195,13 +193,58 @@ export default {
                 currencies: [],
                 accountType:[],
                 absoluutLimit: 0,
-            }
+            },
+            otherBankAccount :
+            {
+                id: 0,
+                iban: "",
+                balance: 0,
+                userId: 0,
+                disabled: false,
+                currencies: [],
+                accountType:[],
+                absoluutLimit: 0,
+            },
+            nameAndDtoList: {
+                id: 0,
+                Name: "",
+                Iban: "",
+                accountType: [],
+            },
+            
+            
         };
     },
     mounted() {
         this.getUser();
+        this.getBankAccount();
+        this.getNameAndDtoList();
     },
     methods: {
+        safething(id){
+            alert("yeah" +id);
+            // this.otherBankAccount.id = id;
+        },
+        getNameAndDtoList(){
+            axios
+                .get('bankaccounts/All', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.nameAndDtoList = res.data;
+                    console.log(this.nameAndDtoList);
+                })
+                .catch(error => console.log(error))
+        },
+
+        fillfield(){
+            let fromInput = document.getElementById("fromInput");
+            if(this.user.roles[0] == "CUSTOMER"){
+                fromInput.setAttribute( 'readonly', true );
+            }
+        },
         getUser() {
             axios
                 .get('users/current', {
@@ -212,12 +255,38 @@ export default {
                 .then((res) => {
                     this.user = res.data;
                     this.transaction.user = res.data;
+                    console.log(this.user);
+                    this.fillfield();
+                })
+                .catch(error => console.log(error))
+        },
+        getBankAccount() {
+            axios
+                .get('/bankaccounts/' + this.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.bankaccount = res.data;
+                    this.transaction.bankAccountFrom = this.bankaccount.iban;
+                    console.log(this.bankaccount);
+                    
                 })
                 .catch(error => console.log(error))
         },
 
-
         showPincode() {
+            let accountToID = document.querySelectorAll("#accountToID");
+            accountToID.forEach(thing => {
+                if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
+                    if(thing.getAttribute("thing") != "SAVINGS"){
+                        console.log(thing.getAttribute("value"));
+            this.otherBankAccount.id = thing.getAttribute("value");
+                    }
+
+                }
+            });
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
@@ -226,10 +295,113 @@ export default {
         postTransaction(){
         //   console.log(this.transaction);
           this.transaction.date = new Date();
+          console.log(this.transaction);
+          axios
+                    .post('transactions',this.transaction, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        console.log(res.data);
+                        this.updateBalance();
+                    })
+                    .catch((error) => console.log(error));
           
-          if(this.transaction.amount < this.user.transactionLimit){
-              axios
-                .post('transactions',this.transaction, {
+        },
+        verifyRequest(){
+            if(this.otherBankAccount.iban == this.bankaccount.iban){
+                if(this.otherBankAccount.accountType[0] == "CURRENT" && this.bankaccount.accountType[0] == "CURRENT" || this.otherBankAccount.accountType[0] == "SAVINGS" && this.bankaccount.accountType[0] == "SAVINGS"){
+                    alert("you can't transfer to the same account");
+                    location.reload();
+                }
+                
+            }
+            if(this.otherBankAccount.accountType[0] != "CURRENT"){
+                alert("you can only transfer to a current account");
+                location.reload();
+            }
+            if(this.otherBankAccount.disabled == true || this.bankaccount.disabled == true){
+                alert("you can't transfer to and / or from a disabled account");
+                location.reload();
+            }
+            if(this.transaction.amount > this.user.transactionLimit){
+                alert("you can't transfer more than your transaction limit");
+                location.reload();
+            }
+
+            let amount = parseInt(this.transaction.amount);
+
+            let newbalance = this.bankaccount.balance -= amount;
+            let othernewbalance = this.otherBankAccount.balance += amount;
+
+            // console.log(newbalance);
+            if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
+                alert("you will end below your absolute limit or below 0");
+                location.reload();
+            }
+            this.bankaccount.balance = newbalance;
+            this.otherBankAccount.balance = othernewbalance;
+
+            var dailylimit = this.user.dailyLimit - this.transaction.amount;
+            if(dailylimit < 0){
+                alert("you will end below your daily limit");
+                location.reload();
+            }
+            this.postTransaction();
+        },
+        getOtherBankAccount(){
+            alert(this.otherBankAccount.id);
+            axios
+                .get('/bankaccounts/' + this.otherBankAccount.id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    if(res.data == null || res.data == undefined || res.data == ""){
+                            alert("this account doesn't exist");
+                            location.reload();
+                        }
+                    this.otherBankAccount = res.data;
+                    this.transaction.bankAccountTo = this.otherBankAccount.iban;
+                    this.verifyRequest();
+                    console.log(this.otherBankAccount);
+                    
+                })
+                .catch(error => console.log(error))
+
+
+            // axios
+            //     .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
+            //             headers: {
+            //                 Authorization: "Bearer " + localStorage.getItem("jwt")
+            //             }
+            //         })
+            //         .then((res) => {
+            //             if(res.data == null || res.data == undefined || res.data == ""){
+            //                 alert("this account doesn't exist");
+            //                 location.reload();
+            //             }
+            //             this.otherBankAccount = res.data;
+            //             this.verifyRequest();
+            //         })
+            //         .catch((error) => console.log(error));
+        },
+        updateBalance(){
+            axios
+                .put('bankaccounts/change/' + this.id, this.bankaccount, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((error) => console.log(error));
+
+            axios
+            .put('bankaccounts/change/' + this.otherBankAccount.id, this.otherBankAccount, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -239,8 +411,6 @@ export default {
                     this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
-          }
-          
         },
         checkPincode() {
             console.log(this.pincode);
@@ -253,10 +423,10 @@ export default {
                 .then((res) => {
                     console.log(res.data)
                     if(res.data != ""){
-                        this.postTransaction();
+                        this.getOtherBankAccount();
                     }
                     else{
-                        console.log("wrong pincode")
+                        alert("wrong pincode")
                     }
                     
                 })

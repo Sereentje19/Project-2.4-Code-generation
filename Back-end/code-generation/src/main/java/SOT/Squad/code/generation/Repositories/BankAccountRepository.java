@@ -18,6 +18,7 @@ public interface BankAccountRepository extends CrudRepository<BankAccount, Long>
 //        void setDisabledTrueById(@Param("id") long id);
 //        void setDisabledTrueById(long id);
 
+    public BankAccount findByIban(String iban);
 
 
 //    @Modifying

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../components/main/Login.vue';
-import Home from '../components/main/Home.vue';
 import Transactions from '../components/transactions/Transaction.vue';
 import ViewTransaction from '../components/transactions/ViewTransactions.vue';
 import Accounts from '../components/employees/Accounts.vue';
@@ -11,7 +10,6 @@ import AllAccounts from '../components/employees/AllAccounts.vue';
 import AccountInfoforEmployee from '../components/employees/AccountInfo.vue';
 import CustomerCreateTransactions from '../components/customers/CreateTransaction.vue';
 import CustomerWithdrawOrDeposit from '../components/customers/WithdrawOrDeposit.vue';
-import pincode from '../components/customers/pincode.vue';
 import QuestionCustomer from '../components/employees/QuestionCustomer.vue';
 import AddBankAccount from '../components/employees/AddBankAccount.vue';
 import AddUser from '../components/employees/addUser.vue';

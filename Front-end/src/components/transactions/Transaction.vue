@@ -12,37 +12,53 @@
                         <button class="btn" @click="WithDrawOrDeposit()">
                             Deposit
                         </button>
+
+            <div class="contain">
+                <div id="rowAbove">
+                    <div class="accountNumber">
+                        <p>{{ this.bankAccount.iban }}</p>
+
                     </div>
-                    <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="WithDrawOrDeposit()">
-                            Withdraw
-                        </button>
+                    <div v-for="role in this.user.roles" class="groupOptions">
+                        <div v-if="role == 'EMPLOYEE'" class="option">
+                            <button class="btn" @click="WithDrawOrDeposit()">
+                                Deposit
+                            </button>
+                        </div>
+                        <div v-if="role == 'EMPLOYEE'" class="option">
+                            <button class="btn" @click="WithDrawOrDeposit()">
+                                Withdraw
+                            </button>
+                        </div>
+                        <div v-if="role == 'EMPLOYEE'" class="option">
+                            <button class="btn" @click="createTransaction()">
+                                Transaction
+                            </button>
+                        </div>
                     </div>
-                    <div v-if="role == 'EMPLOYEE'" class="option">
-                        <button class="btn" @click="createTransaction()">
-                            Transaction
-                        </button>
-                    </div>
-                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
-                        <h4>From</h4>
+                </div>
+
+                <div id="rowBelow">
+                    <div class="options" id="datepicker">
+                        <h4>From</h4>&nbsp;&nbsp;
                         <input type="date" v-model="fromDate" />
                     </div>
-                    <div v-if="role == 'CUSTOMER'" class="option" id="datepicker">
-                        <h4>To</h4>
+                    <div class="options" id="datepicker">
+                        <h4>To</h4> &nbsp;&nbsp;
                         <input type="date" v-model="toDate" />
                     </div>
-                    <div v-if="role == 'CUSTOMER'" class="option">
-                        <select v-model="balanceFilter.comparison">
+                    <div class="options">
+                        <select id="inputField" v-model="balanceFilter.comparison">
                             <option value="<">Less than</option>
                             <option value="==">Equal to</option>
                             <option value=">">Greater than</option>
                         </select>
                     </div>
-                    <div v-if="role == 'CUSTOMER' && balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
-                        class="option">
+                    <div v-if="balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
+                        class="options">
                         <input type="number" id="inputField" placeholder="Balance" v-model="balanceFilter.value" />
                     </div>
-                    <div v-else class="option">
+                    <div v-else class="options">
                         <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
                     </div>
                 </div>
@@ -72,23 +88,6 @@
     </body>
     <footerNavigation />
 </template>
-
-<style>
-#inputField {
-    border-color: black;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    width: 150px;
-    right: 0;
-}
-
-#datepicker {
-    display: flex;
-    flex-direction: column;
-    float: left;
-}
-</style>
 
 <script>
 import headerNavigation from '../main/Header.vue'
@@ -165,7 +164,6 @@ export default {
             searchQuery: '',
             fromDate: null,
             toDate: null,
-            testArray: [],
         };
     },
     mounted() {
@@ -173,15 +171,6 @@ export default {
         this.getBankAccount();
     },
     methods: {
-        test() {
-            this.transactions.forEach(element => {
-                // console.log(element)
-                if (parseInt(element.amount) > 100) {
-                    this.testArray.push(element);
-                }
-            });
-            console.log(this.testArray)
-        },
         WithDrawOrDeposit() {
             this.$router.push("/customer/withdrawOrDeposit/" + this.bankAccount.id);
         },
@@ -189,7 +178,14 @@ export default {
             this.$router.push("/customer/createtransactions/" + this.user.id);
         },
         ViewTransactions(id) {
-            this.$router.push("/viewTransaction/" + this.bankAccount.iban + "/" + id);
+
+            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.iban));
+        },
+        createTransaction() {
+            this.$router.push("/customer/createtransactions/" + btoa(this.user.username));
+        },
+        ViewTransactions(id) {
+            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(this.user.username) + "/" + btoa(id));
         },
         getUser() {
             axios
@@ -200,8 +196,9 @@ export default {
                 .catch(error => console.log(error));
         },
         getBankAccount() {
+            const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + this.id, headerToken)
+                .get('/bankaccounts/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();
@@ -213,8 +210,6 @@ export default {
                 .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], headerToken)
                 .then((res) => {
                     this.transactions = res.data;
-                    this.test();
-
                 })
                 .catch(error => console.log(error))
         },

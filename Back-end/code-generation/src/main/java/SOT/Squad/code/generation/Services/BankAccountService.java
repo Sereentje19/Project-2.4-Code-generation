@@ -1,16 +1,22 @@
 package SOT.Squad.code.generation.Services;
 
 import SOT.Squad.code.generation.Models.BankAccount;
+import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
+import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
@@ -27,8 +33,8 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public List<BankAccount> getBankAccountByIban(String iban) {
-        return (List<BankAccount>)bankAccountRepository.getAllByIban(iban);
+    public BankAccount getBankAccountByIban(String iban) {
+        return (BankAccount)bankAccountRepository.findByIban(iban);
     }
 
     public BankAccount getBankAccountById(long id) {
@@ -38,5 +44,20 @@ public class BankAccountService {
     public void deleteBankAccount(BankAccount bankAccount) {
         bankAccount.setDisabled(true);
         bankAccountRepository.save(bankAccount);
+    }
+
+    public List<IbanAndNameDTO> getAllNameAndIban() {
+        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
+        List<IbanAndNameDTO> dtoList = new ArrayList<>();
+        for (BankAccount bankAccount : bankList) {
+            IbanAndNameDTO ibanAndNameDTO = new IbanAndNameDTO();
+            ibanAndNameDTO.setIban(bankAccount.getIban());
+            User user = (User)userService.getUser(bankAccount.getUserId());
+            ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
+            ibanAndNameDTO.setAccountType(bankAccount.getAccountType());
+            ibanAndNameDTO.setId(bankAccount.getId());
+            dtoList.add(ibanAndNameDTO);
+        }
+        return dtoList;
     }
 }

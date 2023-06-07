@@ -13,7 +13,9 @@
 
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-        <span class="wide-field">{{ account.accountType }} EURO {{ account.amount }}</span>
+        <div v-for="accType in account.accountType">
+        <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+      </div>
       </div>
       <h3>Total: Є{{ totalAmount }}</h3>
     </div>
@@ -113,7 +115,9 @@ export default {
       this.$router.push(`/customer/accountInfo/`);
     },
     goToTransactions(account) {
-      this.$router.push(`/transactions/${account.id}`);
+
+      const username = this.user.username;
+      this.$router.push("/transactions/" + username + "/" + btoa(account.id));
     },
   },
 };

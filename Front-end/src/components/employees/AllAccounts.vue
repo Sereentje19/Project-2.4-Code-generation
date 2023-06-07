@@ -62,6 +62,7 @@ export default {
         },
         goToAddUser() {
             this.$router.push('/AddUser');
+
         },
         selectUser(user) {
             this.$router.push(`/employee/accounts/${user.id}`);

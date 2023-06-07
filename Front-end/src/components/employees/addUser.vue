@@ -175,11 +175,9 @@ export default {
                     .post('users', this.user, headerToken)
                     .then((res) => {
                         this.addBankAccount(res.data.id);
-                        // this.$router.push("/");
                     })
                     .catch((error) => console.log(error));
             }
-            // this.generateIBAN();
         },
         addBankAccount(userId) {
             this.newBankAccount.iban = this.generatedIban;
