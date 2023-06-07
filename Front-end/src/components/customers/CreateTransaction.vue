@@ -5,10 +5,15 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="rekening van" v-model="transaction.bankAccountFrom">
+                    <input type="text" class="input" placeholder="rekening van" :value="this.bankaccount.iban" id="fromInput">
                 </div>
                 <div class="accountNumber mr-2">
-                    <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo">
+                    <input type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
+                    <datalist id="ibanList">
+                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban">
+                            {{ nameAndDto.name }}
+                            </option>
+                    </datalist>
 
                 </div>
             </div>
@@ -161,16 +166,8 @@ export default {
                 houseNumber: "",
                 postalCode: "",
                 city: "",
-                bankAccountList: [
-                    // {
-                    //     id: 0,
-                    //     accountNumber: "BE00 0000 0000 0000",
-                    //     saldo: 1000,
-                    //     firstName: "test",
-                    //     lastName: "test",
-                    //     email: "test",
-                    // }
-                ],
+                bankAccountList: [],
+                roles: [],
                 dailyLimit: 0,
                 transactionLimit: 0,
             },
@@ -208,15 +205,41 @@ export default {
                 currencies: [],
                 accountType:[],
                 absoluutLimit: 0,
-            }
+            },
+            nameAndDtoList: {
+                Name: "",
+                Iban: "",
+            },
+            
             
         };
     },
     mounted() {
         this.getUser();
         this.getBankAccount();
+        this.getNameAndDtoList();
     },
     methods: {
+        getNameAndDtoList(){
+            axios
+                .get('bankaccounts/All', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.nameAndDtoList = res.data;
+                    console.log(this.nameAndDtoList);
+                })
+                .catch(error => console.log(error))
+        },
+
+        fillfield(){
+            let fromInput = document.getElementById("fromInput");
+            if(this.user.roles[0] == "CUSTOMER"){
+                fromInput.setAttribute( 'readonly', true );
+            }
+        },
         getUser() {
             axios
                 .get('users/current', {
@@ -227,6 +250,8 @@ export default {
                 .then((res) => {
                     this.user = res.data;
                     this.transaction.user = res.data;
+                    console.log(this.user);
+                    this.fillfield();
                 })
                 .catch(error => console.log(error))
         },
@@ -288,8 +313,12 @@ export default {
                 alert("you can't transfer more than your transaction limit");
                 this.$router.push("/customer/createtransactions/" + this.id);
             }
-            var newbalance = this.bankaccount.balance -= this.transaction.amount;
-            var othernewbalance = this.otherBankAccount.balance += this.transaction.amount;
+
+            let amount = parseInt(this.transaction.amount);
+
+            let newbalance = this.bankaccount.balance -= amount;
+            let othernewbalance = this.otherBankAccount.balance += amount;
+
             // console.log(newbalance);
             if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
                 alert("you will end below your absolute limit or below 0");
@@ -297,6 +326,7 @@ export default {
             }
             this.bankaccount.balance = newbalance;
             this.otherBankAccount.balance = othernewbalance;
+
             var dailylimit = this.user.dailyLimit - this.transaction.amount;
             if(dailylimit < 0){
                 alert("you will end below your daily limit");
@@ -322,7 +352,6 @@ export default {
                     .catch((error) => console.log(error));
         },
         updateBalance(){
-            alert("something is not right");
             axios
                 .put('bankaccounts/change/' + this.id, this.bankaccount, {
                     headers: {
@@ -342,7 +371,7 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    // this.$router.push("/transactions/" + this.id);
+                    this.$router.push("/transactions/" + this.id);
                 })
                 .catch((error) => console.log(error));
         },
