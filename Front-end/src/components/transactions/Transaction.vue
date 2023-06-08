@@ -85,8 +85,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const roleUser = localStorage.getItem("role");
-
 const headerToken = {
     headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt")
