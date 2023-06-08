@@ -68,7 +68,7 @@ export default {
     data() {
         return {
             user: {
-                roles: []
+                roles: [],
             },
             currentUser: '',
             generatedPassword: '',
@@ -146,12 +146,6 @@ export default {
         },
         cancel() {
             this.$router.go(-1);
-            // if (this.currentUser == "CUSTOMER") {
-            //     this.$router.push("/");
-            // }
-            // else {
-            //     this.$router.push("/employee/question");
-            // }
         },
         addUser() {
             this.user.password = this.generatedPassword;
@@ -165,15 +159,14 @@ export default {
                 axios
                     .post('users/register', this.user)
                     .then((res) => {
+                        this.$router.push("/");
                     }).catch((error) => {
                         alert(error.response.data.token);
                     });
             }
             else {
-                this.checkIbanExists();
-                this.user.iban = this.generatedIban;
+                this.generateIBAN();
 
-                console.log(headerToken)
                 axios
                     .post('users', this.user, headerToken)
                     .then((res) => {
@@ -183,8 +176,8 @@ export default {
             }
         },
         addBankAccount(userId) {
-            this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.userId = userId;
+            this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.accountType.push(this.selectedAccountType);
 
             axios
@@ -192,7 +185,7 @@ export default {
                 .then((res) => {
 
                     console.log(res.data)
-                    // this.$router.push("/");
+                    this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
 

@@ -33,9 +33,11 @@ export default {
     },
     methods: {
         goToEmployee() {
+            localStorage.setItem("role", "EMPLOYEE")
             this.$router.push(`/allAccounts`);
         },
         goToCustomer() {
+            localStorage.setItem("role", "CUSTOMER")
             this.$router.push(`/customerAccountOverview`);
         },
     },

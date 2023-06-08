@@ -108,9 +108,64 @@
     height: 40px;
 }
 
+<<<<<<< HEAD
 #buttonFilter {
     height: 40px;
     margin-left: 10px;
 }
+=======
+export default {
+    components: {
+        headerNavigation,
+        footerNavigation
+    },
+    data() {
+        return {
+            users: [],
+            selectedUser: null,
+            searchQuery: ''
+        };
+    },
+    mounted() {
+        this.getUsers();
+    },
+    computed: {
+        filteredUsers() {
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                return this.users.filter(user => {
+                    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+                    return fullName.includes(query);
+                });
+            }
+            return this.users;
+        }
+    },
+    methods: {
+        getUsers() {
+            axios
+                .get('/users', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.users = res.data;
+                })
+                .catch(error => console.log(error));
+        },
+        goToAddUser() {
+            this.$router.push('/employee/question');
+        },
+        selectUser(user) {
+            this.$router.push(`/employee/accounts/` + btoa(user.id));
+        }
+    }
+};
+</script>
+  
+<style>
+@import '../../assets/css/allAccounts.css';
+>>>>>>> e9e4c7c0bf8e179c2f11f9e88ef20c53cb951af8
 </style>
   

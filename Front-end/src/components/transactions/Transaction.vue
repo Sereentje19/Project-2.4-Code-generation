@@ -9,24 +9,26 @@
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
                     <div v-for="role in this.user.roles" class="groupOptions">
-                        <div v-if="role == 'EMPLOYEE'" class="option">
+                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="role == 'EMPLOYEE'" class="option">
+                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
                         </div>
-                        <div v-if="role == 'EMPLOYEE'" class="option">
+                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div class="option">
                             <button class="btn" @click="createTransaction()">
                                 Transaction
                             </button>
                         </div>
                     </div>
                 </div>
-
+                
                 <div id="rowBelow">
                     <div class="options" id="datepicker">
                         <h4>From</h4>&nbsp;&nbsp;
@@ -108,6 +110,7 @@ export default {
     },
     data() {
         return {
+            roleUser: localStorage.getItem("role"),
             balanceFilter: {
                 comparison: '',
                 value: null,
