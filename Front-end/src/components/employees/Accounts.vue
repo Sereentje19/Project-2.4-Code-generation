@@ -66,14 +66,14 @@ export default {
         }
     },
     mounted() {
-        this.getUserInfo();
+        const encodedId = this.$route.params.id;
+        const decodedId = atob(encodedId);
+        this.getUserInfo(decodedId);
     },
     methods: {
-        getUserInfo() {
-            const userId = this.$route.params.id;
+        getUserInfo(userId) {
             axios
-                .get('transactions/' + decodedId, {
-
+                .get(`/users/${userId}`, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -82,7 +82,7 @@ export default {
                     this.user = res.data;
                     this.getBankAccounts();
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         },
         getBankAccounts() {
             // Iterate over the bank accounts and fetch their details
@@ -109,7 +109,7 @@ export default {
             this.$router.push(`/accountInfo`);
         },
         goToTransactions(account) {
-            this.$router.push(`/transactions/${account.id}`);
+            this.$router.push(`/transactions/` + btoa(account.id));
         },
     },
 };
