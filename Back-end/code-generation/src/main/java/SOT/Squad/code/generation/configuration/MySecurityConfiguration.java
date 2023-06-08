@@ -27,15 +27,12 @@ public class MySecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                 //login
                 .requestMatchers("/login").permitAll()
-                .requestMatchers("/login/register").permitAll()
 
                 //users
                 .requestMatchers("/users/current").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
-                .requestMatchers("/users/register").permitAll()
-
-
+                .requestMatchers("/users/{id}").authenticated()
 
                 //transactions
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
@@ -45,7 +42,6 @@ public class MySecurityConfiguration {
                 //bankaccounts
                 .requestMatchers("/bankaccounts/{id}").authenticated()
                 .requestMatchers("/bankaccounts/change/{id}").authenticated()
-                .requestMatchers("/bankaccounts/iban/{iban}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts").authenticated();
