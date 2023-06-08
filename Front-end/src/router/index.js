@@ -26,7 +26,7 @@ const router = createRouter({
     { path: '/accountInfo' , component: AccountInfo},
     { path: '/customerAccountOverview' , component: CustomerAccountOverview, props: true},
     { path: '/allAccounts' , component: AllAccounts, props: true},
-    { path: '/accountInfoforEmployee' , component: AccountInfoforEmployee, props: true},
+    { path: '/accountInfoforEmployee/:id' , component: AccountInfoforEmployee, props: true},
     { path: '/customer/createtransactions/:id', component: CustomerCreateTransactions, props: true},
     { path: '/customer/withdrawOrDeposit/:id', component: CustomerWithdrawOrDeposit, props: true},
     { path: '/employee/question', component: QuestionCustomer},

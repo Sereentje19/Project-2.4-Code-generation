@@ -41,8 +41,8 @@ public class DataSeeder implements ApplicationRunner {
 
         //Users
             User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()), List.of(Role.EMPLOYEE), "5781",2000,300);
-        User user2 = new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc2.getId()), List.of(Role.CUSTOMER), "2595",2000,300);
-        User user3 = new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId(), bankacc3.getId()), List.of(Role.EMPLOYEE), "3685",2000,300);
+        User user2 = new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc3.getId()), List.of(Role.CUSTOMER), "2595",2000,300);
+        User user3 = new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc4.getId(), bankacc5.getId()), List.of(Role.EMPLOYEE), "3685",2000,300);
 //        userService.addUser(new User(4, "SOTBank", "SOTBank", "SOTBank", "SOTBank", 061234567, "SOTBank@gmail.com", "BankStreet", 1, "1234AB", "Haarlem", List.of(bankacc1.getId()), List.of(Role.EMPLOYEE), "4677"));
         userService.addUser(user1);
         userService.addUser(user2);

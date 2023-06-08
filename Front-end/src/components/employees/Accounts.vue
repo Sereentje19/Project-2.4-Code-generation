@@ -9,7 +9,7 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn">
+                        <button @click="goToUserInfo()" class="btn">
                             edit
                         </button>
                     </div>
@@ -19,7 +19,9 @@
             <div id="extraPadding">
                 <div class="bodyInfo">
                     <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-                        <span class="wide-field">{{ account.accountType }} EURO {{ account.amount }}</span>
+                        <div v-for="accType in account.accountType">
+                            <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+                        </div>
                     </div>
                     <h3>Total: Є{{ totalAmount }}</h3>
                 </div>
@@ -106,7 +108,7 @@ export default {
             console.log(this.bankacc);
         },
         goToUserInfo() {
-            this.$router.push(`/accountInfo`);
+            this.$router.push(`/accountInfoforEmployee/` + btoa(this.user.id));
         },
         goToTransactions(account) {
             this.$router.push(`/transactions/` + btoa(account.id));
