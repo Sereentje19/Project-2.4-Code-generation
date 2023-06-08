@@ -67,7 +67,9 @@ export default {
 
     data() {
         return {
-            user: {},
+            user: {
+                roles: []
+            },
             currentUser: '',
             generatedPassword: '',
             generatedPincode: 0,
@@ -155,6 +157,7 @@ export default {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.username = this.user.firstName;
+            this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {
 

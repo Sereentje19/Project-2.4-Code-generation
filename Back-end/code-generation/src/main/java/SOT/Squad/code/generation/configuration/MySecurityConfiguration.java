@@ -29,6 +29,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/login").permitAll()
 
                 //users
+                .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users/current").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
@@ -45,8 +46,6 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts").authenticated();
-
-                
 
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
