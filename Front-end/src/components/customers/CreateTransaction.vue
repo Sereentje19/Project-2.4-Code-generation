@@ -28,9 +28,10 @@
                     <input type="text" class="input" placeholder="description" v-model="transaction.description">
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.betalingskenmerk">
+                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.paymentReference">
                 </div>
             </div>
+            <button @click="showPincode()">Submit</button>
         </div>
     </body>
     <footerNavigation />
@@ -177,13 +178,13 @@ export default {
                 id: 0,
                 description: "",
                 amount: 0,
-                accountFromtype: "",
-                accountTotype: "",
+                accountTypeFrom: [],
+                accountTypeTo: [],
                 bankAccountFrom: "",
                 bankAccountTo: "",
-                betalingskenmerk: "",
+                paymentReference: "",
                 date: "",
-                user: this.user
+                performedByUser: [],
             },
             pincode: "",
             bankaccount : {
@@ -220,6 +221,8 @@ export default {
         this.getUser();
         this.getBankAccount();
         this.getNameAndDtoList();
+        this.transaction.accountTypeFrom.push("CURRENT");
+        this.transaction.accountTypeTo.push("CURRENT");
     },
     methods: {
         safething(id){
@@ -255,8 +258,8 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
-                    this.transaction.user = res.data;
-                    console.log(this.user);
+                    
+                    this.transaction.performedByUser = res.data;
                     this.fillfield();
                 })
                 .catch(error => console.log(error))
@@ -278,6 +281,7 @@ export default {
         },
 
         showPincode() {
+            alert(this.transaction.paymentReference)
             let accountToID = document.querySelectorAll("#accountToID");
             accountToID.forEach(thing => {
                 if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
@@ -297,6 +301,7 @@ export default {
         //   console.log(this.transaction);
           this.transaction.date = new Date();
           console.log(this.transaction);
+
           axios
                     .post('transactions',this.transaction, {
                         headers: {
@@ -352,7 +357,6 @@ export default {
             this.postTransaction();
         },
         getOtherBankAccount(){
-            alert(this.otherBankAccount.id);
             axios
                 .get('/bankaccounts/' + this.otherBankAccount.id, {
                     headers: {
@@ -409,7 +413,7 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/transactions/" + this.decodedId);
+                    this.$router.push("/transactions/" + btoa(this.decodedId));
                 })
                 .catch((error) => console.log(error));
         },

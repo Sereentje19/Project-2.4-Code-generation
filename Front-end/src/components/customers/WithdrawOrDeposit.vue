@@ -297,7 +297,7 @@ export default {
                 .put("/bankaccounts/change/" + decodedId, this.bankAccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
-                    this.$router.push("/transactions/" + decodedId);
+                    this.$router.push("/transactions/" + btoa(decodedId));
                 })
                 .catch((error) => console.log(error));
         }
