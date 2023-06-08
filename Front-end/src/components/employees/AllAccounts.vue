@@ -81,7 +81,7 @@ export default {
                 .catch(error => console.log(error));
         },
         goToAddUser() {
-            this.$router.push('/AddUser');
+            this.$router.push('/employee/question');
         },
         selectUser(user) {
             this.$router.push(`/employee/accounts/` + btoa(user.id));
