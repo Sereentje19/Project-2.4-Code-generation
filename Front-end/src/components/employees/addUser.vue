@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="containerAddUser">
         <h2>Personal Details</h2>
         <div>
             <label>First Name:</label>

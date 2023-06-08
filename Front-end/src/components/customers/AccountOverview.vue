@@ -3,8 +3,8 @@
     <headerNavigation />
 
     <div class="container">
-      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <div class="user-info-button">
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         <button @click="goToUserInfo">User Info</button>
       </div>
       <div v-if="user.bankAccountList.length > 0">
@@ -14,8 +14,8 @@
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
         <div v-for="accType in account.accountType">
-        <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
-      </div>
+          <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+        </div>
       </div>
       <h3>Total: Є{{ totalAmount }}</h3>
     </div>
@@ -112,7 +112,7 @@ export default {
       console.log(this.bankacc);
     },
     goToUserInfo() {
-      this.$router.push(`/customer/accountInfo/`);
+      this.$router.push(`/accountInfo`);
     },
     goToTransactions(account) {
 

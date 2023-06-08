@@ -3,8 +3,11 @@
 
     <div class="container">
         <h2>All Users</h2>
-        <input type="text" v-model="searchQuery" placeholder="Search..." />
-        <button class="add-user-button" @click="goToAddUser">Add User</button>
+        <div id="inputAndBtn">
+            <input id="inputfield" type="text" v-model="searchQuery" placeholder="Search" />
+            <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add User</button>
+        </div>
+
         <!-- <div v-for="user in user.bankAccountList" :key="user.id"> -->
         <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
             <span>{{ account.firstName }} {{ account.lastName }}</span>
@@ -13,6 +16,23 @@
     <!-- </div> -->
     <footerNavigation />
 </template>
+
+<style>
+#inputAndBtn {
+    display: flex;
+    justify-content: space-between;
+    color: none;
+}
+
+#buttonAdd {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+#inputfield{
+    height: 40px;
+}
+</style>
   
   
 <script>

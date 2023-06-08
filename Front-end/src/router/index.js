@@ -23,7 +23,7 @@ const router = createRouter({
     { path: '/transactions/:id' , component: Transactions, props: true },
     { path: '/viewTransaction/:iban/:id' , component: ViewTransaction, props: true },
     { path: '/employee/accounts/:id' , component: Accounts, props: true },
-    { path: '/accountInfo' , component: AccountInfo, props: true},
+    { path: '/accountInfo' , component: AccountInfo},
     { path: '/customerAccountOverview' , component: CustomerAccountOverview, props: true},
     { path: '/allAccounts' , component: AllAccounts, props: true},
     { path: '/accountInfoforEmployee' , component: AccountInfoforEmployee, props: true},

@@ -9,10 +9,12 @@
                 </div>
                 <div class="accountNumber mr-2">
                     <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
-                    <datalist id="ibanList" >
+                    <datalist id="ibanList">
                         <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
-                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }}) 
+                            <div  v-for="accType in nameAndDto.accountType">
+                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ accType }}) 
                                 <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
+                            </div>
                             </option>
                     </datalist>
 
