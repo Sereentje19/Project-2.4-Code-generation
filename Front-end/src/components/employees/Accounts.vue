@@ -9,7 +9,7 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn">
+                        <button @click="goToUserInfo()" class="btn">
                             edit
                         </button>
                     </div>
@@ -106,7 +106,7 @@ export default {
             console.log(this.bankacc);
         },
         goToUserInfo() {
-            this.$router.push(`/accountInfo`);
+            this.$router.push(`/accountInfoforEmployee/` + btoa(this.user.id));
         },
         goToTransactions(account) {
             this.$router.push(`/transactions/` + btoa(account.id));
