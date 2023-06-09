@@ -3,26 +3,32 @@
     <headerNavigation />
 
     <div class="container">
-      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
       <div class="user-info-button">
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         <button @click="goToUserInfo">User Info</button>
       </div>
+
       <div v-if="user.bankAccountList.length > 0">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
+
+        <h3>Bank Accounts</h3>
+        <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
+          <div v-for="accType in account.accountType">
+            <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+          </div>
+        </div>
+        <h3>Total: Є{{ totalAmount }}</h3>
       </div>
 
-      <h3>Bank Accounts</h3>
-      <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-        <div v-for="accType in account.accountType">
-        <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+      <div v-else>
+        <p>You have no accounts.</p>
       </div>
-      </div>
-      <h3>Total: Є{{ totalAmount }}</h3>
     </div>
 
     <footerNavigation />
   </div>
 </template>
+
 
 <style>
 .user-info-button {
@@ -112,12 +118,12 @@ export default {
       console.log(this.bankacc);
     },
     goToUserInfo() {
-      this.$router.push(`/customer/accountInfo/`);
+      this.$router.push(`/accountInfo`);
     },
     goToTransactions(account) {
 
       const username = this.user.username;
-      this.$router.push("/transactions/" + username + "/" + btoa(account.id));
+      this.$router.push("/transactions/" + btoa(account.id));
     },
   },
 };

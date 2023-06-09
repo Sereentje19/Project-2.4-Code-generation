@@ -9,7 +9,7 @@
                 </div>
                 <div class="groupOptions">
                     <div class="option">
-                        <button class="btn">
+                        <button @click="goToUserInfo()" class="btn">
                             edit
                         </button>
                     </div>
@@ -19,7 +19,9 @@
             <div id="extraPadding">
                 <div class="bodyInfo">
                     <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
-                        <span class="wide-field">{{ account.accountType }} EURO {{ account.amount }}</span>
+                        <div v-for="accType in account.accountType">
+                            <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
+                        </div>
                     </div>
                     <h3>Total: Є{{ totalAmount }}</h3>
                 </div>
@@ -66,19 +68,14 @@ export default {
         }
     },
     mounted() {
-        this.getUserInfo();
+        const encodedId = this.$route.params.id;
+        const decodedId = atob(encodedId);
+        this.getUserInfo(decodedId);
     },
     methods: {
-        getUserInfo() {
-            const userId = this.$route.params.id;
+        getUserInfo(userId) {
             axios
                 .get(`/users/${userId}`, {
-
-               const decodedId = atob(this.id)
-
-            axios
-                .get('transactions/' + decodedId, {
-
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -87,7 +84,7 @@ export default {
                     this.user = res.data;
                     this.getBankAccounts();
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         },
         getBankAccounts() {
             // Iterate over the bank accounts and fetch their details
@@ -111,10 +108,10 @@ export default {
             console.log(this.bankacc);
         },
         goToUserInfo() {
-            this.$router.push(`/accountInfo`);
+            this.$router.push(`/accountInfoforEmployee/` + btoa(this.user.id));
         },
         goToTransactions(account) {
-            this.$router.push(`/transactions/${account.id}`);
+            this.$router.push(`/transactions/` + btoa(account.id));
         },
     },
 };

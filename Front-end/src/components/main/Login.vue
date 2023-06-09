@@ -1,6 +1,6 @@
 <template>
     <div id="logIn" width="100%">
-        <div class="container">
+        <div class="containerLogin">
             <div class="divBtns">
                 <h2 class="">Sign in</h2>
             </div><br>
@@ -23,16 +23,16 @@
 <script>
 import axios from '../../axios-auth.js';
 
+
 export default {
     data() {
         return {
-            user: [
-                {
-                    username: '',
-                    password: '',
-                    id: 0,
-                }
-            ]
+            user:
+            {
+                username: '',
+                password: '',
+                roles: []
+            },
         };
     },
     mounted() {
@@ -48,11 +48,33 @@ export default {
                 axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
                 localStorage.setItem("jwt", res.data.token);
                 console.log(res.data.token);
-                this.$router.push(`/customerAccountOverview`);
+                this.getUser();
             }).catch((error) => {
                 alert(error.response.data.token);
             });
-        }
+        },
+        getUser() {
+            axios
+                .get('users/current', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
+
+                    this.user.roles.forEach(element => {
+                        if (element == "EMPLOYEE") {
+                            this.$router.push(`/question`);
+                        }
+                        else {
+                            this.$router.push(`/customerAccountOverview`);
+                        }
+
+                    });
+                })
+                .catch(error => console.log(error));
+        },
     }
 }
 </script>

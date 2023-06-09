@@ -9,10 +9,12 @@
                 </div>
                 <div class="accountNumber mr-2">
                     <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
-                    <datalist id="ibanList" >
+                    <datalist id="ibanList">
                         <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
-                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }}) 
+                            <div  v-for="accType in nameAndDto.accountType">
+                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ accType }}) 
                                 <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
+                            </div>
                             </option>
                     </datalist>
 
@@ -26,9 +28,10 @@
                     <input type="text" class="input" placeholder="description" v-model="transaction.description">
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.betalingskenmerk">
+                    <input type="text" class="input" placeholder="betalingskenmerk" v-model="transaction.paymentReference">
                 </div>
             </div>
+            <button @click="showPincode()">Submit</button>
         </div>
     </body>
     <footerNavigation />
@@ -175,13 +178,13 @@ export default {
                 id: 0,
                 description: "",
                 amount: 0,
-                accountFromtype: "",
-                accountTotype: "",
+                accountTypeFrom: [],
+                accountTypeTo: [],
                 bankAccountFrom: "",
                 bankAccountTo: "",
-                betalingskenmerk: "",
+                paymentReference: "",
                 date: "",
-                user: this.user
+                performedByUser: [],
             },
             pincode: "",
             bankaccount : {
@@ -211,14 +214,15 @@ export default {
                 Iban: "",
                 accountType: [],
             },
-            
-            
+            decodedId: atob(this.id),
         };
     },
     mounted() {
         this.getUser();
         this.getBankAccount();
         this.getNameAndDtoList();
+        this.transaction.accountTypeFrom.push("CURRENT");
+        this.transaction.accountTypeTo.push("CURRENT");
     },
     methods: {
         safething(id){
@@ -254,15 +258,15 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
-                    this.transaction.user = res.data;
-                    console.log(this.user);
+                    
+                    this.transaction.performedByUser = res.data;
                     this.fillfield();
                 })
                 .catch(error => console.log(error))
         },
         getBankAccount() {
             axios
-                .get('/bankaccounts/' + this.id, {
+                .get('/bankaccounts/' + this.decodedId, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -277,6 +281,7 @@ export default {
         },
 
         showPincode() {
+            alert(this.transaction.paymentReference)
             let accountToID = document.querySelectorAll("#accountToID");
             accountToID.forEach(thing => {
                 if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
@@ -296,6 +301,7 @@ export default {
         //   console.log(this.transaction);
           this.transaction.date = new Date();
           console.log(this.transaction);
+
           axios
                     .post('transactions',this.transaction, {
                         headers: {
@@ -351,7 +357,6 @@ export default {
             this.postTransaction();
         },
         getOtherBankAccount(){
-            alert(this.otherBankAccount.id);
             axios
                 .get('/bankaccounts/' + this.otherBankAccount.id, {
                     headers: {
@@ -390,7 +395,7 @@ export default {
         },
         updateBalance(){
             axios
-                .put('bankaccounts/change/' + this.id, this.bankaccount, {
+                .put('bankaccounts/change/' + this.decodedId, this.bankaccount, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -408,7 +413,7 @@ export default {
                 })
                 .then((res) => {
                     console.log(res.data)
-                    this.$router.push("/transactions/" + this.id);
+                    this.$router.push("/transactions/" + btoa(this.decodedId));
                 })
                 .catch((error) => console.log(error));
         },

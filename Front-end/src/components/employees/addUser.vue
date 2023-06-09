@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="containerAddUser">
         <h2>Personal Details</h2>
         <div>
             <label>First Name:</label>
@@ -67,7 +67,9 @@ export default {
 
     data() {
         return {
-            user: {},
+            user: {
+                roles: [],
+            },
             currentUser: '',
             generatedPassword: '',
             generatedPincode: 0,
@@ -144,17 +146,12 @@ export default {
         },
         cancel() {
             this.$router.go(-1);
-            // if (this.currentUser == "CUSTOMER") {
-            //     this.$router.push("/");
-            // }
-            // else {
-            //     this.$router.push("/employee/question");
-            // }
         },
         addUser() {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.username = this.user.firstName;
+            this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {
 
@@ -162,15 +159,14 @@ export default {
                 axios
                     .post('users/register', this.user)
                     .then((res) => {
+                        this.$router.push("/");
                     }).catch((error) => {
                         alert(error.response.data.token);
                     });
             }
             else {
-                this.checkIbanExists();
-                this.user.iban = this.generatedIban;
+                this.generateIBAN();
 
-                console.log(headerToken)
                 axios
                     .post('users', this.user, headerToken)
                     .then((res) => {
@@ -180,8 +176,8 @@ export default {
             }
         },
         addBankAccount(userId) {
-            this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.userId = userId;
+            this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.accountType.push(this.selectedAccountType);
 
             axios
@@ -189,7 +185,7 @@ export default {
                 .then((res) => {
 
                     console.log(res.data)
-                    // this.$router.push("/");
+                    this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
 
