@@ -104,19 +104,21 @@ export default {
     };
   },
   mounted() {
-    this.getUser();
+    const encodedId = this.$route.params.id;
+    const decodedId = atob(encodedId);
+    this.getUserInfo(decodedId);
   },
   methods: {
-    getUser() {
+    getUserInfo(userId) {
       axios
-        .get('/users/current', {
+        .get(`/users/${userId}`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt")
           }
         })
         .then((res) => {
           this.customer = res.data;
-          this.editedUser = { ...this.customer };
+          this.getBankAccounts();
         })
         .catch(error => console.log(error));
     },
