@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.BankAccount;
+import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
 import SOT.Squad.code.generation.Services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,10 +56,10 @@ public class BankAccountRestController {
 //        return bankAccountService.getBankAccountByIban(iban);
 //    }
 
-//    @GetMapping("/All") //Employee
-//    public List<IbanAndNameDTO> getAllNameAndIban() {
-//        keyProvider.decodeJWT();
-//        return bankAccountService.getAllNameAndIban();
-//    }
+    @GetMapping("/All") //Employee
+    public List<IbanAndNameDTO> getAllNameAndIban() {
+        keyProvider.decodeJWT();
+        return bankAccountService.getAllNameAndIban();
+    }
 
 }

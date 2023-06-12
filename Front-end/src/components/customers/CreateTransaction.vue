@@ -281,7 +281,6 @@ export default {
         },
 
         showPincode() {
-            alert(this.transaction.paymentReference)
             let accountToID = document.querySelectorAll("#accountToID");
             accountToID.forEach(thing => {
                 if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
