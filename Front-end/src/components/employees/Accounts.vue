@@ -13,6 +13,9 @@
                             edit
                         </button>
                     </div>
+                    <div>
+                        <button @click="disableUser" class="btn">Disable User</button>
+                    </div>
                     <div class="option"></div>
                 </div>
             </div>
@@ -35,7 +38,11 @@
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
-
+const headerToken = {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("jwt")
+  }
+};
 export default {
     components: {
         headerNavigation,
@@ -55,6 +62,7 @@ export default {
                 houseNumber: "",
                 postalCode: "",
                 city: "",
+                active: "",
                 bankAccountList: []
             },
 
@@ -112,6 +120,20 @@ export default {
         },
         goToTransactions(account) {
             this.$router.push(`/transactions/` + btoa(account.id));
+        },
+        disableUser() {
+            this.user.active = false;
+            console.log(this.user);
+            console.log(this.user.id);
+            console.log(this.user.active);
+            axios
+                .put('users/' + this.user.id, this.user, headerToken)
+                .then((res) => {
+                    console.log("User disabled successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error disabling user:", error);
+                });
         },
     },
 };

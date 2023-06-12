@@ -43,24 +43,10 @@
       <span v-if="!editMode">{{ customer.houseNumber }}</span>
       <input type="text" v-else v-model="editedUser.houseNumber" />
     </div>
-    <div v-if="!editMode">
-      <div v-if="customer.bankAccountList.length > 0">
-      <label>Account Status:</label>
-      <span>{{ customer.bankAccountList[0].disabled ? 'Inactive' : 'Active' }}</span>
-      <label>IBAN:</label>
-      <span>{{ customer.bankAccountList[0].iban }}</span>
-    </div>
-    </div>
 
-    <div v-else>
-      <label>Account Status:</label>
-      <select v-model="editedUser.accountStatus">
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
-    </div>
     <div>
       <button v-if="!editMode" @click="editMode = true">Edit Info</button>
+      <button v-if="!editMode" @click="goBack">Back</button>
       <button id="btnUpdate" v-else @click="cancelEdit">Cancel</button>
       <button v-if="editMode" @click="updateInfo">Save Changes</button>
     </div>
@@ -80,9 +66,9 @@ import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("jwt")
+  }
 };
 
 export default {
@@ -103,8 +89,7 @@ export default {
         street: "",
         houseNumber: "",
         postalCode: "",
-        city: "",
-        bankAccountList: [],
+        city: ""
       },
       editedUser: {},
       editMode: false
@@ -124,35 +109,14 @@ export default {
         .then((res) => {
           this.customer = res.data;
           this.editedUser = { ...this.customer };
-          this.getBankAccounts();
         })
         .catch(error => console.log(error));
-    },
-    getBankAccounts() {
-      // Iterate over the bank accounts and fetch their details
-      for (let i = 0; i < this.customer.bankAccountList.length; i++) {
-        const accountId = this.customer.bankAccountList[i];
-        axios
-          .get(`/bankaccounts/` + accountId, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("jwt")
-            }
-          })
-          .then((res) => {
-            this.customer.bankAccountList[i] = res.data;
-            this.customer.bankAccountList[i].amount = res.data.balance;
-            this.customer.bankAccountList[i].iban = res.data.iban;
-            this.customer.bankAccountList[i].accountType = res.data.accountType;            
-          })
-          .catch(error => console.log(error));
-      }
     },
     updateInfo() {
       console.log(this.editedUser);
       console.log(this.customer);
       console.log(this.customer.id);
       console.log(this.editedUser.id);
-      console.log(this.editedUser.accountStatus);
       console.log(this.headerToken);
       axios
         .put('/users/' + this.customer.id, this.editedUser, headerToken)
@@ -160,7 +124,7 @@ export default {
           console.log('User information updated successfully!');
           this.customer = { ...this.editedUser };
           this.editMode = false;
-          console.log(this.response )
+          console.log(this.response)
         })
         .catch((error) => {
           console.error('Error updating user information:', error);
@@ -169,6 +133,9 @@ export default {
     cancelEdit() {
       this.editMode = false;
     },
+    goBack() {
+      this.$router.go(-1); // Go back to the previous page
+    }
   }
 };
 </script>
