@@ -8,33 +8,21 @@
             <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add User</button>
         </div>
 
-        <!-- <div v-for="user in user.bankAccountList" :key="user.id"> -->
+        <div v-if="!showUsersWithNoAccounts">
+            <button class="filter-button" @click="filterUsersWithNoAccounts">No Accounts</button>
+        </div>
+
+        <div v-else>
+            <button class="filter-button" @click="resetFilter">Show All</button>
+        </div>
+
         <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
             <span>{{ account.firstName }} {{ account.lastName }}</span>
         </div>
     </div>
-    <!-- </div> -->
+
     <footerNavigation />
 </template>
-
-<style>
-#inputAndBtn {
-    display: flex;
-    justify-content: space-between;
-    color: none;
-}
-
-#buttonAdd {
-    height: 40px;
-    margin-bottom: 10px;
-}
-
-#inputfield{
-    height: 40px;
-}
-</style>
-  
-  
 <script>
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
@@ -49,7 +37,8 @@ export default {
         return {
             users: [],
             selectedUser: null,
-            searchQuery: ''
+            searchQuery: '',
+            showUsersWithNoAccounts: false
         };
     },
     mounted() {
@@ -57,6 +46,10 @@ export default {
     },
     computed: {
         filteredUsers() {
+            if (this.showUsersWithNoAccounts) {
+                return this.users.filter(user => !user.bankAccountList || user.bankAccountList.length === 0);
+            }
+
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
                 return this.users.filter(user => {
@@ -64,6 +57,7 @@ export default {
                     return fullName.includes(query);
                 });
             }
+
             return this.users;
         }
     },
@@ -85,12 +79,38 @@ export default {
         },
         selectUser(user) {
             this.$router.push(`/employee/accounts/` + btoa(user.id));
+        },
+        filterUsersWithNoAccounts() {
+            this.showUsersWithNoAccounts = true;
+        },
+        resetFilter() {
+            this.showUsersWithNoAccounts = false;
         }
     }
 };
 </script>
+
+
   
 <style>
-@import '../../assets/css/allAccounts.css';
+#inputAndBtn {
+    display: flex;
+    justify-content: space-between;
+    color: none;
+}
+
+#buttonAdd {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+#inputfield {
+    height: 40px;
+}
+
+
+#buttonFilter {
+    height: 40px;
+    margin-left: 10px;
+}
 </style>
-  

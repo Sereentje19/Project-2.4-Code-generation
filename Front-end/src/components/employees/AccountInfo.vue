@@ -45,11 +45,11 @@
     </div>
     <div v-if="!editMode">
       <div v-if="customer.bankAccountList.length > 0">
-        <label>Account Status:</label>
-        <span>{{ customer.bankAccountList[0].disabled ? 'Inactive' : 'Active' }}</span>
-        <label>IBAN:</label>
-        <span>{{ customer.bankAccountList[0].iban }}</span>
-      </div>
+      <label>Account Status:</label>
+      <span>{{ customer.bankAccountList[0].disabled ? 'Inactive' : 'Active' }}</span>
+      <label>IBAN:</label>
+      <span>{{ customer.bankAccountList[0].iban }}</span>
+    </div>
     </div>
 
     <div v-else>
@@ -80,9 +80,9 @@ import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 const headerToken = {
-  headers: {
-    Authorization: "Bearer " + localStorage.getItem("jwt")
-  }
+    headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+    }
 };
 
 export default {
@@ -111,14 +111,12 @@ export default {
     };
   },
   mounted() {
-    const encodedId = this.$route.params.id;
-    const decodedId = atob(encodedId);
-    this.getUserInfo(decodedId);
+    this.getUser();
   },
   methods: {
-    getUserInfo(userId) {
+    getUser() {
       axios
-        .get('/users/' + userId, {
+        .get('/users/current', {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt")
           }
@@ -144,7 +142,7 @@ export default {
             this.customer.bankAccountList[i] = res.data;
             this.customer.bankAccountList[i].amount = res.data.balance;
             this.customer.bankAccountList[i].iban = res.data.iban;
-            this.customer.bankAccountList[i].accountType = res.data.accountType;
+            this.customer.bankAccountList[i].accountType = res.data.accountType;            
           })
           .catch(error => console.log(error));
       }
@@ -162,7 +160,7 @@ export default {
           console.log('User information updated successfully!');
           this.customer = { ...this.editedUser };
           this.editMode = false;
-          console.log(this.response)
+          console.log(this.response )
         })
         .catch((error) => {
           console.error('Error updating user information:', error);
