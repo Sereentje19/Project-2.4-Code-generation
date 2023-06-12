@@ -16,8 +16,8 @@
             <button class="filter-button" @click="resetFilter">Show All</button>
         </div>
 
-        <div v-for="account in filteredUsers" :key="account.id" @click="selectUser(account)">
-            <span>{{ account.firstName }} {{ account.lastName }}</span>
+        <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
         </div>
     </div>
 
@@ -58,7 +58,7 @@ export default {
                 });
             }
 
-            return this.users;
+            return this.users.filter(user => user.active); // Only display active users
         }
     },
     methods: {

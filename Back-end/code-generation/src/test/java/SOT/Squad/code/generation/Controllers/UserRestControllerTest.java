@@ -103,6 +103,22 @@ public class UserRestControllerTest {
 
     }
 
+    @Test
+    public void testregister() throws Exception {
+        User user = new User();
+// Add some transactions to the list
+
+        when(userService.addUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+
+    }
+
 
 
     @Test
