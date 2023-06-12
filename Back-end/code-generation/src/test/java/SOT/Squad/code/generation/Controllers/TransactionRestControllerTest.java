@@ -63,7 +63,7 @@ class TransactionRestControllerTest {
         when(transactionService.AddTransaction(any(Transaction.class))).thenReturn(transaction);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/transactions/post")
+                        .post("/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transaction)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -104,7 +104,7 @@ class TransactionRestControllerTest {
         // Arrange
         long transactionId = 1;
         User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null, List.of(Role.CUSTOMER), "5781",2000,300);
-        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1);
+        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().minusDays(3),user1);
         when(transactionService.GetTransactionById(transactionId)).thenReturn(transaction);
 
         // Act and Assert
