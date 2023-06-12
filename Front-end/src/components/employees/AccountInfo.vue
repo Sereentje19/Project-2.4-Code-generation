@@ -43,7 +43,14 @@
       <span v-if="!editMode">{{ customer.houseNumber }}</span>
       <input type="text" v-else v-model="editedUser.houseNumber" />
     </div>
-
+    <div>
+      <label>Status:</label>
+      <span v-if="!editMode">{{ customer.active ? 'Active' : 'Inactive' }}</span>
+      <select v-else v-model="editedUser.active">
+        <option :value="true">Active</option>
+        <option :value="false">Inactive</option>
+      </select>
+    </div>
     <div>
       <button v-if="!editMode" @click="editMode = true">Edit Info</button>
       <button v-if="!editMode" @click="goBack">Back</button>
@@ -89,6 +96,7 @@ export default {
         street: "",
         houseNumber: "",
         postalCode: "",
+        active: true,
         city: ""
       },
       editedUser: {},
