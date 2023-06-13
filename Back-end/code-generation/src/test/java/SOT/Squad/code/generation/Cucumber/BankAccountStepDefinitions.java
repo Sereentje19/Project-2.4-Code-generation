@@ -3,17 +3,44 @@ package SOT.Squad.code.generation.Cucumber;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.junit.jupiter.api.Assertions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BankAccountStepDefinitions{
-    
-    @Given("a bank account with the following details:")
-    public void aBankAccountWithTheFollowingDetails() {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private final HttpHeaders headers = new HttpHeaders();
+
+    private String jwtToken;
+
+    private ResponseEntity<String> response;
+
+
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+
+
+    @Given("the user is logged in as {string} with password {string}")
+    public void theUserIsLoggedInAsWithPassword(String arg0, String arg1) {
     }
 
-    @When("the bank account is added")
-    public void theBankAccountIsAdded() {
-        
-    }
+//    @Given("The endpoint for {string} is available for method {string}")
+//    public void theEndpointForIsAvailableForMethod(String arg0, String arg1) {
+//
+//    }
+
 
     @Then("the response should be a bank account object with the same details")
     public void theResponseShouldBeABankAccountObjectWithTheSameDetails() {

@@ -1,29 +1,33 @@
 package SOT.Squad.code.generation.Cucumber;
 
-import ch.qos.logback.core.BasicStatusManager;
+import SOT.Squad.code.generation.Models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.junit.jupiter.api.Assertions;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-@Qualifier("baseStepDefinitions")
-public class UserStepDefinition {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+public class UserStepDefinition{
+
+    BankAccount bankAccount = new BankAccount();
+    User user = new User();
+    Transaction transaction = new Transaction();
+
+    private TestRestTemplate restTemplate = new TestRestTemplate();
 
     private String jwtToken;
 
@@ -31,11 +35,12 @@ public class UserStepDefinition {
     private final HttpHeaders httpHeaders = new HttpHeaders();
 
     private ResponseEntity<String> responseEntity;
+
     @Given("The user is logged in with username {string} and the password {string}")
     public void theUserIsLoggedInWithUsernameAndThePassword(String arg0, String arg1) throws JsonProcessingException {
 
         httpHeaders.add("Content-Type", "application/json ");
-        responseEntity = restTemplate.exchange("/auth/login",
+        responseEntity = restTemplate.exchange("http://localhost:8080/login",
                 HttpMethod.POST,
                 new HttpEntity<>(
                         mapper.writeValueAsString(Map.of("username", arg0, "password", arg1)),
@@ -45,12 +50,47 @@ public class UserStepDefinition {
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
     }
 
-    @Given("The endpoint for {string} is available with method {string}")
-    public void theEndpointForIsAvailableWithMethod(String arg0, String arg1) throws JsonProcessingException {
+ //start omar shit
+ @Given("The endpoint for {string} is available for method {string}")
+ public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
+     responseEntity = restTemplate
+             .exchange("http://localhost:8080/" + endpoint,
+                     HttpMethod.OPTIONS,
+                     new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+                     String.class);
+
+     List<String> options = Arrays.stream(responseEntity.getHeaders()
+                     .get("Allow")
+                     .get(0)// The first element is all allowed methods separated by comma
+                     .split(","))
+             .toList();
+     Assertions.assertTrue(options.contains(method));
+ }
+
+
+
+    @When("the transaction is added")
+
+    public void theTransactionIsAdded() {
+        bankAccount = new BankAccount(1, "NL12INHO0123456789", 1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
+        user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 64567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",
+                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
+        Transaction transaction = new Transaction(1, "test", 100, "NL12INHO0123456789", "NL12INHO0123456788",
+                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk",
+                LocalDateTime.now().minusDays(3), user);
+        responseEntity = restTemplate.exchange("/transactions",
+                HttpMethod.POST,
+                new HttpEntity<>(transaction, httpHeaders),
+                String.class);
+    }
+
+// end omar shit
+    @When("I retrieve all users")
+    public void iRetrieveAllUsers() {
         httpHeaders.add("Content-Type", "application/json ");
-        responseEntity = restTemplate.exchange("/users",
+        responseEntity = restTemplate.exchange("http://localhost:8080/users",
                 HttpMethod.GET,
-                null,
+                new HttpEntity<>(null, httpHeaders),
                 String.class);
 
         int statusCode = responseEntity.getStatusCodeValue();
@@ -58,24 +98,44 @@ public class UserStepDefinition {
         Assert.assertEquals(200, statusCode);
     }
 
-    @When("I retrieve all users")
-    public void iRetrieveAllUsers() {
-    }
-
     @Then("I should receive all users")
     public void iShouldReceiveAllUsers() {
+        httpHeaders.add("Content-Type", "application/json ");
+        responseEntity = restTemplate.exchange("http://localhost:8080/users",
+                HttpMethod.GET,
+                new HttpEntity<>(null, httpHeaders),
+                String.class);
+
+        // Add your validation logic here
+        Assert.assertNotNull(responseEntity.getBody());
     }
 
     @Given("the system has a database with users")
     public void theSystemHasADatabaseWithUsers() {
     }
 
-    @When("I request to get a single user")
-    public void iRequestToGetASingleUser() {
+    @When("I request to get a single user with an id of {string}")
+    public void iRequestToGetASingleUser(String id) {
+        httpHeaders.add("Content-Type", "application/json ");
+        responseEntity = restTemplate.exchange("http://localhost:8080/users/" + id,
+                HttpMethod.GET,
+                new HttpEntity<>(null, httpHeaders),
+                String.class);
+
+        int statusCode = responseEntity.getStatusCodeValue();
+        // Add your validation logic here
+        Assert.assertEquals(200, statusCode);
     }
 
-    @Then("I should receive a single user")
-    public void iShouldReceiveASingleUser() {
+    @Then("I should receive a single user with an id of {string}")
+    public void iShouldReceiveASingleUser(String id) {
+        httpHeaders.add("Content-Type", "application/json ");
+        responseEntity = restTemplate.exchange("http://localhost:8080/users/" + id,
+                HttpMethod.GET,
+                new HttpEntity<>(null, httpHeaders),
+                String.class);
+
+        Assert.assertNotNull(responseEntity.getBody());
     }
 
     @When("I request to get a single user that does not exist")
@@ -137,4 +197,5 @@ public class UserStepDefinition {
     @Then("The user should be disabled")
     public void theUserShouldBeDisabled() {
     }
+
 }
