@@ -32,6 +32,10 @@ public class DataSeeder implements ApplicationRunner {
         BankAccount bankacc5 = new BankAccount(4, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.SAVINGS),10);
         BankAccount bankacc3 = new BankAccount(2, "NL12INHO0123456788",  100, 2, false, "EUR", List.of(AccountType.CURRENT),10);
         BankAccount bankacc4 = new BankAccount(3, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.CURRENT),10);
+<<<<<<< Updated upstream
+=======
+        BankAccount bankacc5 = new BankAccount(3, "NL12INHO0123456787",  200, 3, false, "EUR", List.of(AccountType.SAVINGS),10);
+>>>>>>> Stashed changes
 
 //      bankAccountService.addBankAccount(bankacc1);
         bankAccountService.addBankAccount(bankacc2);

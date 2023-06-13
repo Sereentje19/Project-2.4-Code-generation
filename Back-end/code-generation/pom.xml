@@ -72,7 +72,7 @@
 
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java8</artifactId>
+            <artifactId>cucumber-java</artifactId>
             <version>7.3.3</version>
             <scope>test</scope>
         </dependency>
