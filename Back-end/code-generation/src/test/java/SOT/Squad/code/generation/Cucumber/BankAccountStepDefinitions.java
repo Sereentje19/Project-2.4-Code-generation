@@ -4,7 +4,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-
 public class BankAccountStepDefinitions extends baseStepDefinitions{
     
     @Given("a bank account with the following details:")
