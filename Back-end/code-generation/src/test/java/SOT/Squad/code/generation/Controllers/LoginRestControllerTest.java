@@ -59,7 +59,7 @@ public class LoginRestControllerTest {
         requestDTO.setPassword("kenter");
 
         LoginResponseDTO responseDTO = new LoginResponseDTO("token");
-        when(userService.login(any(LoginRequestDTO.class))).thenReturn(responseDTO);
+        when(loginRestController.login(any(LoginRequestDTO.class))).thenReturn(responseDTO);
 
         // Perform the request and assert the response
         mockMvc.perform(MockMvcRequestBuilders
@@ -71,44 +71,44 @@ public class LoginRestControllerTest {
                 .andExpect(jsonPath("$.token").value("token"));
     }
 
-//    @Test
-//    void testLogin_InvalidCredentials() throws Exception {
-//        // Mock the service throwing an IllegalArgumentException
-//        LoginRequestDTO requestDTO = new LoginRequestDTO();
-//        requestDTO.setUsername("WrongUsername");
-//        requestDTO.setPassword("WrongPassword");
-//
-//        when(loginService.login(any(LoginRequestDTO.class))).thenThrow(new IllegalArgumentException("Invalid username or password"));
-//
-//        // Perform the request and assert the response
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
-//                .andExpect(status().isForbidden())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.message").value("Invalid username or password"));
-//    }
-//
-//
-//    @Test
-//    void testLogin_InternalServerError() throws Exception {
-//        // Mock the service throwing an exception
-//        LoginRequestDTO requestDTO = new LoginRequestDTO();
-//        requestDTO.setUsername("username");
-//        requestDTO.setPassword("password");
-//
-//        when(loginService.login(any(LoginRequestDTO.class))).thenThrow(new RuntimeException("An error occurred"));
-//
-//        // Perform the request and assert the response
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
-//                .andExpect(status().isInternalServerError())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-////                .andExpect(jsonPath("$.token").value("An error occurred"));
-//                .andExpect(jsonPath("$.message").value("An error occurred"));
-//    }
+    @Test
+    void testLogin_InvalidCredentials() throws Exception {
+        // Mock the service throwing an IllegalArgumentException
+        LoginRequestDTO requestDTO = new LoginRequestDTO();
+        requestDTO.setUsername("WrongUsername");
+        requestDTO.setPassword("WrongPassword");
+
+        when(loginRestController.login(any(LoginRequestDTO.class))).thenThrow(new IllegalArgumentException("Invalid username or password"));
+
+        // Perform the request and assert the response
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Invalid username or password"));
+    }
+
+
+    @Test
+    void testLogin_InternalServerError() throws Exception {
+        // Mock the service throwing an exception
+        LoginRequestDTO requestDTO = new LoginRequestDTO();
+        requestDTO.setUsername("username");
+        requestDTO.setPassword("password");
+
+        when(loginRestController.login(any(LoginRequestDTO.class))).thenThrow(new RuntimeException("An error occurred"));
+
+        // Perform the request and assert the response
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(jsonPath("$.token").value("An error occurred"));
+                .andExpect(jsonPath("$.message").value("An error occurred"));
+    }
 
 }

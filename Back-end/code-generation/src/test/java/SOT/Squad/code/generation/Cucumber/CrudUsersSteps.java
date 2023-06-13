@@ -7,9 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import io.cucumber.java8.En;
+import io.cucumber.java.en.Given;
 @RunWith(Cucumber.class)
-public class CrudUsersSteps implements En{
+public class CrudUsersSteps{
 
     @Autowired
     private UserRestController userRestController;
