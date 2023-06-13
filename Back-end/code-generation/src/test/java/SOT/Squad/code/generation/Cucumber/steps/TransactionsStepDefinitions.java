@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.Cucumber;
+package SOT.Squad.code.generation.Cucumber.steps;
 
 
 import SOT.Squad.code.generation.Models.*;

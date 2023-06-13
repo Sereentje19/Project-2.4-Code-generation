@@ -1,32 +1,22 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
 import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.spring.CucumberContextConfiguration;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@CucumberContextConfiguration
 public class BankAccountStepDefinitions {
     private TestRestTemplate restTemplate = new TestRestTemplate();
 
@@ -71,8 +61,8 @@ public class BankAccountStepDefinitions {
         Assertions.assertTrue(options.contains(method));
     }
 
-    @When("I retreive all bank accounts")
-    public void iRetreiveAllBankAccounts() {
+    @When("I retrieve all bank accounts")
+    public void iRetrieveAllBankAccounts() {
         String endpoint = "http://localhost:8080/bankaccounts";
 
         ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
@@ -137,5 +127,6 @@ public class BankAccountStepDefinitions {
     @Then("the response should be a list of bank account objects with only the ID, iban, name and accountType")
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
     }
+
 
 }

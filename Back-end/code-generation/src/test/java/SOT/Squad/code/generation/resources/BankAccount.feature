@@ -4,7 +4,7 @@ Feature: Bank Account Rest Controller
   Scenario: Get All Bank Accounts
     Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "GET"
-    When I retreive all bank accounts
+    When I retrieve all bank accounts
     Then the response should be a list of bank account objects
 
   Scenario: Add Bank Account
