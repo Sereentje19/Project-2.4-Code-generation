@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 @Qualifier("baseStepDefinitions")
-public class UserStepDefinition extends baseStepDefinitions{
+public class UserStepDefinition {
 
     @Autowired
     private TestRestTemplate restTemplate;
