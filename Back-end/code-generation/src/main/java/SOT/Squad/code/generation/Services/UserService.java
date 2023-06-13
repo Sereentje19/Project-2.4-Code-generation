@@ -21,9 +21,9 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    BCryptPasswordEncoder encoder;
+    private BCryptPasswordEncoder encoder;
     @Autowired
-    JWTTokenProvider tokenProvider;
+    private JWTTokenProvider tokenProvider;
     @Autowired
     private UserRepository userRepository;
     private List<User> users = new ArrayList<>();
@@ -64,7 +64,6 @@ public class UserService {
     public User updateUser(User user) {
         return userRepository.save(user);
     }
-
     public User checkPincode(String pincode) {
         return userRepository.findUserByPincode(pincode);
     }
