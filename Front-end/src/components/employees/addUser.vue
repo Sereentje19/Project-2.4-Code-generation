@@ -40,6 +40,10 @@
             </select>
         </div>
         <div>
+            <label>username:</label>
+            <input type="text" v-model="user.username" />
+        </div>
+        <div>
             <label>Password:</label>
             <input type="text" v-model="this.generatedPassword" />
         </div>
@@ -150,7 +154,6 @@ export default {
         addUser() {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
-            this.user.username = this.user.firstName;
             this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {

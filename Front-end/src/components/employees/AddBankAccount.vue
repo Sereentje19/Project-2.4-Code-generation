@@ -2,8 +2,10 @@
     <div class="container">
         <h2>Personal Details</h2>
         <div>
-            <label>Iban number:</label>
-            <input type="text" v-model="this.newBankAccount.iban" />
+            <label>Users:</label>
+            <select v-model="this.selectedUser">
+                <option v-for="user in this.users" :value="user">{{ user.username }}</option>
+            </select>
         </div>
         <div>
             <label>Account type:</label>
@@ -13,7 +15,7 @@
         </div>
         <div>
             <button id="btn2" class="btnUpdate" @click="cancel()">Cancel</button>
-            <button id="btn2" @click="checkIbanExists()">Save Changes</button>
+            <button id="btn2" @click="getIbanOfUser()">Save Changes</button>
         </div>
     </div>
 </template>
@@ -32,7 +34,9 @@ export default {
 
     data() {
         return {
-            ibanExists: false,
+            users: [],
+            selectedUser: '',
+            generatedIban: '',
             bankAccounts: [],
             accountTypes: ['CURRENT', 'SAVINGS'],
             selectedAccountType: '',
@@ -49,31 +53,63 @@ export default {
         };
     },
     mounted() {
-
+        this.getUsers();
     },
     methods: {
         cancel() {
             this.$router.push("/employee/question");
         },
+        getUsers() {
+            axios
+                .get('/users', headerToken)
+                .then((res) => {
+                    this.users = res.data;
+                })
+                .catch(error => console.log(error));
+        },
+        generateIBAN() {
+            const countryCode = 'NL';
+            const additionalDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+            const bankCode = 'INHO';
+            const accountNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+
+            this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
+            this.checkIbanExists();
+        },
         checkIbanExists() {
+            axios
+                .get('bankaccounts', headerToken)
+                .then((res) => {
+                    this.bankAccount = res.data;
+
+                    for (const element of this.bankAccount) {
+                        if (element.iban == this.generatedIban) {
+                            this.generateIBAN();
+                        }
+                    }
+                }).catch((error) => console.log(error));
+        },
+        getIbanOfUser() {
             axios
                 .get('/bankaccounts', headerToken)
                 .then((res) => {
                     this.bankAccounts = res.data;
 
                     for (const element of this.bankAccounts) {
-                        if (element.iban == this.newBankAccount.iban) {
+                        if (this.selectedUser.id == element.userId) {
+                            this.newBankAccount.iban = element.iban;
                             this.ibanExists = true;
-                            this.newBankAccount.userId = element.userId;
                             break;
                         }
-                        this.ibanExists = false;
                     }
 
+                    console.log(this.ibanExists)
+
                     if (!this.ibanExists) {
-                        alert("IBAN doesn't exists");
-                        return;
+                        this.generateIBAN();
+                        this.newBankAccount.iban = this.generatedIban;
                     }
+
                     this.addBankAccount();
 
                 }).catch((error) => console.log(error));
@@ -81,14 +117,16 @@ export default {
         addBankAccount() {
             this.newBankAccount.accountType = [];
             this.newBankAccount.accountType.push(this.selectedAccountType);
-            console.log(this.newBankAccount)
+            this.newBankAccount.userId = this.selectedUser.id;
+
+            console.log(this.newBankAccount.iban)
 
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
 
                     console.log(res.data)
-                    // this.$router.push("/");
+                    this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
         },
