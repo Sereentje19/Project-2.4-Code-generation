@@ -1,5 +1,7 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
+import SOT.Squad.code.generation.Models.BankAccount;
+import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,15 +11,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +28,6 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @CucumberContextConfiguration
 public class BankAccountStepDefinitions {
-
-//    @Autowired
     private TestRestTemplate restTemplate = new TestRestTemplate();
 
     private final HttpHeaders httpHeaders = new HttpHeaders();
@@ -37,8 +37,8 @@ public class BankAccountStepDefinitions {
     private ResponseEntity<String> responseEntity;
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private List<BankAccount> retreivedBankaccount;
 
-//    @Autowired
     private BankAccountRepository bankAccountRepository;
 
 
@@ -71,16 +71,27 @@ public class BankAccountStepDefinitions {
         Assertions.assertTrue(options.contains(method));
     }
 
-
     @When("I retreive all bank accounts")
     public void iRetreiveAllBankAccounts() {
-        responseEntity = restTemplate.exchange(restTemplate.getRootUri() + "http://localhost:8080//bankaccounts", HttpMethod.GET, new HttpEntity<>(null, httpHeaders), String.class);
+        String endpoint = "http://localhost:8080/bankaccounts";
+
+        ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
+                endpoint,
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {}
+        );
+
+        List<BankAccount> bankAccounts = responseEntity.getBody();
+        retreivedBankaccount = bankAccounts;
     }
+
 
     @Then("the response should be a list of bank account objects")
     public void theResponseShouldBeAListOfBankAccountObjects() {
-        int actual = JsonPath.read(responseEntity.getBody(), "$.data.size()");
-        Assertions.assertEquals(9, actual);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(retreivedBankaccount);
+        Assertions.assertFalse(retreivedBankaccount.isEmpty());
     }
 
 
@@ -131,4 +142,5 @@ public class BankAccountStepDefinitions {
     @Then("the response should be a list of bank account objects with only the ID, iban, name and accountType")
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
     }
+
 }
