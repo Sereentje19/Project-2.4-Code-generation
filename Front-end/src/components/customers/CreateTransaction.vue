@@ -281,6 +281,7 @@ export default {
         },
 
         showPincode() {
+            this.rekening = document.getElementById("fromInput").value;
             let accountToID = document.querySelectorAll("#accountToID");
             accountToID.forEach(thing => {
                 if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){

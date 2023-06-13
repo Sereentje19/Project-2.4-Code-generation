@@ -2,9 +2,11 @@ Feature: Crud Users
   I want to create, read, update and delete users from the database
 
   Scenario: Retrieve all users
-    Given the system has a database with users
-    When I request to get all users
-    Then I should receive a list of users
+    Given The user is logged in with username "thijs" and the password "moerland"
+    Given i have a valid token
+    Given The endpoint for "users" is available with method "GET"
+    When I Retrieve all users
+    Then I should receive all users
 
   Scenario: Retrieve a single user
     Given the system has a database with users
