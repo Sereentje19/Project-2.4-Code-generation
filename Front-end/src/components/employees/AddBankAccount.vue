@@ -3,15 +3,20 @@
         <h2>Personal Details</h2>
         <div>
             <label>Users:</label>
-            <select v-model="this.selectedUser">
+            <select v-model="this.selectedUser" @change="checkAccountType()">
                 <option v-for="user in this.users" :value="user">{{ user.username }}</option>
             </select>
         </div>
         <div>
-            <label>Account type:</label>
-            <select v-model="this.selectedAccountType">
-                <option v-for="accountType in this.accountTypes" :value="accountType">{{ accountType }}</option>
-            </select>
+            <div v-if="this.accountTypes != null">
+                <label>Account type:</label>
+                <select v-model="this.selectedAccountType">
+                    <option v-for="accountType in this.accountTypes" :value="accountType">{{ accountType }}</option>
+                </select>
+            </div>
+            <div v-else>
+                This user already has the maximum of bankaccounts possible.
+            </div>
         </div>
         <div>
             <button id="btn2" class="btnUpdate" @click="cancel()">Cancel</button>
@@ -87,6 +92,40 @@ export default {
                             this.generateIBAN();
                         }
                     }
+                }).catch((error) => console.log(error));
+        },
+        checkAccountType() {
+            axios
+                .get('bankaccounts', headerToken)
+                .then((res) => {
+                    this.bankAccount = res.data;
+                    let savingsAccountsCount = 5;
+                    let currentsAccountsCount = 1;
+
+                    for (const element of this.bankAccount) {
+                        if (element.userId == this.selectedUser.id) {
+
+                            if (element.accountType == 'CURRENT') {
+                                currentsAccountsCount--;
+                            }
+                            else if (element.accountType == 'SAVINGS') {
+                                savingsAccountsCount--;
+                            }
+                        }
+                    }
+
+                    if (savingsAccountsCount <= 0 && currentsAccountsCount <= 0) {
+                        this.accountTypes = null
+                    }
+                    else if(savingsAccountsCount <= 0)
+                    {
+                        this.accountTypes = ['CURRENT']
+                    }
+                    else if(currentsAccountsCount <= 0)
+                    {
+                        this.accountTypes = ['SAVINGS']
+                    }
+
                 }).catch((error) => console.log(error));
         },
         getIbanOfUser() {

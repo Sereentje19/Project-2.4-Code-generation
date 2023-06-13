@@ -62,9 +62,6 @@ export default {
                 active: "",
                 bankAccountList: []
             },
-
-
-
         };
     },
     computed: {

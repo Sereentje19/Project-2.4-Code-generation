@@ -128,6 +128,16 @@ export default {
             this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
             this.checkIbanExists();
         },
+        checkUser() {
+            if (localStorage.getItem("jwt") !== null) {
+                this.currentUser = "EMPLOYEE";
+            } else {
+                this.currentUser = "CUSTOMER";
+            }
+        },
+        cancel() {
+            this.$router.go(-1);
+        },
         checkIbanExists() {
             axios
                 .get('bankaccounts', headerToken)
@@ -141,19 +151,10 @@ export default {
                     }
                 }).catch((error) => console.log(error));
         },
-        checkUser() {
-            if (localStorage.getItem("jwt") !== null) {
-                this.currentUser = "EMPLOYEE";
-            } else {
-                this.currentUser = "CUSTOMER";
-            }
-        },
-        cancel() {
-            this.$router.go(-1);
-        },
         addUser() {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
+            this.user.accountType = this.selectedAccountType;
             this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {
