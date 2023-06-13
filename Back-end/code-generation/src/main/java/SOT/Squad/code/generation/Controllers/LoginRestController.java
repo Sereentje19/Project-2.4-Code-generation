@@ -4,6 +4,7 @@ import SOT.Squad.code.generation.JWT.JWTTokenProvider;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
 import SOT.Squad.code.generation.Models.User;
+import SOT.Squad.code.generation.Services.UserDetailService;
 import SOT.Squad.code.generation.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

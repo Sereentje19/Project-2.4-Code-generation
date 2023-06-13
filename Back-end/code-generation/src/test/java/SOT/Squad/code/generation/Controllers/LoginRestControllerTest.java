@@ -5,6 +5,7 @@ import SOT.Squad.code.generation.JWT.JWTTokenProvider;
 import SOT.Squad.code.generation.Models.DTO.ErrorDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
+import SOT.Squad.code.generation.Services.UserDetailService;
 import SOT.Squad.code.generation.Services.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class LoginRestControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
     @Mock
-    private UserService userService;
+    private UserDetailService userService;
     @InjectMocks
     private LoginRestController loginRestController;
 
