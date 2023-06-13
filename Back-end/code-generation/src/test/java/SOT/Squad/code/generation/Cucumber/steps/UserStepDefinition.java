@@ -21,8 +21,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@CucumberContextConfiguration
 public class UserStepDefinition {
 
 //    @Autowired
