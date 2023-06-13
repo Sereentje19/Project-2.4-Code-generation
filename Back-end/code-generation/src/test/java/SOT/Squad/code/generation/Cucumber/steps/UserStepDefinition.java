@@ -1,16 +1,18 @@
-package SOT.Squad.code.generation.Cucumber;
+package SOT.Squad.code.generation.Cucumber.steps;
 
-import ch.qos.logback.core.BasicStatusManager;
+//import SOT.Squad.code.generation.Cucumber.steps.BaseStepDefinitions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +21,11 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
-@Qualifier("baseStepDefinitions")
-public class UserStepDefinition extends baseStepDefinitions{
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@CucumberContextConfiguration
+public class UserStepDefinition {
 
-    @Autowired
+//    @Autowired
     private TestRestTemplate restTemplate;
 
     private String jwtToken;
