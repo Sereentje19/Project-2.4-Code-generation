@@ -5,7 +5,7 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="van rekeningnummer...." v-model="rekening">
+                    <input type="text" class="input" placeholder="van rekeningnummer...." :value=this.bankAccount.iban id="fromInput">
                 </div>
             </div>
             <div class="body">
@@ -181,16 +181,8 @@ export default {
                 houseNumber: "",
                 postalCode: "",
                 city: "",
-                bankAccountList: [
-                    // {
-                    //     id: 0,
-                    //     accountNumber: "BE00 0000 0000 0000",
-                    //     saldo: 1000,
-                    //     firstName: "test",
-                    //     lastName: "test",
-                    //     email: "test",
-                    // }
-                ],
+                bankAccountList: [],
+                roles: [],
                 dailyLimit: 0,
                 transactionLimit: 0,
             },
@@ -202,6 +194,13 @@ export default {
 
     },
     methods: {
+        fillfield(){
+            let fromInput = document.getElementById("fromInput");
+            console.log(this.user.roles[0]);
+            if(this.user.roles[0]== "CUSTOMER"){
+                fromInput.setAttribute( 'readonly', true );
+            }
+        },
         getUser() {
             axios
                 .get('users/current', {
@@ -211,6 +210,7 @@ export default {
                 })
                 .then((res) => {
                     this.user = res.data;
+                    this.fillfield();
                 })
                 .catch(error => console.log(error))
         },
@@ -220,12 +220,14 @@ export default {
                 .get('/bankaccounts/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
+                    this.rekening = this.bankAccount.iban;
                     console.log(this.bankAccount);
 
                 })
                 .catch(error => console.log(error))
         },
         showPincode() {
+            this.rekening = document.getElementById("fromInput").value;
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
