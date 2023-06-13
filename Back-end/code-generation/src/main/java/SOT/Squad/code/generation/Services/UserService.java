@@ -58,28 +58,12 @@ public class UserService {
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
     }
-
     public User getUser(long id) {
         return userRepository.findById(id).get();
     }
-
-//    public User addUser(User user) {
-//        return userRepository.save(user);
-//    }
-
     public User updateUser(User user) {
         return userRepository.save(user);
     }
-
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
-    }
-
-    public User getByUsernameAndPassword(String username, String password) {
-
-        return userRepository.getByUsernameAndPassword(username, password);
-    }
-
 
     public User checkPincode(String pincode) {
         return userRepository.findUserByPincode(pincode);

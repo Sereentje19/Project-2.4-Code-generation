@@ -49,13 +49,6 @@ public class BankAccountRestController {
         return bankAccountService.updateBankAccount(bankAccount, id);
     }
 
-
-//    @GetMapping("/iban/{iban}") //Employee & Customer
-//    public BankAccount getAccountByIban(@PathVariable String iban) {
-//        keyProvider.decodeJWT();
-//        return bankAccountService.getBankAccountByIban(iban);
-//    }
-
     @GetMapping("/All") //Employee
     public List<IbanAndNameDTO> getAllNameAndIban() {
         keyProvider.decodeJWT();

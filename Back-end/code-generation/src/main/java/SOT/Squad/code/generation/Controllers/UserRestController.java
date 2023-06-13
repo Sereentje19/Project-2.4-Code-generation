@@ -43,11 +43,6 @@ public class UserRestController {
         return userService.addUser(user);
     }
 
-    @DeleteMapping("/{id}") //Employee
-    public void deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
-    }
-
     @GetMapping("/{id}") //Employee & Customer
     public User getUser(@PathVariable long id) {
         return userService.getUser(id);

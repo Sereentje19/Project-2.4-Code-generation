@@ -16,10 +16,10 @@ public class CrudUsersSteps implements En{
 
     private List<User> retrievedUsers;
 
-    @Given("the system has a database with users")
-    public void setupDatabase() {
-        // Implement the setup logic to prepare the database
-        databaseService.addUser(new User("John Doe", "john@example.com"));
-        databaseService.addUser(new User("Jane Smith", "jane@example.com"));
-    }
+//    @Given("the system has a database with users")
+//    public void setupDatabase() {
+//        // Implement the setup logic to prepare the database
+//        databaseService.addUser(new User("John Doe", "john@example.com"));
+//        databaseService.addUser(new User("Jane Smith", "jane@example.com"));
+//    }
 }

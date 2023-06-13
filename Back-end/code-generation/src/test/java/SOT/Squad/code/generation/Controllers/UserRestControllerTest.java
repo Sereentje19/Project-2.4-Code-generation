@@ -185,13 +185,4 @@ public class UserRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testDeleteUser() throws Exception {
-        long id = 1L;
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/users/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 }
