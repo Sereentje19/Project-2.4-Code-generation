@@ -174,7 +174,7 @@ public class UserRestControllerTest {
     public void testCheckPincode() throws Exception {
         User user = new User();
         String pincode = "4321";
-// Add some transactions to the list
+        // Add some transactions to the list
 
         when(userService.checkPincode(any(String.class))).thenReturn(user);
 

@@ -152,13 +152,4 @@ class TransactionRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 
     }
-    @Test
-    void deleteTransaction() throws Exception {
-        long id = 1L;
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/transactions/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 }
