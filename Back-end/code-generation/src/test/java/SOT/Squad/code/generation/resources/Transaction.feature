@@ -1,8 +1,8 @@
 Feature: Transaction API
 
   Scenario: Add a transaction as EMPLOYEE
-    Given I am logged in as username "EMPLOYEE" with password "EMPLOYEE"
-    And The endpoint for "transactions" is available for method "POST"
+    Given I am logged in as username "serena" with password "kenter"
+    And The endpoint for transactions is available for method "POST"
     When the transaction is added
     Then the transaction is successfully created
 
@@ -30,7 +30,7 @@ Feature: Transaction API
 
   Scenario: Getting all transactions
     Given I am logged in as "EMPLOYEE" with password "EMPLOYEE"
-    And The endpoint for "transactions" is available for method "GET"
+    And The endpoint for transactions is available for method get
     When I retrieve all transactions
     Then I should receive all transactions
 
@@ -42,6 +42,6 @@ Feature: Transaction API
 
   Scenario: Getting all transactions from own account
     Given I am logged in as "CUSTOMER" with password "CUSTOMER"
-    And The endpoint for "transactions" is available for method "GET"
+    And The endpoint for transactions is available for method GET
     When I retrieve all transactions
     Then I should receive all transactions
