@@ -4,12 +4,20 @@ import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.spring.CucumberContextConfiguration;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-public class BankAccountStepDefinitions extends baseStepDefinitions{
+import java.util.Arrays;
+import java.util.List;
+
+public class BankAccountStepDefinitions{
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -29,9 +37,10 @@ public class BankAccountStepDefinitions extends baseStepDefinitions{
     public void theUserIsLoggedInAsWithPassword(String arg0, String arg1) {
     }
 
-    @Given("The endpoint for {string} is available for method {string}")
-    public void theEndpointForIsAvailableForMethod(String arg0, String arg1) {
-    }
+//    @Given("The endpoint for {string} is available for method {string}")
+//    public void theEndpointForIsAvailableForMethod(String arg0, String arg1) {
+//
+//    }
 
     @When("I retreive all bank accounts")
     public void iRetreiveAllBankAccounts() {

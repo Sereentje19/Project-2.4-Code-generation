@@ -3,14 +3,15 @@ Feature: Crud Users
 
   Scenario: Retrieve all users
     Given The user is logged in with username "thijs" and the password "moerland"
-    Given The endpoint for "users" is available with method "GET"
+    Given The endpoint for "users" is available for method "GET"
     When I retrieve all users
     Then I should receive all users
 
   Scenario: Retrieve a single user
-    Given the system has a database with users
-    When I request to get a single user
-    Then I should receive a single user
+    Given The user is logged in with username "thijs" and the password "moerland"
+    Given The endpoint for "users" is available for method "GET"
+    When I request to get a single user with an id of "1"
+    Then I should receive a single user with an id of "1"
 
   Scenario: Retrieve a single user that does not exist
     Given the system has a database with users
