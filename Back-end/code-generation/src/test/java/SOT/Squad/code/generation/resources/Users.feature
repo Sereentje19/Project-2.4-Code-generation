@@ -3,9 +3,8 @@ Feature: Crud Users
 
   Scenario: Retrieve all users
     Given The user is logged in with username "thijs" and the password "moerland"
-    Given i have a valid token
     Given The endpoint for "users" is available with method "GET"
-    When I Retrieve all users
+    When I retrieve all users
     Then I should receive all users
 
   Scenario: Retrieve a single user
