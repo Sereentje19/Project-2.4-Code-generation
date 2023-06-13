@@ -5,6 +5,7 @@ import SOT.Squad.code.generation.JWT.JWTTokenProvider;
 import SOT.Squad.code.generation.Models.DTO.ErrorDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
+import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -59,7 +61,9 @@ public class LoginRestControllerTest {
         requestDTO.setPassword("kenter");
 
         LoginResponseDTO responseDTO = new LoginResponseDTO("token");
-        when(loginRestController.login(any(LoginRequestDTO.class))).thenReturn(responseDTO);
+        ResponseEntity responseEntity = ResponseEntity.ok(responseDTO);
+
+        when(loginRestController.login(any(LoginRequestDTO.class))).thenReturn(responseEntity);
 
         // Perform the request and assert the response
         mockMvc.perform(MockMvcRequestBuilders
