@@ -42,8 +42,8 @@ public class BankAccountStepDefinitions {
     private BankAccountRepository bankAccountRepository;
 
 
-    @Given("the user is logged in as {string} with password {string}")
-    public void theUserIsLoggedInAsWithPassword(String arg0, String arg1) {
+    @Given("I am logged in as {string} with password {string}")
+    public void iAmLoggedInAsWithPassword(String arg0, String arg1) {
         httpHeaders.add("Content-Type", "application/json");
         responseEntity = restTemplate
                 .exchange("http://localhost:8080//login",
@@ -92,11 +92,6 @@ public class BankAccountStepDefinitions {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertNotNull(retreivedBankaccount);
         Assertions.assertFalse(retreivedBankaccount.isEmpty());
-    }
-
-
-    @Given("I am logged in as {string} with password {string}")
-    public void iAmLoggedInAsWithPassword(String arg0, String arg1) {
     }
 
     @When("a new bank account is added")

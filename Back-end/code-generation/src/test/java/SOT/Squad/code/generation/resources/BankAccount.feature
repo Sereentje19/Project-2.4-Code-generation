@@ -2,7 +2,7 @@ Feature: Bank Account Rest Controller
 
 
   Scenario: Get All Bank Accounts
-    Given the user is logged in as "serena" with password "kenter"
+    Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "GET"
     When I retreive all bank accounts
     Then the response should be a list of bank account objects
@@ -14,7 +14,7 @@ Feature: Bank Account Rest Controller
     Then the response should be a bank account object
 
   Scenario: Get Bank Account by ID
-    Given the user is logged in as "serena" with password "kenter"
+    Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "GET"
     When I request the bank account with ID 2
     Then the response should be a bank account object with the ID 2
