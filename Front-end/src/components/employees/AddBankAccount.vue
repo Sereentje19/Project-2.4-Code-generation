@@ -2,7 +2,7 @@
     <div class="container">
         <h2>Personal Details</h2>
         <div>
-            <label>Users:</label>
+            <label>User:</label>
             <select v-model="this.selectedUser" @change="checkAccountType()">
                 <option v-for="user in this.users" :value="user">{{ user.username }}</option>
             </select>
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             users: [],
-            selectedUser: '',
+            selectedUser: {},
             generatedIban: '',
             bankAccounts: [],
             accountTypes: ['CURRENT', 'SAVINGS'],
@@ -117,12 +117,10 @@ export default {
                     if (savingsAccountsCount <= 0 && currentsAccountsCount <= 0) {
                         this.accountTypes = null
                     }
-                    else if(savingsAccountsCount <= 0)
-                    {
+                    else if (savingsAccountsCount <= 0) {
                         this.accountTypes = ['CURRENT']
                     }
-                    else if(currentsAccountsCount <= 0)
-                    {
+                    else if (currentsAccountsCount <= 0) {
                         this.accountTypes = ['SAVINGS']
                     }
 
@@ -142,8 +140,6 @@ export default {
                         }
                     }
 
-                    console.log(this.ibanExists)
-
                     if (!this.ibanExists) {
                         this.generateIBAN();
                         this.newBankAccount.iban = this.generatedIban;
@@ -158,14 +154,22 @@ export default {
             this.newBankAccount.accountType.push(this.selectedAccountType);
             this.newBankAccount.userId = this.selectedUser.id;
 
-            console.log(this.newBankAccount.iban)
-
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
-
-                    console.log(res.data)
+                    this.updateUserBankList(res.data.id);
                     this.$router.push("/allAccounts");
+                })
+                .catch((error) => console.log(error));
+
+        },
+        updateUserBankList(id) {
+            this.selectedUser.bankAccountList.push(id)
+
+            axios
+                .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
+                .then((res) => {
+                    console.log(res.data)
                 })
                 .catch((error) => console.log(error));
         },

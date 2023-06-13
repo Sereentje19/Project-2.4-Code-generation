@@ -73,6 +73,7 @@ export default {
         return {
             user: {
                 roles: [],
+                bankAccountList: [],
             },
             currentUser: '',
             generatedPassword: '',
@@ -187,12 +188,27 @@ export default {
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
-
-                    console.log(res.data)
+                    this.updateUserBankList(res.data.id);
                     this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
 
+        },
+        updateUserBankList(id) {
+            
+            console.log(this.user)
+            // console.log(id)
+
+            this.user.bankAccountList.push(id)
+
+            console.log(this.user)
+
+            axios
+                .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
+                .then((res) => {
+                    console.log(res.data)
+                })
+                .catch((error) => console.log(error));
         },
     },
 };
