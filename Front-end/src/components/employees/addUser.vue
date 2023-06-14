@@ -152,11 +152,37 @@ export default {
                     }
                 }).catch((error) => console.log(error));
         },
+        checkFieldsNotEmpty() {
+            if (!this.user.password || this.user.password.length < 8) {
+                alert("Password has to be at least 8 characters.");
+                return false;
+            }
+            else if (!this.user.username || this.user.username.length < 5) {
+                alert("Username has to be at least 5 characters.");
+                return false;
+            }
+            else if (!this.user.pincode || this.user.pincode.length !== 4) {
+                alert("Pincode has to be exactly 4 numbers.");
+                return false;
+            }
+            else if (!this.user.firstName || !this.user.lastName
+                || !this.user.phoneNumber || !this.user.email
+                || !this.user.postalCode || !this.user.city
+                || !this.user.street || !this.user.houseNumber) {
+                alert("Please fill al fields before savings all changes");
+                return false;
+            }
+            return true
+        },
         addUser() {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.accountType = this.selectedAccountType;
             this.user.roles.push("CUSTOMER");
+
+            if (!this.checkFieldsNotEmpty()) {
+                return;
+            }
 
             if (this.currentUser == "CUSTOMER") {
 
@@ -176,6 +202,7 @@ export default {
                     .post('users', this.user, headerToken)
                     .then((res) => {
                         this.addBankAccount(res.data.id);
+                        this.$router.push("/");
                     })
                     .catch((error) => console.log(error));
             }
@@ -192,16 +219,9 @@ export default {
                     this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
-
         },
         updateUserBankList(id) {
-            
-            console.log(this.user)
-            // console.log(id)
-
             this.user.bankAccountList.push(id)
-
-            console.log(this.user)
 
             axios
                 .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
