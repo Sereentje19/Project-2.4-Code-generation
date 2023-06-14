@@ -20,17 +20,10 @@ import java.util.List;
 
 public class BankAccountStepDefinitions {
     private TestRestTemplate restTemplate = new TestRestTemplate();
-
     private final HttpHeaders httpHeaders = new HttpHeaders();
-
     private String jwtToken;
-
     private ResponseEntity<String> responseEntity;
-
-    private final ObjectMapper mapper = new ObjectMapper();
     private List<BankAccount> retreivedBankaccount;
-
-    private BankAccountRepository bankAccountRepository;
     private String uri = "http://localhost:8080/";
 
 

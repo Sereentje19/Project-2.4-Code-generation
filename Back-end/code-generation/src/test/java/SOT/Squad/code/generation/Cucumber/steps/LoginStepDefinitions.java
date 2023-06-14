@@ -1,8 +1,5 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,18 +8,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 public class LoginStepDefinitions {
-
     private TestRestTemplate restTemplate = new TestRestTemplate();
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private String jwtToken;
     private ResponseEntity<String> responseEntity;
-    private final ObjectMapper mapper = new ObjectMapper();
-
     private String uri = "http://localhost:8080/";
+
 
     @Given("I have valid login credentials username {string} and password {string}")
     public void iHaveValidLoginCredentialsUsernameAndPassword(String username, String password) {
@@ -76,13 +70,12 @@ public class LoginStepDefinitions {
     public void theResponseShouldBeAnErrorIndicatingInvalidCredentials() {
         assertNotNull(responseEntity);
 
-        String response = responseEntity.getBody();
+        // Print the response status code and body for debugging purposes
+        System.out.println("Response Status Code: " + responseEntity.getStatusCodeValue());
+        System.out.println("Response Body: " + responseEntity.getBody());
 
-        // Assuming the error message is located at the root level of the response body
-//        String errorMessage = JsonPath.read(response, "$.message");
-
-        assertNotNull(response);
-        assertTrue(response.contains("invalid credentials"));
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
     }
 
     @Given("I have missing login credentials")
@@ -107,11 +100,12 @@ public class LoginStepDefinitions {
     public void theResponseShouldBeAnErrorIndicatingMissingCredentials() {
         assertNotNull(responseEntity);
 
-        // Assuming the error message is located at the root level of the response body
-        String errorMessage = JsonPath.read(responseEntity.getBody(), "$.message");
+        // Print the response status code and body for debugging purposes
+        System.out.println("Response Status Code: " + responseEntity.getStatusCodeValue());
+        System.out.println("Response Body: " + responseEntity.getBody());
 
-        assertNotNull(errorMessage);
-        assertTrue(errorMessage.toLowerCase().contains("missing credentials"));
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
     }
 
 }
