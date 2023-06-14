@@ -23,7 +23,7 @@ Feature: Bank Account Rest Controller
     Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "PUT"
     When The bank account with ID 2 is put to disabled
-    Then the bank account with ID 2 should be put to disabled successfully
+    Then the bank account should be put to disabled successfully
 
   Scenario: Update Bank Account by ID
     Given I am logged in as "serena" with password "kenter"

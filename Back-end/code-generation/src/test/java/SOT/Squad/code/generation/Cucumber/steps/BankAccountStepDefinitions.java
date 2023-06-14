@@ -132,12 +132,6 @@ public class BankAccountStepDefinitions {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setId(id);
         bankAccount.setDisabled(true);
-        bankAccount.setUserId(2);
-        bankAccount.setAccountType(List.of(AccountType.CURRENT));
-        bankAccount.setCurrencies("EUR");
-        bankAccount.setAbsoluutLimit(1000);
-        bankAccount.setIban("NL12INHO0123456787");
-        bankAccount.setBalance(2000);
 
         responseEntity = restTemplate.exchange(
                 uri + "bankaccounts",
@@ -146,8 +140,9 @@ public class BankAccountStepDefinitions {
                 String.class);
     }
 
-    @Then("the bank account with ID {int} should be put to disabled successfully")
-    public void theBankAccountWithIDShouldBePutToDisabledSuccessfully(int id) {
+
+    @Then("the bank account should be put to disabled successfully")
+    public void theBankAccountShouldBePutToDisabledSuccessfully() {
         String responseBody = responseEntity.getBody();
 
         // Check if the response body is not null or empty
@@ -184,7 +179,7 @@ public class BankAccountStepDefinitions {
     public void theResponseShouldBeTheUpdatedBankAccountObjectWithID(int id) {
         String responseBody = responseEntity.getBody();
 
-// Check if the response body is not null or empty
+        // Check if the response body is not null or empty
         Assertions.assertNotNull(responseBody, "Response body is null");
         Assertions.assertTrue(!responseBody.isEmpty(), "Response body is empty");
 
@@ -201,4 +196,5 @@ public class BankAccountStepDefinitions {
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
 
     }
+
 }
