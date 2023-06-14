@@ -8,7 +8,7 @@
         <button @click="goToUserInfo">User Info</button>
       </div>
 
-      <div v-if="user.bankAccountList.length > 0">
+      <div v-if="user.active && user.bankAccountList.length > 0">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
 
         <h3>Bank Accounts</h3>
@@ -65,6 +65,7 @@ export default {
         houseNumber: "",
         postalCode: "",
         city: "",
+        active: true,
         bankAccountList: []
       },
 
@@ -131,4 +132,7 @@ export default {
 
 <style>
 @import '../../assets/css/accountOverview.css';
+wide-field {
+  width: 100%;
+}
 </style>
