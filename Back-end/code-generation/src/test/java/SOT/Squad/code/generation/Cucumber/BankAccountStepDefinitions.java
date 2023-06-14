@@ -68,10 +68,10 @@ public class BankAccountStepDefinitions{
         
     }
 
-    @When("I delete the bank account with ID {int}")
-    public void iDeleteTheBankAccountWithID(int arg0) {
-        
-    }
+//    @When("I delete the bank account with ID {int}")
+//    public void iDeleteTheBankAccountWithID(int arg0) {
+//
+//    }
 
     @Then("the bank account should be deleted successfully")
     public void theBankAccountShouldBeDeletedSuccessfully() {

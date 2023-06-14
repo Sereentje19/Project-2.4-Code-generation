@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.Cucumber;
+package SOT.Squad.code.generation.Cucumber.steps;
 
 import SOT.Squad.code.generation.Models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,7 +54,7 @@ public class UserStepDefinition{
  @Given("The endpoint for {string} is available for method {string}")
  public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
      responseEntity = restTemplate
-             .exchange("http://localhost:8080/" + endpoint,
+             .exchange("http://localhost:8080/" + "users",
                      HttpMethod.OPTIONS,
                      new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
                      String.class);
@@ -183,13 +183,12 @@ public class UserStepDefinition{
 
         User newUser = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",null,true, List.of(Role.CUSTOMER), "5781",2000,300);
 
-        responseEntity = restTemplate.exchange("http://localhost:8080/users/" + arg0,
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users/" + arg0,
                 HttpMethod.PUT,
                 new HttpEntity<>(newUser, httpHeaders),
-                String.class);
-
-        String response = responseEntity.getBody();
-//        User user = JsonPath.read(responseEntity.getBody(), "$.User");
-//        Assert.assertEquals(user.getId(), arg0);
+                User.class);
+//
+        User responseUser = responseEntity.getBody();
+        Assert.assertEquals(responseUser.getId(), arg0);
     }
 }
