@@ -199,6 +199,7 @@ export default {
                         .post('users/register', this.user)
                         .then((res) => {
                             this.$router.push("/");
+
                         }).catch(error => {
                             if (error.response.status === 403) {
                                 alert("The username you entered is already used");
