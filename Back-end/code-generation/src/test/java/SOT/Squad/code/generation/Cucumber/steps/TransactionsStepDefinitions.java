@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.Cucumber;
+package SOT.Squad.code.generation.Cucumber.steps;
 
 
 import SOT.Squad.code.generation.Models.*;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +34,14 @@ public class TransactionsStepDefinitions{
     private String token;
     private User user;
     private BankAccount bankAccount;
+    private Transaction updatedTransaction;
+    private BankAccount updatedBankAccount;
+    private Transaction retrievedTransaction;
+    private int transactionId;
+    private List<Transaction> retrievedTransactions;
+
+
+
 
     @Given("I am logged in as username {string} with password {string}")
     public void iAmLoggedInAsUsernameWithPassword(String arg0, String arg1) throws Throwable {
@@ -82,30 +91,93 @@ public class TransactionsStepDefinitions{
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Given("I am logged in as {string} with password {string}")
-    public void iAmLoggedInAsWithPassword(String username, String password) {
-        httpHeaders.add("Content-Type", "application/json");
+    @Given("a valid transaction ID")
+    public void aValidTransactionID() {
+        transactionId = 1;
+    }
+    @And("The endpoint for transactions :id is available for method {string}")
+    public void theEndpointForTransactionsIdIsAvailableForMethod(String method) {
+        String endpoint = "/transactions/" + transactionId;
         response = restTemplate
-                .exchange("/" + "login",
-                        HttpMethod.POST,
-                        new HttpEntity<>("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}", httpHeaders), // null because OPTIONS does not have a body
+                .exchange(endpoint,
+                        HttpMethod.OPTIONS,
+                        new HttpEntity<>(null, httpHeaders),
                         String.class);
 
-        token = JsonPath.read(response.getBody(), "$.token");
-        httpHeaders.add("Authorization", "Bearer " + token);
+        List<String> options = Arrays.asList(response.getHeaders().get("Allow").get(0).split(","));
+        Assertions.assertTrue(options.contains(method.toUpperCase()));
     }
 
-    @And("The endpoint for transactions is available for method GET")
-    public void theEndpointForTransactionsIsAvailableForMethodGET() {
-        
+
+    @When("the transaction is retrieved")
+    public void theTransactionIsRetrieved() {
+        String endpoint = "/transactions/" + transactionId;
+
+        ResponseEntity<Transaction> responseEntity = restTemplate.exchange(
+                endpoint,
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {}
+        );
+
+        retrievedTransaction = responseEntity.getBody();
     }
+
+    @Then("the transaction details are returned")
+    public void theTransactionDetailsAreReturned() {
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(retrievedTransaction);
+    }
+
+    @And("updated transaction details")
+    public void updatedTransactionDetails() {
+        bankAccount = new BankAccount(2, "NL12INHO0123456789", 2000, 1, false, "EUR", List.of(AccountType.CURRENT), 10);
+        Transaction updatedTransaction = new Transaction(1, "updated test", 200, "NL12INHO0123456789", "NL12INHO0123456788",
+                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "updated kenmerk",
+                LocalDateTime.now().minusDays(2), user);
+
+
+        retrievedTransaction = updatedTransaction;
+    }
+
+    @When("the transaction is updated")
+    public void theTransactionIsUpdated() {
+        String endpoint = "/transactions/" + transactionId;
+        Transaction updatedTransaction = retrievedTransaction; // Set the updated transaction details here
+
+        response = restTemplate.exchange(
+                endpoint,
+                HttpMethod.PUT,
+                new HttpEntity<>(updatedTransaction, httpHeaders),
+                String.class
+        );
+    }
+
+    @Then("the transaction is successfully modified")
+    public void theTransactionIsSuccessfullyModified() {
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
 
     @When("I retrieve all transactions")
     public void iRetrieveAllTransactions() {
-        
+        String endpoint = "/transactions";
+
+        ResponseEntity<List<Transaction>> responseEntity = restTemplate.exchange(
+                endpoint,
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {}
+        );
+
+        List<Transaction> transactions = responseEntity.getBody();
+        retrievedTransactions = transactions;
     }
 
     @Then("I should receive all transactions")
     public void iShouldReceiveAllTransactions() {
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(retrievedTransactions);
+        Assertions.assertFalse(retrievedTransactions.isEmpty());
     }
 }
