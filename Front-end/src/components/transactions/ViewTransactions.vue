@@ -7,6 +7,15 @@
                 <div class="accountNumber">
                     <p><b>{{ this.decodedIban }}</b></p>
                 </div>
+                <div class="groupOptions">
+                    <div class="option"></div>
+                    <div class="option"></div>
+                    <!-- <div v-for="role in this.user.roles" class="option">
+                        <button v-if="role == 'EMPLOYEE'" class="btn">
+                            Delete 
+                        </button>
+                    </div> -->
+                </div>
             </div>
             <div id="padding">
                 <div class="bodyInfo">

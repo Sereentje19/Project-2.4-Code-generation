@@ -9,14 +9,14 @@
         </div>
 
         <div v-if="!showUsersWithNoAccounts">
-            <button class="filter-button" @click="filterUsersWithNoAccounts">Show users without bankaccount</button>
+            <button class="filter-button" @click="filterUsersWithNoAccounts">No Accounts</button>
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show users with bankaccount</button>
+            <button class="filter-button" @click="resetFilter">Show with bankaccount</button>
         </div>
 
-        <div class="listField" v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
+        <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
             <span>{{ user.firstName }} {{ user.lastName }}</span>
         </div>
     </div>
@@ -102,8 +102,6 @@ export default {
 #buttonAdd {
     height: 40px;
     margin-bottom: 10px;
-    margin-top: 10px; /* Add margin-top for spacing */
-    padding: 0 10px; /* Add padding for spacing */
 }
 
 #inputfield {
@@ -114,12 +112,5 @@ export default {
 #buttonFilter {
     height: 40px;
     margin-left: 10px;
-    margin-bottom: 10px;
-}
-#listField {
-    height: 80px;
-    margin-bottom: 100px;
-    margin-top: 100px; /* Add margin-top for spacing */
-    padding: 10px; /* Add padding for spacing */
 }
 </style>

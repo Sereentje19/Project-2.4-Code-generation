@@ -122,11 +122,5 @@ export default {
 </script>
 
 <style>
-wide-field {
-    width: 100%;
-    display: inline-block;
-    text-align: left;
-    padding-left: 10px;
-}
 @import '../../assets/css/transaction.css';
 </style>
