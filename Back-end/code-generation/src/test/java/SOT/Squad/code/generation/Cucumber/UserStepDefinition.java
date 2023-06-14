@@ -68,22 +68,6 @@ public class UserStepDefinition{
  }
 
 
-
-    @When("the transaction is added")
-
-    public void theTransactionIsAdded() {
-        bankAccount = new BankAccount(1, "NL12INHO0123456789", 1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
-        user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 64567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",
-                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
-        Transaction transaction = new Transaction(1, "test", 100, "NL12INHO0123456789", "NL12INHO0123456788",
-                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk",
-                LocalDateTime.now().minusDays(3), user);
-        responseEntity = restTemplate.exchange("/transactions",
-                HttpMethod.POST,
-                new HttpEntity<>(transaction, httpHeaders),
-                String.class);
-    }
-
 // end omar shit
     @When("I retrieve all users")
     public void iRetrieveAllUsers() {
