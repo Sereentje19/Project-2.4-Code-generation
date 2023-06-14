@@ -152,32 +152,73 @@ export default {
                     }
                 }).catch((error) => console.log(error));
         },
+        checkFieldsNotEmpty() {
+            if (!this.user.password || this.user.password.length < 8) {
+                alert("Password has to be at least 8 characters.");
+                return false;
+            }
+            else if (!this.user.username || this.user.username.length < 5) {
+                alert("Username has to be at least 5 characters.");
+                return false;
+            }
+            else if (!this.user.pincode || !/^\d{4}$/.test(this.user.pincode)) {
+                alert("Pincode has to be exactly 4 numbers.");
+                return false;
+            }
+            else if (!this.user.email.includes('@')) {
+                alert("Please enter a valid email.");
+                return false;
+            }
+            else if (!/^\d{10,}$/.test(this.user.phoneNumber)) {
+                alert("Phonenumber has to be at least 10 numbers");
+                return false;
+            }
+            else if (!this.user.firstName || !this.user.lastName
+                || !this.user.postalCode || !this.user.city
+                || !this.user.street || !/^\d+$/.test(this.user.houseNumber)) {
+                alert("Please fill al fields before savings all changes");
+                return false;
+            }
+            else if (this.currentUser == 'EMPLOYEE' && !this.user.accountType) {
+                alert("No accounttype is entered");
+                return false;
+            }
+            return true
+        },
         addUser() {
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.accountType = this.selectedAccountType;
             this.user.roles.push("CUSTOMER");
 
-            if (this.currentUser == "CUSTOMER") {
+            if (this.checkFieldsNotEmpty()) {
+                if (this.currentUser == "CUSTOMER") {
 
-                console.log(this.user)
-                axios
-                    .post('users/register', this.user)
-                    .then((res) => {
-                        this.$router.push("/");
-                    }).catch((error) => {
-                        alert(error.response.data.token);
-                    });
-            }
-            else {
-                this.generateIBAN();
+                    console.log(this.user)
+                    axios
+                        .post('users/register', this.user)
+                        .then((res) => {
+                            this.$router.push("/");
+                        }).catch(error => {
+                            if (error.response.status === 403) {
+                                alert("The username you entered is already used");
+                            }
+                        });
+                }
+                else {
+                    this.generateIBAN();
 
-                axios
-                    .post('users', this.user, headerToken)
-                    .then((res) => {
-                        this.addBankAccount(res.data.id);
-                    })
-                    .catch((error) => console.log(error));
+                    axios
+                        .post('users', this.user, headerToken)
+                        .then((res) => {
+                            this.addBankAccount(res.data.id);
+                            this.$router.push("/");
+                        }).catch(error => {
+                            if (error.response.status === 403) {
+                                alert("The username you entered is already used");
+                            }
+                        });
+                }
             }
         },
         addBankAccount(userId) {
@@ -192,16 +233,9 @@ export default {
                     this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
-
         },
         updateUserBankList(id) {
-            
-            console.log(this.user)
-            // console.log(id)
-
             this.user.bankAccountList.push(id)
-
-            console.log(this.user)
 
             axios
                 .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
