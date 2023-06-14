@@ -8,19 +8,20 @@
                     <input type="text" class="input" placeholder="rekening van" :value="this.bankaccount.iban" id="fromInput">
                 </div>
                 <div class="accountNumber mr-2">
-                    <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
-                    <datalist id="ibanList">
-                        <option v-for="nameAndDto in this.nameAndDtoList"  :value="nameAndDto.iban" id="test23">
-                            <div  v-for="accType in nameAndDto.accountType">
-                            {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ accType }}) 
-                                <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
-                            </div>
-                            </option>
+                    <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList" id="bankaccountTo" >
+                    <datalist id="ibanList" >
+                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban">{{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ nameAndDto.accountType }}) </option>
                     </datalist>
 
                 </div>
             </div>
             <div class="body">
+                <div class="other" id="dropdown" style="display: none;">
+                    <input  type="text" class="input" placeholder="rekening naar" list="ibanLists">
+                    <datalist id="ibanLists" >
+                        <option v-for="bankaccount in this.usersBankList" :value="bankaccount.id"> {{ bankaccount.iban }} ({{ bankaccount.accountType }}) </option>
+                    </datalist>
+                </div>
                 <div class="other">
                     <input type="number" class="input" placeholder="bedrag" v-model="transaction.amount">
                 </div>
@@ -214,6 +215,7 @@ export default {
                 Iban: "",
                 accountType: [],
             },
+            usersBankList : [],
             decodedId: atob(this.id),
         };
     },
@@ -221,10 +223,12 @@ export default {
         this.getUser();
         this.getBankAccount();
         this.getNameAndDtoList();
-        this.transaction.accountTypeFrom.push("CURRENT");
-        this.transaction.accountTypeTo.push("CURRENT");
+        this.transaction.accountTypeFrom .push("CURRENT");
+        this.transaction.accountTypeTo .push("CURRENT");
 
-        
+        document.getElementById("bankaccountTo").addEventListener("change", () => {
+            this.checkAccountIban();
+        });
     },
     methods: {
         getNameAndDtoList(){
@@ -246,6 +250,25 @@ export default {
             if(this.user.roles[0] == "CUSTOMER"){
                 fromInput.setAttribute( 'readonly', true );
             }
+        },
+        checkAccountIban(){
+            if(this.bankaccount.iban == this.transaction.bankAccountTo){
+                document.getElementById("dropdown").style.display = "block";
+            }else {
+                document.getElementById("dropdown").style.display = "none";
+            }
+        },getBankAccountById(id) {
+            axios
+                .get('/bankaccounts/' + id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.usersBankList = res.data;
+                    console.log(this.usersBankList);
+                })
+                .catch(error => console.log(error))
         },
         getUser() {
             axios
@@ -271,6 +294,8 @@ export default {
                 })
                 .then((res) => {
                     this.bankaccount = res.data;
+                    this.getBankAccountById(this.bankaccount.id);
+
                     this.transaction.bankAccountFrom = this.bankaccount.iban;
                     console.log(this.bankaccount);
                     
@@ -278,18 +303,28 @@ export default {
                 .catch(error => console.log(error))
         },
 
+        
         showPincode() {
-            this.rekening = document.getElementById("fromInput").value;
-            let accountToID = document.querySelectorAll("#accountToID");
-            accountToID.forEach(thing => {
-                if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
-                    if(thing.getAttribute("thing") != "SAVINGS"){
-                        console.log(thing.getAttribute("value"));
-            this.otherBankAccount.id = thing.getAttribute("value");
-                    }
+            if(this.bankaccount.iban == this.transaction.bankAccountTo){
+                document.getElementById("dropdown").style.display = "block";
+                
+            }else {
+                document.getElementById("dropdown").style.display = "none";
+            }
 
-                }
-            });
+
+
+            // this.rekening = document.getElementById("fromInput").value;
+            // let accountToID = document.querySelectorAll("#accountToID");
+            // accountToID.forEach(thing => {
+            //     if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
+            //         if(thing.getAttribute("thing") != "SAVINGS"){
+            //             console.log(thing.getAttribute("value"));
+            // this.otherBankAccount.id = thing.getAttribute("value");
+            //         }
+
+            //     }
+            // });
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
@@ -362,6 +397,7 @@ export default {
             this.postTransaction();
         },
         getOtherBankAccount(){
+            alert(this.otherBankAccount.id)
             axios
                 .get('/bankaccounts/' + this.otherBankAccount.id, {
                     headers: {
