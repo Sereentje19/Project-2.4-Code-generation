@@ -34,35 +34,35 @@ public class UserStepDefinition{
 
     private ResponseEntity<String> responseEntity;
 
-    @Given("The user is logged in with username {string} and the password {string}")
-    public void theUserIsLoggedInWithUsernameAndThePassword(String arg0, String arg1) throws JsonProcessingException {
-
-        httpHeaders.add("Content-Type", "application/json ");
-        responseEntity = restTemplate.exchange("http://localhost:8080/login",
-                HttpMethod.POST,
-                new HttpEntity<>(
-                        mapper.writeValueAsString(Map.of("username", arg0, "password", arg1)),
-                        httpHeaders
-                ), String.class);
-        jwtToken = JsonPath.read(responseEntity.getBody(), "$.token");
-        httpHeaders.add("Authorization", "Bearer " + jwtToken);
-    }
-
- @Given("The endpoint for {string} is available for method {string}")
- public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
-     responseEntity = restTemplate
-             .exchange("http://localhost:8080/" + "users",
-                     HttpMethod.OPTIONS,
-                     new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
-                     String.class);
-
-     List<String> options = Arrays.stream(responseEntity.getHeaders()
-                     .get("Allow")
-                     .get(0)// The first element is all allowed methods separated by comma
-                     .split(","))
-             .toList();
-     Assertions.assertTrue(options.contains(method));
- }
+//    @Given("The user is logged in with username {string} and the password {string}")
+//    public void theUserIsLoggedInWithUsernameAndThePassword(String arg0, String arg1) throws JsonProcessingException {
+//
+//        httpHeaders.add("Content-Type", "application/json ");
+//        responseEntity = restTemplate.exchange("http://localhost:8080/login",
+//                HttpMethod.POST,
+//                new HttpEntity<>(
+//                        mapper.writeValueAsString(Map.of("username", arg0, "password", arg1)),
+//                        httpHeaders
+//                ), String.class);
+//        jwtToken = JsonPath.read(responseEntity.getBody(), "$.token");
+//        httpHeaders.add("Authorization", "Bearer " + jwtToken);
+//    }
+//
+// @Given("The endpoint for {string} is available for method {string}")
+// public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
+//     responseEntity = restTemplate
+//             .exchange("http://localhost:8080/" + "users",
+//                     HttpMethod.OPTIONS,
+//                     new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+//                     String.class);
+//
+//     List<String> options = Arrays.stream(responseEntity.getHeaders()
+//                     .get("Allow")
+//                     .get(0)// The first element is all allowed methods separated by comma
+//                     .split(","))
+//             .toList();
+//     Assertions.assertTrue(options.contains(method));
+// }
     @When("I retrieve all users")
     public void iRetrieveAllUsers() {
         httpHeaders.add("Content-Type", "application/json ");

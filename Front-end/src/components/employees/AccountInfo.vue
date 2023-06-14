@@ -108,9 +108,6 @@ export default {
     const decodedId = atob(encodedId);
     this.getUserInfo(decodedId);
   },
-  created() {
-    this.editedUser = { ...this.customer };
-  },
   methods: {
     getUserInfo(userId) {
       axios
@@ -121,7 +118,6 @@ export default {
         })
         .then((res) => {
           this.customer = res.data;
-          this.editedUser = { ...this.customer };
           this.getBankAccounts();
         })
         .catch(error => console.log(error));
@@ -132,16 +128,13 @@ export default {
       console.log(this.customer.id);
       console.log(this.editedUser.id);
       console.log(this.headerToken);
-      if (!this.checkFieldsNotEmpty()) {
-        return;
-      }
       axios
         .put('/users/' + this.customer.id, this.editedUser, headerToken)
         .then((response) => {
           console.log('User information updated successfully!');
-          this.customer = { ...this.editedUser }; // Update customer with editedUser data
+          this.customer = { ...this.editedUser };
           this.editMode = false;
-          console.log(response);
+          console.log(this.response)
         })
         .catch((error) => {
           console.error('Error updating user information:', error);
@@ -149,25 +142,9 @@ export default {
     },
     cancelEdit() {
       this.editMode = false;
-      this.editedUser = { ...this.customer }; // Reset editedUser to customer data
     },
     goBack() {
       this.$router.go(-1); // Go back to the previous page
-    },
-    checkFieldsNotEmpty() {
-      if (!this.customer.email.includes('@')) {
-        alert('Please enter a valid email address.');
-        return false;
-      } else if (!/^\d{10,}$/.test(this.user.phoneNumber)) {
-        alert("Phonenumber has to be at least 10 numbers");
-        return false;
-      } else if (!this.user.firstName || !this.user.lastName
-        || !this.user.postalCode || !this.user.city
-        || !this.user.street || !/^\d+$/.test(this.user.houseNumber)) {
-        alert("Please fill al fields before savings all changes");
-        return false;
-      }
-      return true;
     }
   }
 };

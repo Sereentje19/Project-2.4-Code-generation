@@ -139,4 +139,5 @@ export default {
 .total {
     padding-left: 20px;
 }
+
 </style>

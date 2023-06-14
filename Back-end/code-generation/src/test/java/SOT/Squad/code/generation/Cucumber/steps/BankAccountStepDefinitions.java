@@ -20,22 +20,15 @@ import java.util.List;
 
 public class BankAccountStepDefinitions {
     private TestRestTemplate restTemplate = new TestRestTemplate();
-
     private final HttpHeaders httpHeaders = new HttpHeaders();
-
     private String jwtToken;
-
     private ResponseEntity<String> responseEntity;
-
-    private final ObjectMapper mapper = new ObjectMapper();
     private List<BankAccount> retreivedBankaccount;
-
-    private BankAccountRepository bankAccountRepository;
     private String uri = "http://localhost:8080/";
 
 
-    @Given("I am logged in as {string} with password {string}")
-    public void iAmLoggedInAsWithPassword(String username, String password) {
+    @Given("I am logged in as user {string} with password {string}")
+    public void iAmLoggedInUserAsWithPassword(String username, String password) {
         httpHeaders.add("Content-Type", "application/json");
         responseEntity = restTemplate
                 .exchange(uri + "login",
@@ -47,21 +40,21 @@ public class BankAccountStepDefinitions {
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
     }
 
-//    @And("The endpoint for {string} is available for method {string}")
-//    public void theEndpointForIsAvailableForMethod(String endpoint, String method) {
-//        responseEntity = restTemplate
-//                .exchange(uri + endpoint,
-//                        HttpMethod.OPTIONS,
-//                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
-//                        String.class);
-//
-//        List<String> options = Arrays.stream(responseEntity.getHeaders()
-//                        .get("Allow")
-//                        .get(0)// The first element is all allowed methods separated by comma
-//                        .split(","))
-//                .toList();
-//        Assertions.assertTrue(options.contains(method));
-//    }
+    @And("The endpoint for {string} is available for the method {string}")
+    public void theEndpointForIsAvailableForTheMethod(String endpoint, String method) {
+        responseEntity = restTemplate
+                .exchange(uri + endpoint,
+                        HttpMethod.OPTIONS,
+                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+                        String.class);
+
+        List<String> options = Arrays.stream(responseEntity.getHeaders()
+                        .get("Allow")
+                        .get(0)// The first element is all allowed methods separated by comma
+                        .split(","))
+                .toList();
+        Assertions.assertTrue(options.contains(method));
+    }
 
     @When("I retrieve all bank accounts")
     public void iRetrieveAllBankAccounts() {

@@ -10,7 +10,7 @@
                 <div class="accountNumber mr-2">
                     <input  type="text" class="input" placeholder="rekening naar" v-model="transaction.bankAccountTo" list="ibanList">
                     <datalist id="ibanList">
-                        <option v-for="nameAndDto in this.nameAndDtoList"  :value="nameAndDto.iban" id="test23">
+                        <option v-for="nameAndDto in this.nameAndDtoList" :value="nameAndDto.iban" >
                             <div  v-for="accType in nameAndDto.accountType">
                             {{ nameAndDto.name }} | {{ nameAndDto.iban }} ({{ accType }}) 
                                 <input id="accountToID" type="hidden" :value="nameAndDto.id" :placeholder="nameAndDto.iban" :thing="nameAndDto.accountType">
@@ -22,7 +22,7 @@
             </div>
             <div class="body">
                 <div class="other">
-                    <input type="number" class="input" placeholder="bedrag" v-model="transaction.amount">
+                    <input type="text" class="input" placeholder="bedrag" v-model="transaction.amount">
                 </div>
                 <div class="other">
                     <input type="text" class="input" placeholder="description" v-model="transaction.description">
@@ -223,10 +223,12 @@ export default {
         this.getNameAndDtoList();
         this.transaction.accountTypeFrom.push("CURRENT");
         this.transaction.accountTypeTo.push("CURRENT");
-
-        
     },
     methods: {
+        safething(id){
+            alert("yeah" +id);
+            // this.otherBankAccount.id = id;
+        },
         getNameAndDtoList(){
             axios
                 .get('bankaccounts/All', {
@@ -320,13 +322,6 @@ export default {
                     location.reload();
                 }
                 
-            }if(this.transaction.amount < 0){
-                alert("you can't create a transaction with a negative amount");
-                location.reload();
-            }
-            if(this.transaction.paymentReference == ""){
-                alert("you need to fill in a payment reference");
-                location.reload();
             }
             if(this.otherBankAccount.accountType[0] != "CURRENT"){
                 alert("you can only transfer to a current account");

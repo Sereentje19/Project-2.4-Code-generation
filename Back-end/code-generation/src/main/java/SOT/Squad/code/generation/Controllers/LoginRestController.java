@@ -3,9 +3,7 @@ package SOT.Squad.code.generation.Controllers;
 import SOT.Squad.code.generation.JWT.JWTTokenProvider;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Services.UserDetailService;
-import SOT.Squad.code.generation.Services.UserService;
+import SOT.Squad.code.generation.Services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginRestController {
 
     @Autowired
-    private UserService userService;
+    private LoginService loginService;
 
     @Autowired
     JWTTokenProvider tokenProvider;
@@ -25,7 +23,7 @@ public class LoginRestController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
         try {
-            LoginResponseDTO response = userService.login(requestDTO);
+            LoginResponseDTO response = loginService.login(requestDTO);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
