@@ -112,5 +112,11 @@ export default {
 #buttonFilter {
     height: 40px;
     margin-left: 10px;
+    margin-bottom: 10px;
+}
+.listField {
+    height: 40px;
+    margin-bottom: 1px;
+    margin-top: 2px; /* Add margin-top for spacing */
 }
 </style>

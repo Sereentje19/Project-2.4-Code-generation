@@ -18,12 +18,12 @@
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
+                    <div class="account-field" v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
                         <div v-for="accType in account.accountType">
                             <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
                         </div>
                     </div>
-                    <h3>Total: Є{{ totalAmount }}</h3>
+                    <h3 class="total">Total: Є{{ totalAmount }}</h3>
                 </div>
             </div>
         </div>
@@ -123,4 +123,21 @@ export default {
 
 <style>
 @import '../../assets/css/transaction.css';
+
+.wide-field {
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+    padding-left: 20px;
+}
+.account-field {
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+    padding-left: 20px;
+}
+.total {
+    padding-left: 20px;
+}
+
 </style>
