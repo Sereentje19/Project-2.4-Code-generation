@@ -287,9 +287,10 @@ export default {
             }
             if (this.rekening == "" || this.bedrag == 0 || this.choice == "") {
                 alert("you need to fill in all the fields");
-                alert(this.rekening);
-                alert(this.bedrag);
-                alert(this.choice);
+                location.reload();
+            }
+            if(this.bedrag < 0){
+                alert("you can't withdraw or deposit a negative amount");
                 location.reload();
             }
         },
