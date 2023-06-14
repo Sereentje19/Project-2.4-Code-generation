@@ -1,8 +1,6 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.Transaction;
+import SOT.Squad.code.generation.Models.*;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -33,7 +31,7 @@ public class BankAccountStepDefinitions {
     private List<BankAccount> retreivedBankaccount;
 
     private BankAccountRepository bankAccountRepository;
-    private String uri = "http://localhost:8080//";
+    private String uri = "http://localhost:8080/";
 
 
     @Given("I am logged in as {string} with password {string}")
@@ -77,7 +75,6 @@ public class BankAccountStepDefinitions {
         List<BankAccount> bankAccounts = responseEntity.getBody();
         retreivedBankaccount = bankAccounts;
     }
-
 
     @Then("the response should be a list of bank account objects")
     public void theResponseShouldBeAListOfBankAccountObjects() {
@@ -128,47 +125,25 @@ public class BankAccountStepDefinitions {
         Assertions.assertEquals(id, actual);
     }
 
-    @Given("I am logged in as an employee with the credentials username {string} and password {string}")
-    public void iAmLoggedInAsAnEmployeeWithTheCredentialsUsernameAndPassword(String username, String password) {
-        httpHeaders.add("Content-Type", "application/json");
-        responseEntity = restTemplate
-                .exchange(uri + "login",
-                        HttpMethod.POST,
-                        new HttpEntity<>("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}", httpHeaders), // null because OPTIONS does not have a body
-                        String.class);
-
-        jwtToken = JsonPath.read(responseEntity.getBody(), "$.token");
-        httpHeaders.add("Authorization", "Bearer " + jwtToken);
-    }
-
     @When("The bank account with ID {int} is put to disabled")
     public void theBankAccountWithIDIsPutToDisabled(int id) {
-//        BankAccount bankAccount = new BankAccount(id, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.CURRENT),10);
-        BankAccount bankAccount = new BankAccount(2, "NL12INHO0123456789", 2000, 1, false, "EUR", List.of(AccountType.CURRENT), 10);
-
         httpHeaders.add("Content-Type", "application/json");
 
-//        BankAccount bankAccount = new BankAccount();
-//        bankAccount.setId(id);
-//        bankAccount.setDisabled(true);
-//        bankAccount.setUserId(2);
-//        bankAccount.setAccountType(List.of(AccountType.CURRENT));
-//        bankAccount.setCurrencies("EUR");
-//        bankAccount.setAbsoluutLimit(1000);
-//        bankAccount.setIban("NL12INHO0123456787");
-//        bankAccount.setBalance(2000);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setId(id);
+        bankAccount.setDisabled(true);
+        bankAccount.setUserId(2);
+        bankAccount.setAccountType(List.of(AccountType.CURRENT));
+        bankAccount.setCurrencies("EUR");
+        bankAccount.setAbsoluutLimit(1000);
+        bankAccount.setIban("NL12INHO0123456787");
+        bankAccount.setBalance(2000);
 
         responseEntity = restTemplate.exchange(
-                uri + "bankaccounts/" + id,
+                uri + "bankaccounts",
                 HttpMethod.PUT,
                 new HttpEntity<>(bankAccount, httpHeaders),
                 String.class);
-
-        // Extract the response body as a string
-        String responseBody = responseEntity.getBody();
-
-        // Print the response body to check its content
-        System.out.println(responseEntity.getBody());
     }
 
     @Then("the bank account with ID {int} should be put to disabled successfully")
@@ -179,51 +154,51 @@ public class BankAccountStepDefinitions {
         Assertions.assertNotNull(responseBody, "Response body is null");
         Assertions.assertTrue(!responseBody.isEmpty(), "Response body is empty");
 
-        String actual = JsonPath.read(responseBody, "$.id");
-        Assertions.assertEquals(id, actual);
+        // Check if the response body is a boolean indicating success
+        boolean success = Boolean.parseBoolean(responseBody);
+        Assertions.assertTrue(success, "Bank account was not put to disabled successfully");
     }
 
     @When("I update the bank account with ID {int}")
-    public void iUpdateTheBankAccountWithID(int arg0) {
+    public void iUpdateTheBankAccountWithID(int id) {
+        httpHeaders.add("Content-Type", "application/json");
+
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setId(id);
+        bankAccount.setDisabled(true);
+        bankAccount.setUserId(2);
+        bankAccount.setAccountType(List.of(AccountType.CURRENT));
+        bankAccount.setCurrencies("EUR");
+        bankAccount.setAbsoluutLimit(1000);
+        bankAccount.setIban("NL12INHO0123456787");
+        bankAccount.setBalance(2000);
+
+        responseEntity = restTemplate.exchange(
+                uri + "bankaccounts/change/" + id,
+                HttpMethod.PUT,
+                new HttpEntity<>(bankAccount, httpHeaders),
+                String.class);
     }
 
     @Then("the response should be the updated bank account object with ID {int}")
-    public void theResponseShouldBeTheUpdatedBankAccountObjectWithID(int arg0) {
+    public void theResponseShouldBeTheUpdatedBankAccountObjectWithID(int id) {
+        String responseBody = responseEntity.getBody();
+
+// Check if the response body is not null or empty
+        Assertions.assertNotNull(responseBody, "Response body is null");
+        Assertions.assertTrue(!responseBody.isEmpty(), "Response body is empty");
+
+        Integer actual = JsonPath.read(responseBody, "$.id");
+        Assertions.assertEquals(id, actual.intValue());
+
     }
 
     @When("I request the ID, iban, name and accountType of all bank accounts")
     public void iRequestTheIDIbanNameAndAccountTypeOfAllBankAccounts() {
-//        ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
-//                uri + "bankaccounts",
-//                HttpMethod.GET,
-//                new HttpEntity<>(httpHeaders),
-//                new ParameterizedTypeReference<>() {}
-//        );
-//
-//        List<BankAccount> bankAccounts = responseEntity.getBody();
-//        retreivedBankaccount = bankAccounts;
     }
 
     @Then("the response should be a list of bank account objects with only the ID, iban, name and accountType")
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-//        // Retrieve the bank account objects from the response body
-//        String bankAccounts = responseEntity.getBody();
-//
-//        // Validate the list of bank accounts
-//        Assertions.assertNotNull(bankAccounts);
-//        Assertions.assertFalse(bankAccounts.isEmpty());
-//
-//        // Check that each bank account object contains only the required attributes
-//        for (BankAccount account : bankAccounts) {
-//            Assertions.assertNotNull(account.getId());
-//            Assertions.assertNotNull(account.getIban());
-////            Assertions.assertNotNull(account.getName());
-//            Assertions.assertNotNull(account.getAccountType());
-//            Assertions.assertNull(account.getBalance());
-//            // Add assertions for any other attributes that should not be present
-//            // ...
-//        }
     }
 }

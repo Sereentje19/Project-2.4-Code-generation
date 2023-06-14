@@ -20,13 +20,13 @@ Feature: Bank Account Rest Controller
     Then the response should be a bank account object with the ID 2
 
   Scenario: Update Bank Account
-    Given I am logged in as an employee with the credentials username "serena" and password "kenter"
+    Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "PUT"
     When The bank account with ID 2 is put to disabled
     Then the bank account with ID 2 should be put to disabled successfully
 
-  Scenario: Update Bank Account
-    Given I am logged in as an employee with the credentials username "serena" and password "kenter"
+  Scenario: Update Bank Account by ID
+    Given I am logged in as "serena" with password "kenter"
     And The endpoint for "bankaccounts" is available for method "PUT"
     When I update the bank account with ID 2
     Then the response should be the updated bank account object with ID 2
