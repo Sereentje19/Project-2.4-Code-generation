@@ -140,7 +140,6 @@ public class BankAccountStepDefinitions {
                 String.class);
     }
 
-
     @Then("the bank account should be put to disabled successfully")
     public void theBankAccountShouldBePutToDisabledSuccessfully() {
         String responseBody = responseEntity.getBody();
@@ -185,7 +184,6 @@ public class BankAccountStepDefinitions {
 
         Integer actual = JsonPath.read(responseBody, "$.id");
         Assertions.assertEquals(id, actual.intValue());
-
     }
 
     @When("I request the ID, iban, name and accountType of all bank accounts")
