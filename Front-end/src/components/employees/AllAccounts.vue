@@ -5,15 +5,15 @@
         <h2>All Users</h2>
         <div id="inputAndBtn">
             <input id="inputfield" type="text" v-model="searchQuery" placeholder="Search" />
-            <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add User</button>
+            <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add Bankaccount</button>
         </div>
 
         <div v-if="!showUsersWithNoAccounts">
-            <button class="filter-button" @click="filterUsersWithNoAccounts">No Accounts</button>
+            <button class="filter-button" @click="filterUsersWithNoAccounts">Show users without bankaccount</button>
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show All</button>
+            <button class="filter-button" @click="resetFilter">Show users with bankaccount</button>
         </div>
 
         <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">

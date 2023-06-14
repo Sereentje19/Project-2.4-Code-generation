@@ -276,7 +276,7 @@ export default {
                 alert("you can't withdraw or deposit from or to a disabled account");
                 location.reload();
             }
-            if (newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
+            if (this.choice == "withdraw" && newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
                 alert("you can't withdraw or deposit more than your absoluut limit");
                 location.reload();
             }

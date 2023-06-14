@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.Cucumber;
+package SOT.Squad.code.generation.Cucumber.steps;
 
 import SOT.Squad.code.generation.Models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +9,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.apache.catalina.connector.Response;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 
 public class UserStepDefinition{
-
-    BankAccount bankAccount = new BankAccount();
-    User user = new User();
-    Transaction transaction = new Transaction();
-
     private TestRestTemplate restTemplate = new TestRestTemplate();
 
     private String jwtToken;
@@ -50,11 +48,10 @@ public class UserStepDefinition{
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
     }
 
- //start omar shit
  @Given("The endpoint for {string} is available for method {string}")
  public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
      responseEntity = restTemplate
-             .exchange("http://localhost:8080/" + endpoint,
+             .exchange("http://localhost:8080/" + "users",
                      HttpMethod.OPTIONS,
                      new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
                      String.class);
@@ -66,9 +63,6 @@ public class UserStepDefinition{
              .toList();
      Assertions.assertTrue(options.contains(method));
  }
-
-
-// end omar shit
     @When("I retrieve all users")
     public void iRetrieveAllUsers() {
         httpHeaders.add("Content-Type", "application/json ");
@@ -94,8 +88,18 @@ public class UserStepDefinition{
         Assert.assertNotNull(responseEntity.getBody());
     }
 
-    @Given("the system has a database with users")
-    public void theSystemHasADatabaseWithUsers() {
+    @When("I request to create a new user with valid informations")
+    public void iRequestToCreateANewUserWithValidInformations() {
+        httpHeaders.add("Content-Type", "application/json ");
+        User user = new User(1, "henk", "rick", "joe", "biden", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
+                HttpMethod.POST,
+                new HttpEntity<>(user, httpHeaders),
+                User.class);
+
+        int statusCode = responseEntity.getStatusCodeValue();
+        // Add your validation logic here
+        Assert.assertEquals(200, statusCode);
     }
 
     @When("I request to get a single user with an id of {string}")
@@ -114,28 +118,63 @@ public class UserStepDefinition{
     @Then("I should receive a single user with an id of {string}")
     public void iShouldReceiveASingleUser(String id) {
         httpHeaders.add("Content-Type", "application/json ");
-        responseEntity = restTemplate.exchange("http://localhost:8080/users/" + id,
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users/" + id,
                 HttpMethod.GET,
                 new HttpEntity<>(null, httpHeaders),
-                String.class);
+                User.class);
+        User responseUser = responseEntity.getBody();
+        Assert.assertEquals(responseUser.getId(), parseInt(id));
 
-        Assert.assertNotNull(responseEntity.getBody());
     }
 
     @When("I request to get a single user that does not exist")
     public void iRequestToGetASingleUserThatDoesNotExist() {
+        httpHeaders.add("Content-Type", "application/json ");
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users/" + 7897,
+                HttpMethod.GET,
+                new HttpEntity<>(null, httpHeaders),
+                User.class);
+        User responseUser = responseEntity.getBody();
+        Assert.assertNull(responseUser);
     }
 
     @Then("I should receive a error")
     public void iShouldReceiveAError() {
+        httpHeaders.add("Content-Type", "application/json ");
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users/" + 7897,
+                HttpMethod.GET,
+                new HttpEntity<>(null, httpHeaders),
+                User.class);
+        int statusCode = responseEntity.getStatusCodeValue();
+        // Add your validation logic here
+        Assert.assertEquals(403, statusCode);
     }
 
-    @When("I request to create a new user with a valid token")
-    public void iRequestToCreateANewUserWithAValidToken() {
-    }
 
     @Then("I should receive a new user")
     public void iShouldReceiveANewUser() {
+        httpHeaders.add("Content-Type", "application/json ");
+        User user = new User(1, "henk", "rick", "joe", "biden", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
+                HttpMethod.POST,
+                new HttpEntity<>(user, httpHeaders),
+                User.class);
+
+        User responseUser = responseEntity.getBody();
+        Assert.assertNull(responseUser);
+    }
+    @When("I request to create a new user that already exists")
+    public void iRequestToCreateANewUserThatAlreadyExists() {
+        httpHeaders.add("Content-Type", "application/json ");
+        User user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
+                HttpMethod.POST,
+                new HttpEntity<>(user, httpHeaders),
+                User.class);
+
+        int statusCode = responseEntity.getStatusCodeValue();
+        // Add your validation logic here
+        Assert.assertEquals(403, statusCode);
     }
 
     @When("I request to create a new user with invalid token")
@@ -162,9 +201,7 @@ public class UserStepDefinition{
     public void iRequestToUpdateAUserWithoutAToken() {
     }
 
-    @When("I request to delete a user with a valid token")
-    public void iRequestToDeleteAUserWithAValidToken() {
-    }
+
 
     @Then("I should receive a deleted user")
     public void iShouldReceiveADeletedUser() {
@@ -181,5 +218,12 @@ public class UserStepDefinition{
     @Then("The user should be disabled")
     public void theUserShouldBeDisabled() {
     }
+
+    @When("I request to delete a user with an id of {string}")
+    public void iRequestToDeleteAUserWithAnIdOf(String arg0) {
+
+    }
+
+
 
 }
