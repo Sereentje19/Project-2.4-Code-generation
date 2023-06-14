@@ -9,6 +9,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.apache.catalina.connector.Response;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,7 +50,6 @@ public class UserStepDefinition{
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
     }
 
- //start omar shit
  @Given("The endpoint for {string} is available for method {string}")
  public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
      responseEntity = restTemplate
@@ -65,25 +65,6 @@ public class UserStepDefinition{
              .toList();
      Assertions.assertTrue(options.contains(method));
  }
-
-
-
-    @When("the transaction is added")
-
-    public void theTransactionIsAdded() {
-        bankAccount = new BankAccount(1, "NL12INHO0123456789", 1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
-        user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 64567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",
-                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
-        Transaction transaction = new Transaction(1, "test", 100, "NL12INHO0123456789", "NL12INHO0123456788",
-                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk",
-                LocalDateTime.now().minusDays(3), user);
-        responseEntity = restTemplate.exchange("/transactions",
-                HttpMethod.POST,
-                new HttpEntity<>(transaction, httpHeaders),
-                String.class);
-    }
-
-// end omar shit
     @When("I retrieve all users")
     public void iRetrieveAllUsers() {
         httpHeaders.add("Content-Type", "application/json ");
@@ -133,8 +114,8 @@ public class UserStepDefinition{
                 HttpMethod.GET,
                 new HttpEntity<>(null, httpHeaders),
                 String.class);
-
-        Assert.assertNotNull(responseEntity.getBody());
+        User user = JsonPath.read(responseEntity.getBody(), "$.token");
+        Assert.assertEquals(user.getId(), id);
     }
 
     @When("I request to get a single user that does not exist")
@@ -177,9 +158,7 @@ public class UserStepDefinition{
     public void iRequestToUpdateAUserWithoutAToken() {
     }
 
-    @When("I request to delete a user with a valid token")
-    public void iRequestToDeleteAUserWithAValidToken() {
-    }
+
 
     @Then("I should receive a deleted user")
     public void iShouldReceiveADeletedUser() {
@@ -197,4 +176,19 @@ public class UserStepDefinition{
     public void theUserShouldBeDisabled() {
     }
 
+    @When("I request to delete a user with an id of {string}")
+    public void iRequestToDeleteAUserWithAnIdOf(String arg0) {
+        httpHeaders.add("Content-Type", "application/json ");
+
+        User newUser = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+
+        responseEntity = restTemplate.exchange("http://localhost:8080/users/" + arg0,
+                HttpMethod.PUT,
+                new HttpEntity<>(newUser, httpHeaders),
+                String.class);
+
+        String response = responseEntity.getBody();
+//        User user = JsonPath.read(responseEntity.getBody(), "$.User");
+//        Assert.assertEquals(user.getId(), arg0);
+    }
 }

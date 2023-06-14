@@ -14,7 +14,8 @@ Feature: Crud Users
     Then I should receive a single user with an id of "1"
 
   Scenario: Retrieve a single user that does not exist
-    Given the system has a database with users
+    Given The user is logged in with username "thijs" and the password "moerland"
+    Given The endpoint for "users" is available for method "GET"
     When I request to get a single user that does not exist
     Then I should receive a error
 
@@ -48,9 +49,10 @@ Feature: Crud Users
     When I request to update a user without a token
     Then I should receive a error
 
-Scenario: Deleting a user with a valid token
-    Given the system has a database with users
-    When I request to delete a user with a valid token
+  Scenario: Deleting a user with a valid token
+    Given The user is logged in with username "thijs" and the password "moerland"
+    Given The endpoint for "users" is available for method "GET"
+    When I request to delete a user with an id of "1"
     Then I should receive a deleted user
 
   Scenario: Deleting a user with invalid token
@@ -62,9 +64,3 @@ Scenario: Deleting a user with a valid token
     Given the system has a database with users
     When I request to delete a user without a token
     Then I should receive a error
-
-  Scenario: Deleting a user with a valid token
-    Given the system has a database with users
-    When I request to delete a user with a valid token
-    Then The user should be disabled
-

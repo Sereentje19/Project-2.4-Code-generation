@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@CucumberContextConfiguration
 public class TransactionsStepDefinitions{
     private final HttpHeaders httpHeaders = new HttpHeaders();
 
