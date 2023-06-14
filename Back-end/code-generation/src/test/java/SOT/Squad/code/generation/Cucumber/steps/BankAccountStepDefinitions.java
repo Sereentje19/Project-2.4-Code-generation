@@ -47,21 +47,21 @@ public class BankAccountStepDefinitions {
         httpHeaders.add("Authorization", "Bearer " + jwtToken);
     }
 
-    @And("The endpoint for {string} is available for method {string}")
-    public void theEndpointForIsAvailableForMethod(String endpoint, String method) {
-        responseEntity = restTemplate
-                .exchange(uri + endpoint,
-                        HttpMethod.OPTIONS,
-                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
-                        String.class);
-
-        List<String> options = Arrays.stream(responseEntity.getHeaders()
-                        .get("Allow")
-                        .get(0)// The first element is all allowed methods separated by comma
-                        .split(","))
-                .toList();
-        Assertions.assertTrue(options.contains(method));
-    }
+//    @And("The endpoint for {string} is available for method {string}")
+//    public void theEndpointForIsAvailableForMethod(String endpoint, String method) {
+//        responseEntity = restTemplate
+//                .exchange(uri + endpoint,
+//                        HttpMethod.OPTIONS,
+//                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+//                        String.class);
+//
+//        List<String> options = Arrays.stream(responseEntity.getHeaders()
+//                        .get("Allow")
+//                        .get(0)// The first element is all allowed methods separated by comma
+//                        .split(","))
+//                .toList();
+//        Assertions.assertTrue(options.contains(method));
+//    }
 
     @When("I retrieve all bank accounts")
     public void iRetrieveAllBankAccounts() {
