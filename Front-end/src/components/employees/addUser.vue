@@ -179,10 +179,13 @@ export default {
                 alert("Please fill al fields before savings all changes");
                 return false;
             }
+            else if (this.currentUser == 'EMPLOYEE' && !this.user.accountType) {
+                alert("No accounttype is entered");
+                return false;
+            }
             return true
         },
         addUser() {
-
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.accountType = this.selectedAccountType;
@@ -196,8 +199,10 @@ export default {
                         .post('users/register', this.user)
                         .then((res) => {
                             this.$router.push("/");
-                        }).catch((error) => {
-                            alert(error.response.data.token);
+                        }).catch(error => {
+                            if (error.response.status === 403) {
+                                alert("The username you entered is already used");
+                            }
                         });
                 }
                 else {
@@ -208,8 +213,11 @@ export default {
                         .then((res) => {
                             this.addBankAccount(res.data.id);
                             this.$router.push("/");
-                        })
-                        .catch((error) => console.log(error));
+                        }).catch(error => {
+                            if (error.response.status === 403) {
+                                alert("The username you entered is already used");
+                            }
+                        });
                 }
             }
         },
