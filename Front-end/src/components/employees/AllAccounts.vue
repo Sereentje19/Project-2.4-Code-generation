@@ -116,10 +116,9 @@ export default {
     margin-left: 10px;
     margin-bottom: 10px;
 }
-#listField {
-    height: 80px;
-    margin-bottom: 100px;
-    margin-top: 100px; /* Add margin-top for spacing */
-    padding: 10px; /* Add padding for spacing */
+.listField {
+    height: 40px;
+    margin-bottom: 1px;
+    margin-top: 2px; /* Add margin-top for spacing */
 }
 </style>
