@@ -35,13 +35,7 @@ Feature: Transaction API
 
 
   Scenario: Getting all transactions from own account
-    Given I am logged in as username "serena" with password "kenter"
+    Given I am logged in as "serena" with password "kenter"
     And The endpoint for transactions is available for method GET
     When I retrieve all transactions
     Then I should receive all transactions
-
-#  Scenario: Retrieve Transactions by Bank Account and Account Type
-#    Given I am logged in as username "serena" with password "kenter"
-#    And the endpoint "/account/{iban}/{type}" is available for the GET method
-#    When I request to retrieve transactions for bank account with IBAN and account type ["CURRENT"]
-#    Then I should receive a list of transactions matching the criteria

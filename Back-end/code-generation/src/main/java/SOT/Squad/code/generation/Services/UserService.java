@@ -44,16 +44,7 @@ public class UserService {
         throw new IllegalArgumentException("Username is already taken");
     }
 
-    public LoginResponseDTO login(LoginRequestDTO requestDTO) {
-        User user = userRepository.findUserByUsername(requestDTO.getUsername()).orElseThrow(() -> new IllegalArgumentException("Username not found"));
-        if (encoder.matches(requestDTO.getPassword(), user.getPassword())) {
-            String token = tokenProvider.createToken(user.getUsername(), user.getRoles());
-            LoginResponseDTO response = new LoginResponseDTO(token);
-            response.setToken(token);
-            return response;
-        }
-        throw new IllegalArgumentException("Password is incorrect");
-    }
+
 
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();

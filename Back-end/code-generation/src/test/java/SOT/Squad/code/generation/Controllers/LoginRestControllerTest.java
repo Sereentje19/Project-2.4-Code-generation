@@ -1,118 +1,61 @@
 package SOT.Squad.code.generation.Controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.ErrorDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
 import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Services.UserService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import SOT.Squad.code.generation.Services.LoginService;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 public class LoginRestControllerTest {
 
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
     @Mock
-    private UserService userService;
+    private LoginService loginService;
     @InjectMocks
     private LoginRestController loginRestController;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(loginRestController).build();
-        objectMapper = new ObjectMapper();
-
-        // Mock the JWTKeyProvider using @MockBean
-        JWTKeyProvider keyProviderMock = Mockito.mock(JWTKeyProvider.class);
-        when(keyProviderMock.decodeJWT()).thenReturn("mockedToken");
-
-        // Inject the mocked JWTKeyProvider into the controller using ReflectionTestUtils
-        ReflectionTestUtils.setField(loginRestController, "tokenProvider", keyProviderMock);
-    }
-
-    @Test
-    void testLogin_ValidCredentials() throws Exception {
-        // Mock the service response
-        LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setUsername("serena");
-        requestDTO.setPassword("kenter");
-
-        LoginResponseDTO responseDTO = new LoginResponseDTO("token");
-        ResponseEntity responseEntity = ResponseEntity.ok(responseDTO);
-
-        when(loginRestController.login(any(LoginRequestDTO.class))).thenReturn(responseEntity);
-
-        // Perform the request and assert the response
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.token").value("token"));
-    }
-
-    @Test
-    void testLogin_InvalidCredentials() throws Exception {
-        // Mock the service throwing an IllegalArgumentException
-        LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setUsername("WrongUsername");
-        requestDTO.setPassword("WrongPassword");
-
-        when(loginRestController.login(any(LoginRequestDTO.class))).thenThrow(new IllegalArgumentException("Invalid username or password"));
-
-        // Perform the request and assert the response
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
-                .andExpect(status().isForbidden())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Invalid username or password"));
     }
 
 
     @Test
-    void testLogin_InternalServerError() throws Exception {
-        // Mock the service throwing an exception
+    void testLoginValidCredentials() {
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
+        loginRequestDTO.setUsername("username");
+        loginRequestDTO.setPassword("password");
+
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO("token");
+
+        when(loginService.login(loginRequestDTO)).thenReturn(loginResponseDTO);
+
+        ResponseEntity<?> responseEntity = loginRestController.login(loginRequestDTO);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(loginResponseDTO, responseEntity.getBody());
+        verify(loginService, times(1)).login(loginRequestDTO);
+    }
+
+    @Test
+    void testLoginInvalidCredentials() {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
         requestDTO.setUsername("username");
         requestDTO.setPassword("password");
 
-        when(loginRestController.login(any(LoginRequestDTO.class))).thenThrow(new RuntimeException("An error occurred"));
+        when(loginService.login(requestDTO)).thenThrow(new IllegalArgumentException("Invalid username or password"));
 
-        // Perform the request and assert the response
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(requestDTO)))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.token").value("An error occurred"));
-                .andExpect(jsonPath("$.message").value("An error occurred"));
+        ResponseEntity<?> responseEntity = loginRestController.login(requestDTO);
+
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals("Invalid username or password", ((LoginResponseDTO) responseEntity.getBody()).getToken());
+        verify(loginService, times(1)).login(requestDTO);
     }
-
 }

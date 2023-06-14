@@ -23,7 +23,7 @@
                     </datalist>
                 </div>
                 <div class="other">
-                    <input type="number" class="input" placeholder="bedrag" v-model="transaction.amount">
+                    <input type="text" class="input" placeholder="bedrag" v-model="transaction.amount">
                 </div>
                 <div class="other">
                     <input type="text" class="input" placeholder="description" v-model="transaction.description">
@@ -231,6 +231,10 @@ export default {
         });
     },
     methods: {
+        safething(id){
+            alert("yeah" +id);
+            // this.otherBankAccount.id = id;
+        },
         getNameAndDtoList(){
             axios
                 .get('bankaccounts/All', {
@@ -355,13 +359,6 @@ export default {
                     location.reload();
                 }
                 
-            }if(this.transaction.amount < 0){
-                alert("you can't create a transaction with a negative amount");
-                location.reload();
-            }
-            if(this.transaction.paymentReference == ""){
-                alert("you need to fill in a payment reference");
-                location.reload();
             }
             if(this.otherBankAccount.accountType[0] != "CURRENT"){
                 alert("you can only transfer to a current account");
