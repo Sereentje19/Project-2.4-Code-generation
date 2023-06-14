@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
+import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.BankAccount;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +9,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,13 +32,14 @@ public class BankAccountStepDefinitions {
     private List<BankAccount> retreivedBankaccount;
 
     private BankAccountRepository bankAccountRepository;
+    private String uri = "http://localhost:8080//";
 
 
     @Given("I am logged in as {string} with password {string}")
     public void iAmLoggedInAsWithPassword(String arg0, String arg1) {
         httpHeaders.add("Content-Type", "application/json");
         responseEntity = restTemplate
-                .exchange("http://localhost:8080//login",
+                .exchange(uri + "login",
                         HttpMethod.POST,
                         new HttpEntity<>("{\"username\":\"" + arg0 + "\", \"password\":\"" + arg1 + "\"}", httpHeaders), // null because OPTIONS does not have a body
                         String.class);
@@ -48,7 +51,7 @@ public class BankAccountStepDefinitions {
     @And("The endpoint for {string} is available for method {string}")
     public void theEndpointForIsAvailableForMethod(String endpoint, String method) {
         responseEntity = restTemplate
-                .exchange("http://localhost:8080//" + endpoint,
+                .exchange(uri + endpoint,
                         HttpMethod.OPTIONS,
                         new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
                         String.class);
@@ -63,10 +66,8 @@ public class BankAccountStepDefinitions {
 
     @When("I retrieve all bank accounts")
     public void iRetrieveAllBankAccounts() {
-        String endpoint = "http://localhost:8080/bankaccounts";
-
         ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
-                endpoint,
+                uri + "bankaccounts",
                 HttpMethod.GET,
                 new HttpEntity<>(httpHeaders),
                 new ParameterizedTypeReference<>() {}
@@ -86,18 +87,44 @@ public class BankAccountStepDefinitions {
 
     @When("a new bank account is added")
     public void aNewBankAccountIsAdded() {
+        BankAccount account = new BankAccount();
+        account.setId(2L);
+        account.setUserId(2L);
+        account.setAccountType(List.of(AccountType.CURRENT));
+        account.setCurrencies("EUR");
+        account.setDisabled(false);
+        account.setAbsoluutLimit(1000);
+        account.setIban("NL12INHO0123456787");
+        account.setBalance(2000);
+
+        responseEntity = restTemplate.exchange(uri + "bankaccounts",
+                HttpMethod.POST,
+                new HttpEntity<>(account, httpHeaders),
+                String.class);
     }
 
     @Then("the response should be a bank account object")
     public void theResponseShouldBeABankAccountObject() {
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 
     @When("I request the bank account with ID {int}")
-    public void iRequestTheBankAccountWithID(int arg0) {
+    public void iRequestTheBankAccountWithID(int id) {
+        responseEntity = restTemplate.exchange(
+                uri + "bankaccounts/" + id,
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {}
+        );
     }
 
     @Then("the response should be a bank account object with the ID {int}")
-    public void theResponseShouldBeABankAccountObjectWithTheID(int arg0) {
+    public void theResponseShouldBeABankAccountObjectWithTheID(int id) {
+        Assertions.assertNotNull(responseEntity, "Response entity is null.");
+        Assertions.assertNotNull(responseEntity.getBody(), "Response body is null.");
+
+        int actual = JsonPath.read(responseEntity.getBody(), "$.id");
+        Assertions.assertEquals(id, actual);
     }
 
     @Given("I am logged in as an employee with the credentials username {string} and password {string}")

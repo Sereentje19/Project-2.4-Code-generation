@@ -43,34 +43,34 @@ public class TransactionsStepDefinitions{
 
 
 
-    @Given("I am logged in as username {string} with password {string}")
-    public void iAmLoggedInAsUsernameWithPassword(String arg0, String arg1) throws Throwable {
-        httpHeaders.add("Content-Type", "application/json");
-        response = restTemplate
-                .exchange("/" + "login",
-                        HttpMethod.POST,
-                        new HttpEntity<>("{\"username\":\"" + arg0 + "\", \"password\":\"" + arg1 + "\"}", httpHeaders), // null because OPTIONS does not have a body
-                        String.class);
+//    @Given("I am logged in as username {string} with password {string}")
+//    public void iAmLoggedInAsUsernameWithPassword(String arg0, String arg1) throws Throwable {
+//        httpHeaders.add("Content-Type", "application/json");
+//        response = restTemplate
+//                .exchange("/" + "login",
+//                        HttpMethod.POST,
+//                        new HttpEntity<>("{\"username\":\"" + arg0 + "\", \"password\":\"" + arg1 + "\"}", httpHeaders), // null because OPTIONS does not have a body
+//                        String.class);
+//
+//        token = JsonPath.read(response.getBody(), "$.token");
+//        httpHeaders.add("Authorization", "Bearer " + token);
+//    }
 
-        token = JsonPath.read(response.getBody(), "$.token");
-        httpHeaders.add("Authorization", "Bearer " + token);
-    }
-
-    @Given("The endpoint for transactions is available for method {string}")
-    public void theEndpointForIsAvailableForMethod(String method) throws Throwable {
-        response = restTemplate
-                .exchange("/" + "transactions",
-                        HttpMethod.OPTIONS,
-                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
-                        String.class);
-
-        List<String> options = Arrays.stream(response.getHeaders()
-                        .get("Allow")
-                        .get(0)// The first element is all allowed methods separated by comma
-                        .split(","))
-                .toList();
-        Assertions.assertTrue(options.contains(method));
-    }
+//    @Given("The endpoint for transactions is available for method {string}")
+//    public void theEndpointForIsAvailableForMethod(String method) throws Throwable {
+//        response = restTemplate
+//                .exchange("/" + "transactions",
+//                        HttpMethod.OPTIONS,
+//                        new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+//                        String.class);
+//
+//        List<String> options = Arrays.stream(response.getHeaders()
+//                        .get("Allow")
+//                        .get(0)// The first element is all allowed methods separated by comma
+//                        .split(","))
+//                .toList();
+//        Assertions.assertTrue(options.contains(method));
+//    }
     @When("the transaction is added")
     public void theTransactionIsAdded() {
         bankAccount = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);

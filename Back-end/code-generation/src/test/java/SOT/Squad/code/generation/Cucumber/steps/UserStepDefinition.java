@@ -51,38 +51,23 @@ public class UserStepDefinition{
     }
 
  //start omar shit
- @Given("The endpoint for {string} is available for method {string}")
- public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
-     responseEntity = restTemplate
-             .exchange("http://localhost:8080/" + endpoint,
-                     HttpMethod.OPTIONS,
-                     new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
-                     String.class);
+// @Given("The endpoint for {string} is available for method {string}")
+// public void theEndpointForIsAvailableForMethod(String endpoint,String method) throws Throwable {
+//     responseEntity = restTemplate
+//             .exchange("http://localhost:8080/" + endpoint,
+//                     HttpMethod.OPTIONS,
+//                     new HttpEntity<>(null, httpHeaders), // null because OPTIONS does not have a body
+//                     String.class);
+//
+//     List<String> options = Arrays.stream(responseEntity.getHeaders()
+//                     .get("Allow")
+//                     .get(0)// The first element is all allowed methods separated by comma
+//                     .split(","))
+//             .toList();
+//     Assertions.assertTrue(options.contains(method));
+// }
 
-     List<String> options = Arrays.stream(responseEntity.getHeaders()
-                     .get("Allow")
-                     .get(0)// The first element is all allowed methods separated by comma
-                     .split(","))
-             .toList();
-     Assertions.assertTrue(options.contains(method));
- }
 
-
-
-    @When("the transaction is added")
-
-    public void theTransactionIsAdded() {
-        bankAccount = new BankAccount(1, "NL12INHO0123456789", 1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
-        user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 64567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",
-                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
-        Transaction transaction = new Transaction(1, "test", 100, "NL12INHO0123456789", "NL12INHO0123456788",
-                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk",
-                LocalDateTime.now().minusDays(3), user);
-        responseEntity = restTemplate.exchange("/transactions",
-                HttpMethod.POST,
-                new HttpEntity<>(transaction, httpHeaders),
-                String.class);
-    }
 
 // end omar shit
     @When("I retrieve all users")
