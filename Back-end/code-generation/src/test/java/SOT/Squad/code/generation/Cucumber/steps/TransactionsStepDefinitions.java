@@ -43,18 +43,18 @@ public class TransactionsStepDefinitions{
 
 
 
-    @Given("I am logged in as username {string} with password {string}")
-    public void iAmLoggedInAsUsernameWithPassword(String arg0, String arg1) throws Throwable {
-        httpHeaders.add("Content-Type", "application/json");
-        response = restTemplate
-                .exchange("/" + "login",
-                        HttpMethod.POST,
-                        new HttpEntity<>("{\"username\":\"" + arg0 + "\", \"password\":\"" + arg1 + "\"}", httpHeaders), // null because OPTIONS does not have a body
-                        String.class);
-
-        token = JsonPath.read(response.getBody(), "$.token");
-        httpHeaders.add("Authorization", "Bearer " + token);
-    }
+//    @Given("I am logged in as username {string} with password {string}")
+//    public void iAmLoggedInAsUsernameWithPassword(String arg0, String arg1) throws Throwable {
+//        httpHeaders.add("Content-Type", "application/json");
+//        response = restTemplate
+//                .exchange("/" + "login",
+//                        HttpMethod.POST,
+//                        new HttpEntity<>("{\"username\":\"" + arg0 + "\", \"password\":\"" + arg1 + "\"}", httpHeaders), // null because OPTIONS does not have a body
+//                        String.class);
+//
+//        token = JsonPath.read(response.getBody(), "$.token");
+//        httpHeaders.add("Authorization", "Bearer " + token);
+//    }
 
 //    @Given("The endpoint for transactions is available for method {string}")
 //    public void theEndpointForIsAvailableForMethod(String method) throws Throwable {
