@@ -27,9 +27,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 public class TransactionsStepDefinitions{
     private final HttpHeaders httpHeaders = new HttpHeaders();
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate  = new TestRestTemplate();
     private ResponseEntity<String> response;
     private String token;
     private User user;
@@ -55,7 +53,7 @@ public class TransactionsStepDefinitions{
 //        token = JsonPath.read(response.getBody(), "$.token");
 //        httpHeaders.add("Authorization", "Bearer " + token);
 //    }
-
+//
 //    @Given("The endpoint for transactions is available for method {string}")
 //    public void theEndpointForIsAvailableForMethod(String method) throws Throwable {
 //        response = restTemplate
