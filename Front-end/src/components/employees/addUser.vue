@@ -161,50 +161,56 @@ export default {
                 alert("Username has to be at least 5 characters.");
                 return false;
             }
-            else if (!this.user.pincode || this.user.pincode.length !== 4) {
+            else if (!this.user.pincode || !/^\d{4}$/.test(this.user.pincode)) {
                 alert("Pincode has to be exactly 4 numbers.");
                 return false;
             }
+            else if (!this.user.email.includes('@')) {
+                alert("Please enter a valid email.");
+                return false;
+            }
+            else if (!/^\d{10,}$/.test(this.user.phoneNumber)) {
+                alert("Phonenumber has to be at least 10 numbers");
+                return false;
+            }
             else if (!this.user.firstName || !this.user.lastName
-                || !this.user.phoneNumber || !this.user.email
                 || !this.user.postalCode || !this.user.city
-                || !this.user.street || !this.user.houseNumber) {
+                || !this.user.street || !/^\d+$/.test(this.user.houseNumber)) {
                 alert("Please fill al fields before savings all changes");
                 return false;
             }
             return true
         },
         addUser() {
+
             this.user.password = this.generatedPassword;
             this.user.pincode = this.generatedPincode;
             this.user.accountType = this.selectedAccountType;
             this.user.roles.push("CUSTOMER");
 
-            if (!this.checkFieldsNotEmpty()) {
-                return;
-            }
+            if (this.checkFieldsNotEmpty()) {
+                if (this.currentUser == "CUSTOMER") {
 
-            if (this.currentUser == "CUSTOMER") {
+                    console.log(this.user)
+                    axios
+                        .post('users/register', this.user)
+                        .then((res) => {
+                            this.$router.push("/");
+                        }).catch((error) => {
+                            alert(error.response.data.token);
+                        });
+                }
+                else {
+                    this.generateIBAN();
 
-                console.log(this.user)
-                axios
-                    .post('users/register', this.user)
-                    .then((res) => {
-                        this.$router.push("/");
-                    }).catch((error) => {
-                        alert(error.response.data.token);
-                    });
-            }
-            else {
-                this.generateIBAN();
-
-                axios
-                    .post('users', this.user, headerToken)
-                    .then((res) => {
-                        this.addBankAccount(res.data.id);
-                        this.$router.push("/");
-                    })
-                    .catch((error) => console.log(error));
+                    axios
+                        .post('users', this.user, headerToken)
+                        .then((res) => {
+                            this.addBankAccount(res.data.id);
+                            this.$router.push("/");
+                        })
+                        .catch((error) => console.log(error));
+                }
             }
         },
         addBankAccount(userId) {
