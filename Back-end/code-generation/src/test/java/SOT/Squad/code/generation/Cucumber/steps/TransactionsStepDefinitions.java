@@ -1,7 +1,11 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import SOT.Squad.code.generation.Models.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -19,10 +23,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class TransactionsStepDefinitions{
@@ -180,4 +181,54 @@ public class TransactionsStepDefinitions{
         Assertions.assertNotNull(retrievedTransactions);
         Assertions.assertFalse(retrievedTransactions.isEmpty());
     }
+    @When("I request to retrieve transactions for bank account with IBAN and account type [{string}]")
+    public void iRequestToRetrieveTransactionsForBankAccountWithIBANAndAccountType(String accountType) {
+//        List<Transaction> transactionList = new ArrayList<>(); // Create an empty list of Transaction objects
+//
+//        // Add Transaction objects to the list
+//        Transaction transaction1 = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().minusDays(3),user);
+//        transactionList.add(transaction1);
+//
+//        Transaction transaction2 = new Transaction(2, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().plusDays(4),user);
+//        transactionList.add(transaction2);
+//
+//        // Assign the transactionList to your variable
+//        List<Transaction> myTransactions = transactionList;
+//
+//        String endpoint = String.format("/transactions/account/" + "NL12INHO0123456787/" + accountType);
+//
+//
+//        response = restTemplate.exchange(
+//                endpoint,
+//                HttpMethod.GET,
+//                new HttpEntity<>(httpHeaders),
+//                String.class
+//        );
+//
+//        String responseBody = response.getBody();
+//        // Use Gson to convert the JSON string to a list of Transaction objects
+//        Gson gson = new Gson();
+//        List<Transaction> retrievedTransactions = gson.fromJson(responseBody, new TypeToken<List<Transaction>>() {}.getType());
+//    }
+//    @And("the endpoint {string} is available for the GET method")
+//    public void theEndpointIsAvailableForTheGETMethod(String endpoint) {
+//        response = restTemplate
+//                .exchange(endpoint,
+//                        HttpMethod.OPTIONS,
+//                        new HttpEntity<>(null, httpHeaders),
+//                        String.class);
+//
+//        List<String> options = Arrays.asList(response.getHeaders().get("Allow").get(0).split(","));
+//        Assertions.assertTrue(options.contains(HttpMethod.GET.toString()));
+        
+    }
+
+
+    @Then("I should receive a list of transactions matching the criteria")
+    public void iShouldReceiveAListOfTransactionsMatchingTheCriteria() {
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(retrievedTransactions);
+    }
+
+
 }
