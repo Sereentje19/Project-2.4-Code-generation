@@ -30,11 +30,6 @@ public class BankAccountService {
         bankAccount.setId(id);
         return bankAccountRepository.save(bankAccount);
     }
-
-    public BankAccount getBankAccountByIban(String iban) {
-        return (BankAccount)bankAccountRepository.findByIban(iban);
-    }
-
     public BankAccount getBankAccountById(long id) {
         return (BankAccount)bankAccountRepository.getAllById(id);
     }
@@ -46,22 +41,15 @@ public class BankAccountService {
 
     public List<IbanAndNameDTO> getAllNameAndIban() {
         List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
-
         List<IbanAndNameDTO> dtoList = new ArrayList<>();
 
         for (int i = 1; i < bankList.size(); i++) {
             IbanAndNameDTO ibanAndNameDTO = new IbanAndNameDTO();
-
             ibanAndNameDTO.setIban(bankList.get(i).getIban());
-
             User user = (User)userService.getUser(bankList.get(i).getUserId());
-
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
-
             ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
-
             ibanAndNameDTO.setId(bankList.get(i).getId());
-
             dtoList.add(ibanAndNameDTO);
         }
         return dtoList;
