@@ -2,7 +2,6 @@
   <div id="header">
     <div class="navbar">
       <a @click="logout()" class="grey btn" href="/">logout</a>
-      <a class="grey btn" href="/">Login</a>
 
     </div>
   </div>
