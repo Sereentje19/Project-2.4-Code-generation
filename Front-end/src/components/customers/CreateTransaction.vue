@@ -19,6 +19,16 @@
                 </div>
             </div>
             <div class="body">
+                <div class="other" id="dropdown" style="display: none;">
+                    <input  type="text" class="input" placeholder="rekening naar" list="ibanLists">
+                    <datalist id="ibanLists" >
+                        <option v-for="bankaccount in this.usersBankList" :value="bankaccount.id"> 
+                            <div v-for="accType in bankaccount.accountType">
+                            {{ bankaccount.iban }} ({{ accType }}) 
+                            </div>
+                        </option>
+                    </datalist>
+                </div>
                 <div class="other">
                     <input type="text" class="input" placeholder="bedrag" v-model="transaction.amount">
                 </div>
@@ -247,6 +257,26 @@ export default {
                 fromInput.setAttribute( 'readonly', true );
             }
         },
+        checkAccountIban(){
+            if(this.bankaccount.iban == this.transaction.bankAccountTo){
+                document.getElementById("dropdown").style.display = "block";
+            }else {
+                document.getElementById("dropdown").style.display = "none";
+            }
+        },getBankAccountById(id) {
+            alert("test" + id)
+            axios
+                .get('/bankaccounts/userID/' + id, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.usersBankList = res.data;
+                    console.log(res.data);
+                })
+                .catch(error => console.log(error))
+        },
         getUser() {
             axios
                 .get('users/current', {
@@ -271,6 +301,7 @@ export default {
                 })
                 .then((res) => {
                     this.bankaccount = res.data;
+                    this.getBankAccountById(this.bankaccount.userId);
                     this.transaction.bankAccountFrom = this.bankaccount.iban;
                     console.log(this.bankaccount);
                     

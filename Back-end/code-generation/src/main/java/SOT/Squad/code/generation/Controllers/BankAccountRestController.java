@@ -47,11 +47,10 @@ public class BankAccountRestController {
     public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
         return bankAccountService.addBankAccount(bankAccount);
     }
-
-    @GetMapping("/All") //Employee
-    public List<IbanAndNameDTO> getAllNameAndIban() {
+    @GetMapping("/userID/{id}")
+    public List<BankAccount> getAllBankAccountsByUserId(@PathVariable long id) {
         keyProvider.decodeJWT();
-        return bankAccountService.getAllNameAndIban();
+        return bankAccountService.getAllBankAccountsByUserId(id);
     }
 
     @PutMapping("/change/{id}") //Employee & Customer
@@ -59,5 +58,12 @@ public class BankAccountRestController {
         keyProvider.decodeJWT();
         return bankAccountService.updateBankAccount(bankAccount, id);
     }
+
+    @GetMapping("/All") //Employee
+    public List<IbanAndNameDTO> getAllNameAndIban() {
+        keyProvider.decodeJWT();
+        return bankAccountService.getAllNameAndIban();
+    }
+
 
 }
