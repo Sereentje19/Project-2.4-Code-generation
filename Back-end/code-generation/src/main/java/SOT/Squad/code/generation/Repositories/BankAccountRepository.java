@@ -8,8 +8,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BankAccountRepository extends CrudRepository<BankAccount, Long> {
+
+    public Iterable<BankAccount> getAllByIban(String iban);
+
+    List<BankAccount> getAllByUserId(long id);
+
     BankAccount getAllById(long id);
     BankAccount findByIban(String iban);
+
 }

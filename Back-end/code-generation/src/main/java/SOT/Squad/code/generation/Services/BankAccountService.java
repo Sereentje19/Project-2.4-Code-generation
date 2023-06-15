@@ -54,4 +54,8 @@ public class BankAccountService {
         }
         return dtoList;
     }
+
+    public List<BankAccount> getAllBankAccountsByUserId(long id) {
+        return (List<BankAccount>) bankAccountRepository.getAllByUserId(id);
+    }
 }

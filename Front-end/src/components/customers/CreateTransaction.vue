@@ -19,7 +19,11 @@
                 <div class="other" id="dropdown" style="display: none;">
                     <input  type="text" class="input" placeholder="rekening naar" list="ibanLists">
                     <datalist id="ibanLists" >
-                        <option v-for="bankaccount in this.usersBankList" :value="bankaccount.id"> {{ bankaccount.iban }} ({{ bankaccount.accountType }}) </option>
+                        <option v-for="bankaccount in this.usersBankList" :value="bankaccount.id"> 
+                            <div v-for="accType in bankaccount.accountType">
+                            {{ bankaccount.iban }} ({{ accType }}) 
+                            </div>
+                        </option>
                     </datalist>
                 </div>
                 <div class="other">
@@ -263,14 +267,14 @@ export default {
             }
         },getBankAccountById(id) {
             axios
-                .get('/bankaccounts/' + id, {
+                .get('/bankaccounts/userID/' + id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
                     this.usersBankList = res.data;
-                    console.log(this.usersBankList);
+                    console.log(res.data);
                 })
                 .catch(error => console.log(error))
         },
@@ -298,8 +302,7 @@ export default {
                 })
                 .then((res) => {
                     this.bankaccount = res.data;
-                    this.getBankAccountById(this.bankaccount.id);
-
+                    this.getBankAccountById(this.bankaccount.userId);
                     this.transaction.bankAccountFrom = this.bankaccount.iban;
                     console.log(this.bankaccount);
                     

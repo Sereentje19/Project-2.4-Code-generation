@@ -46,6 +46,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
                 .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts").authenticated()
+                .requestMatchers("/bankaccounts/userID/{id}").authenticated()
                 .requestMatchers("/bankaccounts/All").authenticated();
 
 
