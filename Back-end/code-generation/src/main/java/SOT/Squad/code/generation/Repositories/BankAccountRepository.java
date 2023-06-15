@@ -18,6 +18,10 @@ public interface BankAccountRepository extends CrudRepository<BankAccount, Long>
     List<BankAccount> getAllByUserId(long id);
 
     BankAccount getAllById(long id);
-    BankAccount findByIban(String iban);
+
+
+    //create a method to find a bank account by iban
+    public BankAccount findFirstByIban(String iban);
+
 
 }

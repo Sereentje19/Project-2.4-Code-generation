@@ -58,4 +58,8 @@ public class BankAccountService {
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
         return (List<BankAccount>) bankAccountRepository.getAllByUserId(id);
     }
+
+    public BankAccount getBankAccountByIban(String iban) {
+        return (BankAccount) bankAccountRepository.findFirstByIban(iban);
+    }
 }
