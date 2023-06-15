@@ -12,10 +12,12 @@ import java.util.List;
 
 @Repository
 public interface BankAccountRepository extends CrudRepository<BankAccount, Long> {
+
     public Iterable<BankAccount> getAllByIban(String iban);
+
+    List<BankAccount> getAllByUserId(long id);
 
     BankAccount getAllById(long id);
     BankAccount findByIban(String iban);
 
-    List<BankAccount> getAllByUserId(long id);
 }

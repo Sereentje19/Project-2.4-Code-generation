@@ -1,7 +1,5 @@
 <template>
   <div id="header">
-    <!-- <a href="/"><img id="logo" src="../../assets/images/logo.png" alt="Image is not shown"></a> -->
-
     <div class="navbar">
       <a @click="logout()" class="grey btn" href="/">logout</a>
       <a class="grey btn" href="/">Login</a>
@@ -15,11 +13,6 @@
 export default {
   name: "header",
 
-  methods: {
-  logout(){
-    
-  }
-},
 };
 
 

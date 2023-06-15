@@ -52,16 +52,10 @@ public class TransactionRestController {
         }
     }
 
-
     @PutMapping("/{id}") //Employee
     public Transaction updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
         transaction.setId(id);
         return transactionService.UpdateTransaction(transaction);
-    }
-
-    @DeleteMapping("/{id}") //Employee
-    public void deleteTransaction(@PathVariable long id) {
-        transactionService.DeleteTransaction(id);
     }
 
 }

@@ -1,73 +1,122 @@
 <template>
+    <headerNavigation />
+
     <div class="container">
-        <h2>All Bank Accounts</h2>
-        <input type="text" v-model="searchQuery" placeholder="Search..." />
-        <div v-for="account in filteredAccounts" :key="account.id" @click="selectAccount(account)">
-            <span>{{ account.accountNumber }}</span>
-            <span v-if="selectedAccount && selectedAccount.id === account.id">- Owner: {{ selectedAccount.ownerName
-            }}</span>
+        <h2>All Users</h2>
+        <div id="inputAndBtn">
+            <input id="inputfield" type="text" v-model="searchQuery" placeholder="Search" />
+            <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add Bankaccount</button>
+        </div>
+
+        <div v-if="!showUsersWithNoAccounts">
+            <button class="filter-button" @click="filterUsersWithNoAccounts">No Accounts</button>
+        </div>
+
+        <div v-else>
+            <button class="filter-button" @click="resetFilter">Show with bankaccount</button>
+        </div>
+
+        <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
         </div>
     </div>
-</template>
 
+    <footerNavigation />
+</template>
 <script>
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
 export default {
-    header: {
-        name: "header",
-        components: {
-            headerNavigation
-        }
-    },
-    footer: {
-        name: "footer",
-        components: {
-            footerNavigation
-        },
+    components: {
+        headerNavigation,
+        footerNavigation
     },
     data() {
         return {
-            accounts: [],
+            users: [],
+            selectedUser: null,
             searchQuery: '',
-            selectedAccount: null,
+            showUsersWithNoAccounts: false
         };
     },
     mounted() {
-        this.fetchAccounts();
+        this.getUsers();
     },
     computed: {
-        filteredAccounts() {
-            // Filter accounts based on the search query
-            return this.accounts.filter((account) =>
-                account.accountNumber.includes(this.searchQuery)
-            );
-        },
+        filteredUsers() {
+            if (this.showUsersWithNoAccounts) {
+                return this.users.filter(user => !user.bankAccountList || user.bankAccountList.length === 0);
+            }
+
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                return this.users.filter(user => {
+                    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+                    return fullName.includes(query);
+                });
+            }
+
+            return this.users.filter(user => user.active); // Only display active users
+        }
     },
     methods: {
-        fetchAccounts() {
-            // Make an API call to fetch all bank accounts
+        getUsers() {
             axios
-                .get('/bankaccounts') // Use the correct API endpoint
-                .then((response) => {
-                    // Handle the response and update the accounts data
-                    this.accounts = response.data;
+                .get('/users', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
                 })
-                .catch((error) => {
-                    console.error('Error fetching accounts:', error);
-                    // Handle the error case if necessary
-                });
+                .then((res) => {
+                    this.users = res.data;
+                })
+                .catch(error => console.log(error));
         },
-        selectAccount(account) {
-            // Set the selected account for displaying owner's name
-            this.selectedAccount = { ...account }; // Create a copy of the account object
+        goToAddUser() {
+            this.$router.push('/employee/question');
         },
-    },
+        selectUser(user) {
+            this.$router.push(`/employee/accounts/` + btoa(user.id));
+        },
+        filterUsersWithNoAccounts() {
+            this.showUsersWithNoAccounts = true;
+        },
+        resetFilter() {
+            this.showUsersWithNoAccounts = false;
+        }
+    }
 };
 </script>
 
+
+  
 <style>
-@import '../../assets/css/allAccounts.css';
+#inputAndBtn {
+    display: flex;
+    justify-content: space-between;
+    color: none;
+}
+
+#buttonAdd {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+#inputfield {
+    height: 40px;
+}
+
+
+#buttonFilter {
+    height: 40px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.listField {
+    height: 40px;
+    margin-bottom: 1px;
+    margin-top: 2px; /* Add margin-top for spacing */
+}
 </style>

@@ -20,9 +20,9 @@ public class BankAccountRestController {
     @Autowired
     private BankAccountService bankAccountService;
 
-    @GetMapping //Employee
-    public List<BankAccount> getAllBankAccounts() {
-        return bankAccountService.getAllBankAccounts();
+    @PostMapping //Employee & Customer
+    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+        return bankAccountService.addBankAccount(bankAccount);
     }
 
     @GetMapping("/{id}") //Employee & Customer
@@ -30,10 +30,10 @@ public class BankAccountRestController {
         keyProvider.decodeJWT();
         return bankAccountService.getBankAccountById(id);
     }
-    @GetMapping("/iban/{iban}") //Employee & Customer
-    public BankAccount getAccountByIban(@PathVariable String iban) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountByIban(iban);
+
+    @GetMapping //Employee
+    public List<BankAccount> getAllBankAccounts() {
+        return bankAccountService.getAllBankAccounts();
     }
 
     @PutMapping //Employee
@@ -43,9 +43,10 @@ public class BankAccountRestController {
         return true;
     }
 
-    @PostMapping //Employee & Customer
-    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
-        return bankAccountService.addBankAccount(bankAccount);
+    @PutMapping("/change/{id}") //Employee & Customer
+    public BankAccount updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
+        keyProvider.decodeJWT();
+        return bankAccountService.updateBankAccount(bankAccount, id);
     }
     @GetMapping("/userID/{id}")
     public List<BankAccount> getAllBankAccountsByUserId(@PathVariable long id) {
@@ -64,6 +65,5 @@ public class BankAccountRestController {
         keyProvider.decodeJWT();
         return bankAccountService.getAllNameAndIban();
     }
-
 
 }

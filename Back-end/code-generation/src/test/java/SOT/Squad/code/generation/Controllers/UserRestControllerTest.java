@@ -174,7 +174,7 @@ public class UserRestControllerTest {
     public void testCheckPincode() throws Exception {
         User user = new User();
         String pincode = "4321";
-// Add some transactions to the list
+        // Add some transactions to the list
 
         when(userService.checkPincode(any(String.class))).thenReturn(user);
 
@@ -185,13 +185,4 @@ public class UserRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testDeleteUser() throws Exception {
-        long id = 1L;
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/users/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 }

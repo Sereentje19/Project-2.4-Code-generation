@@ -1,9 +1,13 @@
 package SOT.Squad.code.generation.Controllers;
 
+import SOT.Squad.code.generation.JWT.JWTTokenProvider;
+import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Services.UserService;
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,10 @@ public class UserRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
+
+    @Autowired
+    JWTTokenProvider tokenProvider;
+
     @GetMapping() //Employee
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -30,9 +38,9 @@ public class UserRestController {
         return userService.addUser(user);
     }
 
-    @DeleteMapping("/{id}") //Employee
-    public void deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
+    @PostMapping("/register")//Employee
+    public User register(@RequestBody User user) {
+        return userService.addUser(user);
     }
 
     @GetMapping("/{id}") //Employee & Customer
@@ -44,7 +52,6 @@ public class UserRestController {
     public User getUserOnUsername() {
         String username = keyProvider.decodeJWT();
         return userService.getUserByUsername(username);
-
     }
 
     @PutMapping("/{id}") //Employee & Customer

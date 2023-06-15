@@ -12,9 +12,6 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findByBankAccountFromOrBankAccountTo(String bankAccountFrom, String bankAccountTo);
-
     List<Transaction> findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(
             String bankAccountTo, List<AccountType> accountTypeTo, String bankAccountFrom, List<AccountType> accountTypeFrom);
-
-
 }

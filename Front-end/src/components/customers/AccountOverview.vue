@@ -17,9 +17,8 @@
       <div v-if="user.bankAccountList.length > 0">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
 
-
         <h3>Bank Accounts</h3>
-        <div v-for="account in this.user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
+        <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
           <div v-for="accType in account.accountType">
             <span class="wide-field">{{ accType }} Є{{ account.amount }}</span>
           </div>
@@ -36,6 +35,18 @@
   </div>
   </div>
 </template>
+
+
+<style>
+.user-info-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-info-button button {
+  margin-left: auto;
+}
+</style>
 
 <script>
 import headerNavigation from '../main/Header.vue'
@@ -61,35 +72,65 @@ export default {
         houseNumber: "",
         postalCode: "",
         city: "",
-        bankAccountList: [],
+        bankAccountList: []
       },
+
+
+
     };
   },
+  computed: {
+    totalAmount() {
+      return this.user.bankAccountList.reduce((total, account) => total + account.amount, 0);
+    }
+  },
   mounted() {
+    console.log(this.user.bankAccountList);
     this.getAll();
-
   },
   methods: {
     getAll() {
       axios
-        .get('users/current', {
+        .get('/users/current', {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("jwt")
           }
         })
         .then((res) => {
-          console.log(res.data);
           this.user = res.data;
-          console.log(res.data)
-          console.log(this.user.id)
+          console.log(this.user.bankAccountList);
+          this.getBankAccounts();
         })
         .catch(error => console.log(error))
     },
+    getBankAccounts() {
+      // Iterate over the bank accounts and fetch their details
+      for (let i = 0; i < this.user.bankAccountList.length; i++) {
+        const accountId = this.user.bankAccountList[i];
+        axios
+          .get(`/bankaccounts/` + accountId, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("jwt")
+            }
+          })
+          .then((res) => {
+            this.user.bankAccountList[i] = res.data;
+            this.user.bankAccountList[i].amount = res.data.balance;
+            this.user.bankAccountList[i].iban = res.data.iban;
+            this.user.bankAccountList[i].accountType = res.data.accountType;
+          })
+          .catch(error => console.log(error));
+      }
+      this.bankacc = this.user.bankAccountList[1];
+      console.log(this.bankacc);
+    },
     goToUserInfo() {
-      this.$router.push('/personal-details');
+      this.$router.push(`/accountInfo`);
     },
     goToTransactions(account) {
-      this.$router.push({ name: 'transactions', params: { accountId: account.id } });
+
+      const username = this.user.username;
+      this.$router.push("/transactions/" + btoa(account.id));
     },
   },
 };

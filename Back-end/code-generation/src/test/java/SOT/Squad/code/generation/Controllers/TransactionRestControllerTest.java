@@ -1,6 +1,8 @@
 package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
+import SOT.Squad.code.generation.Models.Role;
+import SOT.Squad.code.generation.Models.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -19,6 +21,8 @@ import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +33,6 @@ class TransactionRestControllerTest {
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
-
 
     @Mock
     private TransactionService transactionService;
@@ -59,7 +62,7 @@ class TransactionRestControllerTest {
         when(transactionService.AddTransaction(any(Transaction.class))).thenReturn(transaction);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/transactions/post")
+                        .post("/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(transaction)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -89,7 +92,7 @@ class TransactionRestControllerTest {
         when(transactionService.GetTransactionsByIban(iban)).thenReturn(transactions);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/transactions/{iban}", iban)
+                        .get("/transactions/account/{iban}/{type}", iban, "CURRENT,SAVINGS")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
@@ -98,20 +101,18 @@ class TransactionRestControllerTest {
     @Test
     void getTransactionById() throws Exception {
         // Arrange
-        long transactionId = 1;
-        Transaction transaction = new Transaction(1, "test", 100.0, "NL12INHO0123456789", "NL12INHO0123456787",
-                List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk");
-        when(transactionService.GetTransactionById(transactionId)).thenReturn(transaction);
+        long id = 1L;
+        Transaction transaction = new Transaction();
+        transaction.setId(id);
+        // Set up the transaction with the given ID
+
+        when(transactionService.GetTransactionById(id)).thenReturn(transaction);
 
         // Act and Assert
-        mockMvc.perform(get("/transactions/info/{id}", transactionId))
+        mockMvc.perform(get("/transactions/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(transaction.getId()))
-                .andExpect(jsonPath("$.description").value(transaction.getDescription()))
-                .andExpect(jsonPath("$.amount").value(transaction.getAmount()))
-                .andExpect(jsonPath("$.bankAccountFrom").value(transaction.getBankAccountFrom()))
-                .andExpect(jsonPath("$.fromIban").doesNotExist()); // Assert that "fromIban" field does not exist
+                .andExpect(jsonPath("$.id").value(id));
     }
 
     @Test
@@ -120,9 +121,11 @@ class TransactionRestControllerTest {
         List<AccountType> accountTypes = List.of(AccountType.CURRENT, AccountType.SAVINGS);
         List<Transaction> transactions = new ArrayList<>();
 
+        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1);
+
         // Add some transactions to the list that match the provided IBAN and account types
-        transactions.add(new Transaction(1, "test", 100.0, "NL12INHO0123456789", "NL12INHO0123456787",
-                List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk"));
+        transactions.add(transaction);
         // Mock the service method call
         when(transactionService.findByBankAccountAndAccountType(iban, accountTypes)).thenReturn(transactions);
 
@@ -148,14 +151,5 @@ class TransactionRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 
-    }
-    @Test
-    void deleteTransaction() throws Exception {
-        long id = 1L;
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/transactions/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

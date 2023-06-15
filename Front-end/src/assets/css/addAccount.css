@@ -1,9 +1,14 @@
-#container {
-    padding-top: 150px;
-    width: 410px;
-    left: 0;
-    right: 0;
-    margin: auto;
+.containerAddUser {
+    padding: 30px;
+    /* width: 410px; */
+    /* left: 0; */
+    /* right: 0; */
+    /* margin: auto; */
+    width: fit-content;
+    position: absolute;
+    top: 13%;
+    left: 35%;
+    background-color: rgb(192, 192, 192);
 }
 
 #btns {
