@@ -187,5 +187,17 @@ public class BankAccountStepDefinitions {
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
 
     }
+    @Given("I am not logged in")
+    public void iAmNotLoggedIn() {
+        // No specific implementation needed as this is a precondition
 
+    }
+
+    @Then("the response should be an unauthorized error")
+    public void theResponseShouldBeAnUnauthorizedError() {
+        // Verify that the response status code is 401 Unauthorized
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+
+        // You can add additional assertions or checks to verify the error response body or message if needed
+    }
 }
