@@ -385,9 +385,31 @@ export default {
             }
             this.postTransaction();
         },
-        getOtherBankAccount(){
-            alert(this.accountID)
+        getBankAccountByIban(){
             axios
+                .get('bankaccounts/iban/'+this.transaction.bankAccountTo,{
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    if(res.data == null || res.data == undefined || res.data == ""){
+                            alert("this account doesn't exist");
+                            location.reload();
+                        }
+                    this.otherBankAccount = res.data;
+                    this.transaction.bankAccountTo = this.otherBankAccount.iban;
+                    this.verifyRequest();
+                    console.log(this.otherBankAccount);
+                    
+                })
+                .catch(error => console.log(error))
+        },
+        getOtherBankAccount(){
+            if(this.accountID == 0){
+                this.getBankAccountByIban();
+            }else{
+                axios
                 .get('/bankaccounts/' + this.accountID, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
@@ -406,6 +428,8 @@ export default {
                     
                 })
                 .catch(error => console.log(error))
+            }
+            
         },
         updateBalance(){
             axios

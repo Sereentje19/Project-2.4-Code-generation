@@ -47,7 +47,8 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts").authenticated()
                 .requestMatchers("/bankaccounts/userID/{id}").authenticated()
-                .requestMatchers("/bankaccounts/All").authenticated();
+                .requestMatchers("/bankaccounts/All").authenticated()
+                .requestMatchers("/bankaccounts/iban/{iban}").authenticated();
 
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
