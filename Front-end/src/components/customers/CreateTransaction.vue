@@ -17,7 +17,7 @@
             </div>
             <div class="body">
                 <div class="other" id="dropdown" style="display: none;">
-                    <input  type="text" class="input" placeholder="rekening naar" list="ibanLists">
+                    <input  type="text" class="input" placeholder="rekening naar" list="ibanLists" v-model="this.accountID">
                     <datalist id="ibanLists" >
                         <option v-for="bankaccount in this.usersBankList" :value="bankaccount.id"> 
                             <div v-for="accType in bankaccount.accountType">
@@ -160,6 +160,7 @@ export default {
     },
     data() {
         return {
+            accountID: 0,
             user:
             {
                 id: 0,
@@ -227,8 +228,7 @@ export default {
         this.getUser();
         this.getBankAccount();
         this.getNameAndDtoList();
-        this.transaction.accountTypeFrom .push("CURRENT");
-        this.transaction.accountTypeTo .push("CURRENT");
+        
 
         document.getElementById("bankaccountTo").addEventListener("change", () => {
             this.checkAccountIban();
@@ -262,8 +262,11 @@ export default {
         checkAccountIban(){
             if(this.bankaccount.iban == this.transaction.bankAccountTo){
                 document.getElementById("dropdown").style.display = "block";
+                this.transaction.accountTypeFrom .push(this.bankaccount.accountType[0]);
             }else {
                 document.getElementById("dropdown").style.display = "none";
+                this.transaction.accountTypeFrom.push("CURRENT");
+                this.transaction.accountTypeTo.push("CURRENT");
             }
         },getBankAccountById(id) {
             axios
@@ -312,33 +315,13 @@ export default {
 
         
         showPincode() {
-            if(this.bankaccount.iban == this.transaction.bankAccountTo){
-                document.getElementById("dropdown").style.display = "block";
-                
-            }else {
-                document.getElementById("dropdown").style.display = "none";
-            }
-
-
-
-            // this.rekening = document.getElementById("fromInput").value;
-            // let accountToID = document.querySelectorAll("#accountToID");
-            // accountToID.forEach(thing => {
-            //     if(thing.getAttribute("placeholder") == this.transaction.bankAccountTo){
-            //         if(thing.getAttribute("thing") != "SAVINGS"){
-            //             console.log(thing.getAttribute("value"));
-            // this.otherBankAccount.id = thing.getAttribute("value");
-            //         }
-
-            //     }
-            // });
+            
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
             document.getElementById("test").style.display = "none";
         },
         postTransaction(){
-        //   console.log(this.transaction);
           this.transaction.date = new Date();
           console.log(this.transaction);
 
@@ -363,10 +346,17 @@ export default {
                 }
                 
             }
-            if(this.otherBankAccount.accountType[0] != "CURRENT"){
-                alert("you can only transfer to a current account");
+            else {
+                if(this.otherBankAccount.accountType[0] != "CURRENT"){
+                    alert("you can only transfer to a current account");
+                    location.reload();
+                }
+            }
+            if(this.bankaccount.iban == this.transaction.bankAccountTo && this.accountID == ""){
+                alert("please fill in wich accountID");
                 location.reload();
             }
+            
             if(this.otherBankAccount.disabled == true || this.bankaccount.disabled == true){
                 alert("you can't transfer to and / or from a disabled account");
                 location.reload();
@@ -381,7 +371,6 @@ export default {
             let newbalance = this.bankaccount.balance -= amount;
             let othernewbalance = this.otherBankAccount.balance += amount;
 
-            // console.log(newbalance);
             if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
                 alert("you will end below your absolute limit or below 0");
                 location.reload();
@@ -397,9 +386,9 @@ export default {
             this.postTransaction();
         },
         getOtherBankAccount(){
-            alert(this.otherBankAccount.id)
+            alert(this.accountID)
             axios
-                .get('/bankaccounts/' + this.otherBankAccount.id, {
+                .get('/bankaccounts/' + this.accountID, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -411,28 +400,12 @@ export default {
                         }
                     this.otherBankAccount = res.data;
                     this.transaction.bankAccountTo = this.otherBankAccount.iban;
+                    this.transaction.accountTypeTo .push(this.otherBankAccount.accountType[0]);
                     this.verifyRequest();
                     console.log(this.otherBankAccount);
                     
                 })
                 .catch(error => console.log(error))
-
-
-            // axios
-            //     .get('bankaccounts/iban/' + this.transaction.bankAccountTo,{
-            //             headers: {
-            //                 Authorization: "Bearer " + localStorage.getItem("jwt")
-            //             }
-            //         })
-            //         .then((res) => {
-            //             if(res.data == null || res.data == undefined || res.data == ""){
-            //                 alert("this account doesn't exist");
-            //                 location.reload();
-            //             }
-            //             this.otherBankAccount = res.data;
-            //             this.verifyRequest();
-            //         })
-            //         .catch((error) => console.log(error));
         },
         updateBalance(){
             axios
@@ -474,13 +447,9 @@ export default {
                     else{
                         alert("wrong pincode")
                     }
-                    
                 })
                 .catch((error) => console.log(error));
-
         },
-        
-
     },
 };
 
