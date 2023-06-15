@@ -1,104 +1,140 @@
 <template>
+  <headerNavigation />
+
   <div class="container">
     <h2>Personal Details</h2>
     <div>
       <label>First Name:</label>
-      <span v-if="!editMode">{{ user.firstName }}</span>
+      <span v-if="!editMode">{{ customer.firstName }}</span>
       <input type="text" v-else v-model="editedUser.firstName" />
     </div>
     <div>
       <label>Last Name:</label>
-      <span v-if="!editMode">{{ user.lastName }}</span>
+      <span v-if="!editMode">{{ customer.lastName }}</span>
       <input type="text" v-else v-model="editedUser.lastName" />
     </div>
     <div>
       <label>Phone Number:</label>
-      <span v-if="!editMode">{{ user.phoneNumber }}</span>
+      <span v-if="!editMode">{{ customer.phoneNumber }}</span>
       <input type="text" v-else v-model="editedUser.phoneNumber" />
     </div>
     <div>
       <label>Email Address:</label>
-      <span v-if="!editMode">{{ user.email }}</span>
+      <span v-if="!editMode">{{ customer.email }}</span>
       <input type="text" v-else v-model="editedUser.email" />
     </div>
     <div>
       <label>Postal Code:</label>
-      <span v-if="!editMode">{{ user.postalCode }}</span>
+      <span v-if="!editMode">{{ customer.postalCode }}</span>
       <input type="text" v-else v-model="editedUser.postalCode" />
     </div>
     <div>
       <label>City:</label>
-      <span v-if="!editMode">{{ user.city }}</span>
+      <span v-if="!editMode">{{ customer.city }}</span>
       <input type="text" v-else v-model="editedUser.city" />
     </div>
     <div>
       <label>Street:</label>
-      <span v-if="!editMode">{{ user.street }}</span>
+      <span v-if="!editMode">{{ customer.street }}</span>
       <input type="text" v-else v-model="editedUser.street" />
     </div>
     <div>
       <label>House Number:</label>
-      <span v-if="!editMode">{{ user.houseNumber }}</span>
+      <span v-if="!editMode">{{ customer.houseNumber }}</span>
       <input type="text" v-else v-model="editedUser.houseNumber" />
     </div>
-    <div v-if="!editMode">
-      <label>Account Status:</label>
-      <span>{{ user.accountStatus }}</span>
-    </div>
-    <div v-else>
-      <label>Account Status:</label>
-      <select v-model="editedUser.accountStatus">
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+    <div>
+      <label>Status:</label>
+      <span v-if="!editMode">{{ customer.active ? 'Active' : 'Inactive' }}</span>
+      <select v-else v-model="editedUser.active">
+        <option :value="true">Active</option>
+        <option :value="false">Inactive</option>
       </select>
     </div>
     <div>
       <button v-if="!editMode" @click="editMode = true">Edit Info</button>
+      <button v-if="!editMode" @click="goBack">Back</button>
       <button id="btnUpdate" v-else @click="cancelEdit">Cancel</button>
-      <button  v-if="editMode" @click="updateInfo">Save Changes</button>
+      <button v-if="editMode" @click="updateInfo">Save Changes</button>
     </div>
   </div>
+  <footerNavigation />
 </template>
 
 <style>
-
-#btnUpdate{
+#btnUpdate {
   margin-right: 150px;
 }
-
 </style>
 
 <script>
+import headerNavigation from '../main/Header.vue'
+import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
+const headerToken = {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("jwt")
+  }
+};
+
 export default {
-  
+  components: {
+    headerNavigation,
+    footerNavigation
+  },
   data() {
     return {
-      user: {},
+      customer: {
+        id: 0,
+        username: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        email: "",
+        street: "",
+        houseNumber: "",
+        postalCode: "",
+        active: true,
+        city: ""
+      },
       editedUser: {},
-      editMode: false,
+      editMode: false
     };
   },
+  mounted() {
+    const encodedId = this.$route.params.id;
+    const decodedId = atob(encodedId);
+    this.getUserInfo(decodedId);
+  },
   methods: {
-    fetchUser() {
+    getUserInfo(userId) {
       axios
-        .get('/users/current')
-        .then((response) => {
-          this.user = response.data;
-          this.editedUser = { ...this.user };
+        .get(`/users/${userId}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt")
+          }
         })
-        .catch((error) => {
-          console.error('Error fetching user information:', error);
-        });
+        .then((res) => {
+          this.customer = res.data;
+          this.getBankAccounts();
+        })
+        .catch(error => console.log(error));
     },
     updateInfo() {
+      console.log(this.editedUser);
+      console.log(this.customer);
+      console.log(this.customer.id);
+      console.log(this.editedUser.id);
+      console.log(this.headerToken);
       axios
-        .put('/users/' + this.user.id, this.editedUser)
+        .put('/users/' + this.customer.id, this.editedUser, headerToken)
         .then((response) => {
           console.log('User information updated successfully!');
-          this.user = { ...this.editedUser };
+          this.customer = { ...this.editedUser };
           this.editMode = false;
+          console.log(this.response)
         })
         .catch((error) => {
           console.error('Error updating user information:', error);
@@ -107,10 +143,10 @@ export default {
     cancelEdit() {
       this.editMode = false;
     },
-  },
-  mounted() {
-    this.fetchUser();
-  },
+    goBack() {
+      this.$router.go(-1); // Go back to the previous page
+    }
+  }
 };
 </script>
 

@@ -18,7 +18,7 @@
 }
 
 .imgcontainer,
-.container {
+.containerLogin {
   width: fit-content;
   display: flex;
   flex-direction: column;
@@ -29,9 +29,11 @@
   margin-top: 250px;
 }
 
-.container {
+.containerLogin {
   padding: 35px;
-  background-color: rgb(255, 255, 255);
+  position: absolute;
+  left: 35%;
+  background-color: rgb(192, 192, 192);
 }
 
 body {
@@ -39,5 +41,7 @@ body {
   background-size: 100%;
 }
 
+#register{
+  margin: 0 auto;
+}
 
-/* background-color: rgb(208, 45, 125); */

@@ -27,6 +27,7 @@ public class User {
     private String city;
 
     private List<Long> bankAccountList;
+    private boolean active;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;

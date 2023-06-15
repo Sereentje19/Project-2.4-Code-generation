@@ -50,7 +50,6 @@
             </div>
         </div>
     </Transition>
-
 </template>
 
 <style>
@@ -148,7 +147,7 @@ export default {
             footerNavigation
         },
     },
-    name: "transactions",
+    name: "withdrawOrDeposit",
     props: {
         id: Number,
     },
@@ -190,10 +189,9 @@ export default {
         };
     },
     mounted() {
-        console.log(this.id);
         this.getUser();
         this.getBankAccount();
-        
+
     },
     methods: {
         fillfield(){
@@ -217,13 +215,14 @@ export default {
                 .catch(error => console.log(error))
         },
         getBankAccount() {
+            const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + this.id, headerToken)
+                .get('/bankaccounts/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.rekening = this.bankAccount.iban;
                     console.log(this.bankAccount);
-                    
+
                 })
                 .catch(error => console.log(error))
         },
@@ -239,16 +238,16 @@ export default {
                 .get('users/pincode/' + this.pincode, headerToken)
                 .then((res) => {
                     console.log(res.data)
-// console.log(this.bankAccount);
+                    // console.log(this.bankAccount);
                     this.withdrawOrDeposit();
                 })
                 .catch((error) => console.log(error));
 
         },
-        withdrawOrDeposit(){
-            if(this.choice == "withdraw"){
+        withdrawOrDeposit() {
+            if (this.choice == "withdraw") {
                 this.withdraw();
-            }else if(this.choice == "deposit"){
+            } else if (this.choice == "deposit") {
                 this.deposit();
             }
             else {
@@ -256,50 +255,52 @@ export default {
                 location.reload();
             }
         },
-        withdraw(){
+        withdraw() {
             let newbalance = this.bankAccount.balance -= this.bedrag;
             this.verifyRequest(newbalance);
             this.bankAccount.balance = newbalance;
-            this.changeBankAcount(); 
+            this.changeBankAcount();
         },
-        deposit(){
+        deposit() {
             let newbalance = this.bankAccount.balance += this.bedrag;
             this.verifyRequest(newbalance);
             this.bankAccount.balance = newbalance;
-            this.changeBankAcount(); 
+            this.changeBankAcount();
         },
-        verifyRequest(newbalance){
-            if(this.bankAccount.accountType[0] == "SAVINGS"){
+        verifyRequest(newbalance) {
+            if (this.bankAccount.accountType[0] == "SAVINGS") {
                 alert("you can't withdraw or deposit from or to a savings account");
                 location.reload();
             }
-            if(this.bankAccount.disabled == true){
+            if (this.bankAccount.disabled == true) {
                 alert("you can't withdraw or deposit from or to a disabled account");
                 location.reload();
             }
-            if(newbalance < this.bankAccount.absoluutLimit || newbalance < 0){
+            if (this.choice == "withdraw" && newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
                 alert("you can't withdraw or deposit more than your absoluut limit");
                 location.reload();
             }
             var dailylimit = this.user.dailyLimit - this.bedrag;
-            if(dailylimit < 0){
+            if (dailylimit < 0) {
                 alert("you can't withdraw or deposit more than your daily limit");
                 location.reload();
             }
-            if(this.rekening == "" || this.bedrag == 0 || this.choice == ""){
+            if (this.rekening == "" || this.bedrag == 0 || this.choice == "") {
                 alert("you need to fill in all the fields");
-                alert(this.rekening);
-                alert(this.bedrag);
-                alert(this.choice);
+                location.reload();
+            }
+            if(this.bedrag < 0){
+                alert("you can't withdraw or deposit a negative amount");
                 location.reload();
             }
         },
         changeBankAcount() {
+            const decodedId = atob(this.id)
             axios
-                .put("/bankaccounts/change/" + this.id , this.bankAccount, headerToken)
+                .put("/bankaccounts/change/" + decodedId, this.bankAccount, headerToken)
                 .then((res) => {
                     console.log(res.data);
-                    this.$router.push("/transactions/" + this.id);
+                    this.$router.push("/transactions/" + btoa(decodedId));
                 })
                 .catch((error) => console.log(error));
         }
@@ -310,7 +311,7 @@ export default {
 <style>
 @import '../../assets/css/transaction.css';
 
-.structure{
+.structure {
     max-width: 90%;
 }
 </style>

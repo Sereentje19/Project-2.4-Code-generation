@@ -21,9 +21,9 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    BCryptPasswordEncoder encoder;
+    private BCryptPasswordEncoder encoder;
     @Autowired
-    JWTTokenProvider tokenProvider;
+    private JWTTokenProvider tokenProvider;
     @Autowired
     private UserRepository userRepository;
     private List<User> users = new ArrayList<>();
@@ -44,43 +44,17 @@ public class UserService {
         throw new IllegalArgumentException("Username is already taken");
     }
 
-    public LoginResponseDTO login(LoginRequestDTO requestDTO) {
-        User user = userRepository.findUserByUsername(requestDTO.getUsername()).orElseThrow(() -> new IllegalArgumentException("Username not found"));
-        if (encoder.matches(requestDTO.getPassword(), user.getPassword())) {
-            String token = tokenProvider.createToken(user.getUsername(), user.getRoles());
-            LoginResponseDTO response = new LoginResponseDTO(token);
-            response.setToken(token);
-            return response;
-        }
-        throw new IllegalArgumentException("Password is incorrect");
-    }
+
 
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
     }
-
     public User getUser(long id) {
         return userRepository.findById(id).get();
     }
-
-//    public User addUser(User user) {
-//        return userRepository.save(user);
-//    }
-
     public User updateUser(User user) {
         return userRepository.save(user);
     }
-
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
-    }
-
-    public User getByUsernameAndPassword(String username, String password) {
-
-        return userRepository.getByUsernameAndPassword(username, password);
-    }
-
-
     public User checkPincode(String pincode) {
         return userRepository.findUserByPincode(pincode);
     }

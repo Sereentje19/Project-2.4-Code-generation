@@ -38,16 +38,4 @@ public class TransactionService {
     public Transaction UpdateTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);
     }
-    public void DeleteTransaction(long id) {
-        transactionRepository.deleteById(id);
-    }
-    //public Transaction GetTransactionByAccount(BankAccount bankAccountFrom) {
-    //    return transactionRepositrory.findByBankAccount(bankAccountFrom);
-    //}
-    //public List<Transaction> GetTransactionsByUser(BankAccount bankAccountFrom) {
-    //    return (List<Transaction>)transactionRepositrory.findById(bankAccountFrom);
-    //}
-    //public List<Transaction> addTransaction(Transaction transaction) {
-    //    retur transactionRepositrory.save(transaction);
-    //}
 }
