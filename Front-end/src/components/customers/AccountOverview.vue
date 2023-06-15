@@ -3,13 +3,12 @@
     <headerNavigation />
 
     <div class="container">
-<<<<<<< Updated upstream
       <h2>Personal Info</h2>
       <button @click="goToUserInfo">User Info</button>
       <h3>Bank Accounts</h3>
       <div v-for="account in user.bankAccountList" :key="account.id" @click="goToTransactions(account)">
         <span class="wide-field">{{ account.id }} {{ account.accountType }} {{ account.amount }}</span>
-=======
+
       <div class="user-info-button">
         <h2>{{ user.firstName }} {{ user.lastName }}</h2>
         <button @click="goToUserInfo">User Info</button>
@@ -30,11 +29,11 @@
 
       <div v-else>
         <p>You have no accounts.</p>
->>>>>>> Stashed changes
       </div>
     </div>
 
     <footerNavigation />
+  </div>
   </div>
 </template>
 
