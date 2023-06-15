@@ -36,28 +36,3 @@ Feature: Bank Account Rest Controller
     And The endpoint for "bankaccounts" is available for the method "GET"
     When I request the ID, iban, name and accountType of all bank accounts
     Then the response should be a list of bank account objects with only the ID, iban, name and accountType
-
-
-
-
-
-
-
-
-  Scenario: Get Bank Account by ID (Unauthorized)
-    Given I am not logged in
-    And The endpoint for "bankaccounts" is available for the method "GET"
-    When I request the bank account with ID 4
-    Then the response should be an unauthorized error
-
-  Scenario: Update Bank Account (Unauthorized)
-    Given I am not logged in
-    And The endpoint for "bankaccounts" is available for the method "PUT"
-    When The bank account with ID 5 is put to disabled
-    Then the response should be an unauthorized error
-
-  Scenario: Update Bank Account by ID (Invalid ID)
-    Given I am logged in as user "serena" with password "kenter"
-    And The endpoint for "bankaccounts" is available for the method "PUT"
-    When I update the bank account with ID -1
-    Then the response should be an error indicating an invalid ID

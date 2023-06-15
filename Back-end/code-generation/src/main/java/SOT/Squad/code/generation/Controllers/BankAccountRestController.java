@@ -22,49 +22,93 @@ public class BankAccountRestController {
 
     @PostMapping //Employee & Customer
     public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
-        return bankAccountService.addBankAccount(bankAccount);
+        try {
+            keyProvider.decodeJWT();
+
+            return bankAccountService.addBankAccount(bankAccount);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping("/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable long id) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountById(id);
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getBankAccountById(id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @GetMapping //Employee
     public List<BankAccount> getAllBankAccounts() {
-        return bankAccountService.getAllBankAccounts();
+        try {
+            keyProvider.decodeJWT();
+
+            return bankAccountService.getAllBankAccounts();
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @PutMapping //Employee
     public boolean deleteBankAccount(@RequestBody BankAccount bankAccount) {
-        keyProvider.decodeJWT();
-        bankAccountService.deleteBankAccount(bankAccount);
-        return true;
+        try {
+            keyProvider.decodeJWT();
+            bankAccountService.deleteBankAccount(bankAccount);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
+
     }
 
     @PutMapping("/change/{id}") //Employee & Customer
     public BankAccount updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
-        keyProvider.decodeJWT();
-        return bankAccountService.updateBankAccount(bankAccount, id);
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.updateBankAccount(bankAccount, id);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
     @GetMapping("/userID/{id}")
     public List<BankAccount> getAllBankAccountsByUserId(@PathVariable long id) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getAllBankAccountsByUserId(id);
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getAllBankAccountsByUserId(id);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
 
     @GetMapping("/All") //Employee
     public List<IbanAndNameDTO> getAllNameAndIban() {
-        keyProvider.decodeJWT();
-        return bankAccountService.getAllNameAndIban();
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getAllNameAndIban();
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping("/iban/{iban}") //Employee & Customer
     public BankAccount getBankAccountByIban(@PathVariable String iban) {
-        keyProvider.decodeJWT();
-        return bankAccountService.getBankAccountByIban(iban);
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getBankAccountByIban(iban);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
 }

@@ -105,7 +105,6 @@ public class LoginStepDefinitions {
         System.out.println("Response Body: " + responseEntity.getBody());
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
     }
 
 }

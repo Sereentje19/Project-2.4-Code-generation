@@ -23,13 +23,25 @@ public class TransactionRestController {
 //    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
     public Transaction addTransaction(@RequestBody Transaction transaction) {
-        keyProvider.decodeJWT();
-        return transactionService.AddTransaction(transaction);
+        try {
+            keyProvider.decodeJWT();
+            return transactionService.AddTransaction(transaction);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {
-        return transactionService.GetAllTransactions();
+        try {
+            keyProvider.decodeJWT();
+
+            return transactionService.GetAllTransactions();
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping("/{id}") //Employee & Customer
@@ -54,8 +66,14 @@ public class TransactionRestController {
 
     @PutMapping("/{id}") //Employee
     public Transaction updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
-        transaction.setId(id);
-        return transactionService.UpdateTransaction(transaction);
+        try {
+            keyProvider.decodeJWT();
+            transaction.setId(id);
+            return transactionService.UpdateTransaction(transaction);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
 }

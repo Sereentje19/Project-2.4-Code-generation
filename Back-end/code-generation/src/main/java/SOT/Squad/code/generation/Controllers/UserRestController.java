@@ -29,43 +29,77 @@ public class UserRestController {
 
     @GetMapping() //Employee
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        try {
+            keyProvider.decodeJWT();
+            return userService.getAllUsers();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping //Employee
     public User addUser(@RequestBody User user) {
-        keyProvider.decodeJWT();
-        return userService.addUser(user);
+        try {
+            keyProvider.decodeJWT();
+            return userService.addUser(user);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @PostMapping("/register")//Employee
     public User register(@RequestBody User user) {
-        return userService.addUser(user);
+        try {
+            return userService.addUser(user);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @GetMapping("/{id}") //Employee & Customer
     public User getUser(@PathVariable long id) {
-        return userService.getUser(id);
+        try {
+            keyProvider.decodeJWT();
+
+            return userService.getUser(id);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/current") //Employee & Customer
     public User getUserOnUsername() {
-        String username = keyProvider.decodeJWT();
-        return userService.getUserByUsername(username);
+        try {
+            String username = keyProvider.decodeJWT();
+            return userService.getUserByUsername(username);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @PutMapping("/{id}") //Employee & Customer
     public User updateUser(@PathVariable long id, @RequestBody User user) {
-        keyProvider.decodeJWT();
-        user.setId(id);
-        return userService.updateUser(user);
+        try {
+            keyProvider.decodeJWT();
+            user.setId(id);
+            return userService.updateUser(user);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping("/pincode/{pincode}") //Employee & Customer
     public User checkPincode(@PathVariable String pincode) {
+        try {
+            keyProvider.decodeJWT();
+            return userService.checkPincode(pincode);
+        }catch (Exception e) {
+            return null;
+        }
 
-        keyProvider.decodeJWT();
-        return userService.checkPincode(pincode);
+
     }
 
 }

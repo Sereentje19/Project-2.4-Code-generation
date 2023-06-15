@@ -323,6 +323,7 @@ export default {
         },
         postTransaction(){
           this.transaction.date = new Date();
+          alert("i am in");
           console.log(this.transaction);
 
           axios
@@ -343,6 +344,7 @@ export default {
                 if(this.otherBankAccount.accountType[0] == "CURRENT" && this.bankaccount.accountType[0] == "CURRENT" || this.otherBankAccount.accountType[0] == "SAVINGS" && this.bankaccount.accountType[0] == "SAVINGS"){
                     alert("you can't transfer to the same account");
                     location.reload();
+                    return;
                 }
                 
             }
@@ -350,20 +352,24 @@ export default {
                 if(this.otherBankAccount.accountType[0] != "CURRENT"){
                     alert("you can only transfer to a current account");
                     location.reload();
+                    return;
                 }
             }
             if(this.bankaccount.iban == this.transaction.bankAccountTo && this.accountID == ""){
                 alert("please fill in wich accountID");
                 location.reload();
+                return;
             }
             
             if(this.otherBankAccount.disabled == true || this.bankaccount.disabled == true){
                 alert("you can't transfer to and / or from a disabled account");
                 location.reload();
+                return;
             }
             if(this.transaction.amount > this.user.transactionLimit){
                 alert("you can't transfer more than your transaction limit");
                 location.reload();
+                return;
             }
 
             let amount = parseInt(this.transaction.amount);
@@ -374,6 +380,7 @@ export default {
             if(newbalance < this.bankaccount.absoluutLimit || this.newbalance < 0){
                 alert("you will end below your absolute limit or below 0");
                 location.reload();
+                return;
             }
             this.bankaccount.balance = newbalance;
             this.otherBankAccount.balance = othernewbalance;
@@ -382,6 +389,7 @@ export default {
             if(dailylimit < 0){
                 alert("you will end below your daily limit");
                 location.reload();
+                return;
             }
             this.postTransaction();
         },
