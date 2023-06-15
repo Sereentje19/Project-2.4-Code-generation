@@ -74,6 +74,7 @@ export default {
             user: {
                 roles: [],
                 bankAccountList: [],
+                active: true,
             },
             currentUser: '',
             generatedPassword: '',
@@ -213,7 +214,7 @@ export default {
                         .post('users', this.user, headerToken)
                         .then((res) => {
                             this.addBankAccount(res.data.id);
-                            this.$router.push("/");
+                            this.$router.push("/allAccounts");
                         }).catch(error => {
                             if (error.response.status === 403) {
                                 alert("The username you entered is already used");
@@ -230,16 +231,16 @@ export default {
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
-                    this.updateUserBankList(res.data.id);
+                    this.updateUserBankList(res.data.id, res.data.userId);
                     this.$router.push("/allAccounts");
                 })
                 .catch((error) => console.log(error));
         },
-        updateUserBankList(id) {
+        updateUserBankList(id, userId) {
             this.user.bankAccountList.push(id)
 
             axios
-                .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
+                .put('users/' + userId, this.user, headerToken)
                 .then((res) => {
                     console.log(res.data)
                 })
