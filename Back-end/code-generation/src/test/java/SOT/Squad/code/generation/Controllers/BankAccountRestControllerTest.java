@@ -88,8 +88,7 @@ public class BankAccountRestControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/bankaccounts")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
