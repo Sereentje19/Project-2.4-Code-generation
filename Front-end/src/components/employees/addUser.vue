@@ -199,7 +199,7 @@ export default {
                     axios
                         .post('users/register', this.user)
                         .then((res) => {
-                            this.$router.push("/");
+                            this.$router.go(-1);
 
                         }).catch(error => {
                             if (error.response.status === 403) {
