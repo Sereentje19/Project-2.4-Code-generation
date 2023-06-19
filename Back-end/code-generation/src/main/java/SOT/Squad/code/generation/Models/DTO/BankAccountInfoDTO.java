@@ -4,6 +4,7 @@ import SOT.Squad.code.generation.Models.AccountType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import lombok.Data;
+
 import java.util.List;
 
 @Data
@@ -14,4 +15,5 @@ public class BankAccountInfoDTO {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountType;
+
 }

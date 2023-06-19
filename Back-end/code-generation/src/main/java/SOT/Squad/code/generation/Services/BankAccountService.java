@@ -1,12 +1,8 @@
 package SOT.Squad.code.generation.Services;
 
 import SOT.Squad.code.generation.Models.BankAccount;
-<<<<<<< Updated upstream
 import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
-=======
 import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
-import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
->>>>>>> Stashed changes
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +73,15 @@ public class BankAccountService {
     }
 
     public BankAccountInfoDTO getBankAccountInfo(long id) {
-        return bankAccountRepository.findBankAccountById(id);
+        BankAccount bankList = bankAccountRepository.getAllById(id);
+
+        BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
+        bankAccountInfoDTO.setId(bankList.getId());
+        bankAccountInfoDTO.setIban(bankList.getIban());
+        bankAccountInfoDTO.setAccountType(bankList.getAccountType());
+        bankAccountInfoDTO.setCurrencies(bankList.getCurrencies());
+
+        return bankAccountInfoDTO;
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {

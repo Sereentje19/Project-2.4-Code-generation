@@ -129,7 +129,7 @@ export default {
             {
                 id: 0,
                 iban: '',
-                currencies: [],
+                currencies: '',
                 accountType: [],
             },
             balanceFilter:
@@ -149,7 +149,6 @@ export default {
                 .get('/bankaccounts/info/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
-                    console.log(res.data)
                     this.getTransactions();
                 })
                 .catch(error => console.log(error))

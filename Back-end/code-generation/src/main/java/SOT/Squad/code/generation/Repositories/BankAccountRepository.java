@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BankAccountRepository extends CrudRepository<BankAccount, Long> {
+public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
-    public Iterable<BankAccount> getAllByIban(String iban);
+//    public Iterable<BankAccount> getAllByIban(String iban);
 
     List<BankAccount> getAllByUserId(long id);
 
@@ -23,14 +23,5 @@ public interface BankAccountRepository extends CrudRepository<BankAccount, Long>
 
     //create a method to find a bank account by iban
     public BankAccount findFirstByIban(String iban);
-
-//    @Query("SELECT NEW SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO(b.id, b.iban, b.currencies, b.accountType) FROM BankAccount b WHERE b.id = :id")
-//    List<BankAccountInfoDTO> findBankAccountInfo(@Param("id") Long id);
-
-//    @Query("SELECT b.id, b.iban, b.currencies, b.accountType FROM BankAccount b WHERE b.id = :id")
-//    BankAccountInfoDTO findBankAccountInfo(@Param("id") Long id);
-
-    public BankAccountInfoDTO findBankAccountById(long id);
-
 
 }
