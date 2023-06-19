@@ -68,6 +68,7 @@ export default {
                             this.$router.push(`/question`);
                         }
                         else {
+                            localStorage.setItem("role", "CUSTOMER")
                             this.$router.push(`/customerAccountOverview`);
                         }
 

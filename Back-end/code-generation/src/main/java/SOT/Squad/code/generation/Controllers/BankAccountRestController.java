@@ -2,7 +2,12 @@ package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.BankAccount;
+<<<<<<< Updated upstream
 import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
+=======
+import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
+import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
+>>>>>>> Stashed changes
 import SOT.Squad.code.generation.Services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -101,6 +106,16 @@ public class BankAccountRestController {
             return null;
         }
 
+    }
+
+    @GetMapping("/info/{id}") //Employee
+    public BankAccountInfoDTO getBankAccountInfo(@PathVariable long id) {
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getBankAccountInfo(id);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
 

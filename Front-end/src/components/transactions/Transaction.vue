@@ -8,19 +8,21 @@
                     <div class="accountNumber">
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
-                    <div v-for="role in this.user.roles" class="groupOptions">
-                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
+                    <div class="groupOptions">
+                        <div v-if="this.roleUser == 'CUSTOMER'"
+                            class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
+                        <div v-if="this.roleUser == 'CUSTOMER'"
+                            class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
                         </div>
-                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
-                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
                         <div class="option">
                             <button class="btn" @click="createTransaction()">
                                 Transaction
@@ -28,7 +30,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="rowBelow">
                     <div class="options" id="datepicker">
                         <h4>From</h4>&nbsp;&nbsp;
@@ -110,11 +112,10 @@ export default {
     },
     data() {
         return {
+            searchQuery: '',
+            fromDate: null,
+            toDate: null,
             roleUser: localStorage.getItem("role"),
-            balanceFilter: {
-                comparison: '',
-                value: null,
-            },
             transactions: [
                 {
                     id: '',
@@ -131,43 +132,24 @@ export default {
                 currencies: [],
                 accountType: [],
             },
-            user:
+            balanceFilter:
             {
-                roles: [],
+                comparison: '',
+                value: null,
             },
-            searchQuery: '',
-            fromDate: null,
-            toDate: null,
         };
     },
     mounted() {
-        this.getUser();
         this.getBankAccount();
     },
     methods: {
-        WithDrawOrDeposit() {
-            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.id));
-        },
-        createTransaction() {
-            this.$router.push("/customer/createtransactions/" + btoa(this.bankAccount.id));
-        },
-        ViewTransactions(id) {
-            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
-        },
-        getUser() {
-            axios
-                .get('users/current', headerToken)
-                .then((res) => {
-                    this.user = res.data;
-                })
-                .catch(error => console.log(error));
-        },
         getBankAccount() {
             const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + decodedId, headerToken)
+                .get('/bankaccounts/info/' + decodedId, headerToken)
                 .then((res) => {
                     this.bankAccount = res.data;
+                    console.log(res.data)
                     this.getTransactions();
                 })
                 .catch(error => console.log(error))
@@ -179,6 +161,15 @@ export default {
                     this.transactions = res.data;
                 })
                 .catch(error => console.log(error))
+        },
+        WithDrawOrDeposit() {
+            this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.id));
+        },
+        createTransaction() {
+            this.$router.push("/customer/createtransactions/" + btoa(this.bankAccount.id));
+        },
+        ViewTransactions(id) {
+            this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
         },
     },
     computed: {
