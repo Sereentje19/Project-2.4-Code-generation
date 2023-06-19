@@ -10,11 +10,6 @@
                 <div class="groupOptions">
                     <div class="option"></div>
                     <div class="option"></div>
-                    <!-- <div v-for="role in this.user.roles" class="option">
-                        <button v-if="role == 'EMPLOYEE'" class="btn">
-                            Delete 
-                        </button>
-                    </div> -->
                 </div>
             </div>
             <div id="padding">
@@ -24,9 +19,11 @@
                     <div class="bodyInfoText"> <b>Description:</b> {{ this.transaction.description }}</div>
                     <div class="bodyInfoText"> <b>payment reference:</b> {{ this.transaction.paymentReference }}</div>
                     <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.bankAccountFrom }}</div>
-                    <div v-for="accFrom in this.transaction.accountTypeFrom" class="bodyInfoText"> <b>Account type from:</b> {{ accFrom }} </div>
+                    <div v-for="accFrom in this.transaction.accountTypeFrom" class="bodyInfoText"> <b>Account type from:</b>
+                        {{ accFrom }} </div>
                     <div class="bodyInfoText"> <b>Bank account to:</b> {{ this.transaction.bankAccountTo }}</div>
-                    <div v-for="accTo in this.transaction.accountTypeTo" class="bodyInfoText"> <b>Account type to:</b> {{ accTo }}</div>
+                    <div v-for="accTo in this.transaction.accountTypeTo" class="bodyInfoText"> <b>Account type to:</b> {{
+                        accTo }}</div>
                 </div>
             </div>
         </div>
@@ -78,39 +75,15 @@ export default {
                 bankAccountTo: '',
                 paymentReference: ''
             },
-            user:
-            {
-                id: 0,
-                username: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                email: '',
-                street: '',
-                houseNumber: '',
-                postalCode: '',
-                city: '',
-                bankAccountList: [],
-                roles: [],
-            },
         };
     },
     mounted() {
-        this.getUser();
+        this.getTransaction();
     },
     methods: {
-        getUser() {
-            axios
-                .get('users/current', headerToken)
-                .then((res) => {
-                    this.user = res.data;
-                    this.getTransaction();
-                })
-                .catch(error => console.log(error));
-        },
         getTransaction() {
             const decodedId = atob(this.id)
+
             axios
                 .get('transactions/' + decodedId, headerToken)
                 .then((res) => {
