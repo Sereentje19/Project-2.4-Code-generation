@@ -118,10 +118,7 @@ export default {
             transactions: [
                 {
                     id: '',
-                    description: '',
                     amount: '',
-                    accountTypeFrom: '',
-                    accountTypeTo: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',
                     date: '',
@@ -131,26 +128,11 @@ export default {
             {
                 id: 0,
                 iban: '',
-                balance: '',
-                userId: 0,
-                disabled: '',
                 currencies: [],
                 accountType: [],
             },
             user:
             {
-                id: 0,
-                username: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                email: '',
-                street: '',
-                houseNumber: '',
-                postalCode: '',
-                city: '',
-                bankAccountList: [],
                 roles: [],
             },
             searchQuery: '',
