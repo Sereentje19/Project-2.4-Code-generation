@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class IbanAndNameDTO {
+public class BankDropDownDTO {
     private long id;
     private String Name;
     private String Iban;

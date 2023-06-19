@@ -1,7 +1,7 @@
 package SOT.Squad.code.generation.Services;
 
 import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
+import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +39,28 @@ public class BankAccountService {
         bankAccountRepository.save(bankAccount);
     }
 
-    public List<IbanAndNameDTO> getAllNameAndIban() {
-        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
-        List<IbanAndNameDTO> dtoList = new ArrayList<>();
+    public List<BankDropDownDTO> getAllNameAndIban(List<BankAccount> bankList) {
+//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
+        List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 1; i < bankList.size(); i++) {
-            IbanAndNameDTO ibanAndNameDTO = new IbanAndNameDTO();
+            BankDropDownDTO ibanAndNameDTO = new BankDropDownDTO();
+            ibanAndNameDTO.setIban(bankList.get(i).getIban());
+            User user = (User)userService.getUser(bankList.get(i).getUserId());
+            ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
+            ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
+            ibanAndNameDTO.setId(bankList.get(i).getId());
+            dtoList.add(ibanAndNameDTO);
+        }
+        return dtoList;
+    }
+
+    public List<BankDropDownDTO> getAllNameAndIbanFirst(List<BankAccount> bankList) {
+//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
+        List<BankDropDownDTO> dtoList = new ArrayList<>();
+
+        for (int i = 0; i < bankList.size(); i++) {
+            BankDropDownDTO ibanAndNameDTO = new BankDropDownDTO();
             ibanAndNameDTO.setIban(bankList.get(i).getIban());
             User user = (User)userService.getUser(bankList.get(i).getUserId());
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());

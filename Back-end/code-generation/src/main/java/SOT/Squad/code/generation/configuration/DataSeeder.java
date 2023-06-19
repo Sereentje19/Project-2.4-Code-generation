@@ -59,6 +59,6 @@ public class DataSeeder implements ApplicationRunner {
         transactionService.AddTransaction(new Transaction(7, "test", 90,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(8, "test", 10,  "NL12INHO0123456787", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(9, "test", 1.8,  "NL12INHO0123456787", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(10, "test", 10.20,  "NL12INHO0123456787", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
+        transactionService.AddTransaction(new Transaction(0, "test", 10.20,  "NL12INHO0123456787", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),user1));
     }
 }

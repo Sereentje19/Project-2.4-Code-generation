@@ -55,7 +55,11 @@ public class UserService {
     public User updateUser(User user) {
         return userRepository.save(user);
     }
-    public User checkPincode(String pincode) {
-        return userRepository.findUserByPincode(pincode);
+    public boolean checkPincode(String pincode) {
+        User user = userRepository.findUserByPincode(pincode);
+        if(user != null || user.getId() != 0){
+            return true;
+        }
+        return false;
     }
 }

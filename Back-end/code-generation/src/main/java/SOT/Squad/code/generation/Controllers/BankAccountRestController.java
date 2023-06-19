@@ -2,11 +2,12 @@ package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
+import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
 import SOT.Squad.code.generation.Services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -37,6 +38,19 @@ public class BankAccountRestController {
         try {
             keyProvider.decodeJWT();
             return bankAccountService.getBankAccountById(id);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+    @GetMapping("/dto/{id}") //Employee & Customer
+    public List<BankDropDownDTO> getAccountDtoById(@PathVariable long id) {
+        try {
+            keyProvider.decodeJWT();
+            List<BankAccount> bankList = new ArrayList<>();
+            bankList.add(bankAccountService.getBankAccountById(id));
+//            return bankList;
+            return bankAccountService.getAllNameAndIbanFirst(bankList);
         }catch (Exception e){
             return null;
         }
@@ -78,10 +92,11 @@ public class BankAccountRestController {
 
     }
     @GetMapping("/userID/{id}")
-    public List<BankAccount> getAllBankAccountsByUserId(@PathVariable long id) {
+    public List<BankDropDownDTO> getAllBankAccountsByUserId(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getAllBankAccountsByUserId(id);
+            List<BankAccount> bankList = bankAccountService.getAllBankAccountsByUserId(id);
+            return bankAccountService.getAllNameAndIbanFirst(bankList);
         }catch (Exception e) {
             return null;
         }
@@ -90,10 +105,11 @@ public class BankAccountRestController {
 
 
     @GetMapping("/All") //Employee
-    public List<IbanAndNameDTO> getAllNameAndIban() {
+    public List<BankDropDownDTO> getAllNameAndIban() {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getAllNameAndIban();
+            List<BankAccount> bankList = bankAccountService.getAllBankAccounts();
+            return bankAccountService.getAllNameAndIban(bankList);
         }catch (Exception e) {
             return null;
         }
@@ -101,10 +117,12 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/iban/{iban}") //Employee & Customer
-    public BankAccount getBankAccountByIban(@PathVariable String iban) {
+    public List<BankDropDownDTO> getBankAccountByIban(@PathVariable String iban) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getBankAccountByIban(iban);
+            List<BankAccount> bankList = new ArrayList<>();
+            bankList.add(bankAccountService.getBankAccountByIban(iban));
+            return bankAccountService.getAllNameAndIbanFirst(bankList);
         }catch (Exception e) {
             return null;
         }

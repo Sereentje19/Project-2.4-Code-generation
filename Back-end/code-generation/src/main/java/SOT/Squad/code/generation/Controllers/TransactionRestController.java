@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.Controllers;
 
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.AccountType;
+import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class TransactionRestController {
 
 //    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
-    public Transaction addTransaction(@RequestBody Transaction transaction) {
+    public Transaction addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         try {
             keyProvider.decodeJWT();
-            return transactionService.AddTransaction(transaction);
+            return transactionService.validateTransaction(transactionRequestDTO);
         }catch (Exception e) {
             return null;
         }

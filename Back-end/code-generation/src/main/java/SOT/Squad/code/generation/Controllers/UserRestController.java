@@ -91,12 +91,12 @@ public class UserRestController {
     }
 
     @GetMapping("/pincode/{pincode}") //Employee & Customer
-    public User checkPincode(@PathVariable String pincode) {
+    public boolean checkPincode(@PathVariable String pincode) {
         try {
             keyProvider.decodeJWT();
             return userService.checkPincode(pincode);
         }catch (Exception e) {
-            return null;
+            return false;
         }
 
 
