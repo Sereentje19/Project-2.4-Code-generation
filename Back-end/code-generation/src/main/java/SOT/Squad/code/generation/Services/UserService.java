@@ -29,6 +29,7 @@ public class UserService {
     }
 
     public User addUser(User user) {
+
         if (userRepository.findUserByUsername(user.getUsername()).isEmpty()) {
             user.setPassword(encoder.encode(user.getPassword()));
             return userRepository.save(user);

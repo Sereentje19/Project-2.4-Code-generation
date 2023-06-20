@@ -165,7 +165,9 @@ export default {
                     .post('users/register', this.user)
                     .then((res) => {
                         this.$router.go(-1);
-                    }).catch((error) => console.log(error));
+                    }).catch((error) => {
+                        alert(error.response.data);
+                    });
             }
             else {
                 axios
@@ -177,7 +179,9 @@ export default {
                     .then((res) => {
                         this.addBankAccount(res.data.id);
                         this.$router.push("/allAccounts");
-                    }).catch((error) => console.log(error));
+                    }).catch((error) => {
+                        alert(error.response.data);
+                    });
             }
         },
         addBankAccount(userId) {

@@ -6,6 +6,8 @@ import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,17 +39,17 @@ public class UserRestController {
     }
 
     @PostMapping //Employee
-    public User addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody User user) {
         try {
 
-            if (1 > 0) {
-                throw new UserCreateException("User could not be created, please try again later.");
-            }
-            
+//            if (1 > 0) {
+//                throw new UserCreateException("blablabla");
+//            }
+
             keyProvider.decodeJWT();
-            return userService.addUser(user);
-        } catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
