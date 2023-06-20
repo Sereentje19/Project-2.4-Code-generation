@@ -58,7 +58,7 @@ export default {
                 });
             }
 
-            return this.users.filter(user => user.active); // Only display active users
+            return this.users.filter(user => !user.inActive); // Only display active users
         }
     },
     methods: {

@@ -59,7 +59,6 @@ export default {
                 houseNumber: "",
                 postalCode: "",
                 city: "",
-                active: "",
                 bankAccountList: []
             },
         };

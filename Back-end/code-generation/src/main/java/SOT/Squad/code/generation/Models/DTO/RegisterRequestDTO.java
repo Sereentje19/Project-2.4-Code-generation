@@ -1,17 +1,16 @@
-package SOT.Squad.code.generation.Models;
+package SOT.Squad.code.generation.Models.DTO;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import SOT.Squad.code.generation.Models.Role;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "\"Users\"")
-public class User {
+public class RegisterRequestDTO {
     @Id
     @GeneratedValue
     private long id;
@@ -26,12 +25,7 @@ public class User {
     private String postalCode;
     private String city;
 
-    private List<Long> bankAccountList;
-    private boolean inActive;
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
     private String pincode;
-    private double dailyLimit;
-    private int transactionLimit;
 }

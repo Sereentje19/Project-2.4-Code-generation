@@ -86,7 +86,6 @@ export default {
                 pincode: '',
                 roles: [],
                 bankAccountList: [],
-                active: true,
             },
             currentUser: '',
             generatedPassword: '',
