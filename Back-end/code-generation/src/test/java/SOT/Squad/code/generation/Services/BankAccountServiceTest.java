@@ -1,7 +1,7 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

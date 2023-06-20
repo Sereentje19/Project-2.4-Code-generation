@@ -1,7 +1,7 @@
-package SOT.Squad.code.generation.JWT;
+package SOT.Squad.code.generation.jwt;
 
-import SOT.Squad.code.generation.Models.Role;
-import SOT.Squad.code.generation.Services.UserDetailService;
+import SOT.Squad.code.generation.models.Role;
+import SOT.Squad.code.generation.services.UserDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Date;
 import java.util.List;

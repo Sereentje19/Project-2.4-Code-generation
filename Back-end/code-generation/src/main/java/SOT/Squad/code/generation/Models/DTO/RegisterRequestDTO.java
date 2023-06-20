@@ -1,6 +1,6 @@
-package SOT.Squad.code.generation.Models.DTO;
+package SOT.Squad.code.generation.models.dto;
 
-import SOT.Squad.code.generation.Models.Role;
+import SOT.Squad.code.generation.models.Role;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -1,7 +1,5 @@
-package SOT.Squad.code.generation.Generators;
+package SOT.Squad.code.generation.generators;
 
-import SOT.Squad.code.generation.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

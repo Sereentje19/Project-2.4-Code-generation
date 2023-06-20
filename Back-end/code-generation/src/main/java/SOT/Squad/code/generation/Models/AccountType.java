@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.Models;
+package SOT.Squad.code.generation.models;
 
 import org.springframework.security.core.GrantedAuthority;
 

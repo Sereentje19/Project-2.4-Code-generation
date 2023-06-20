@@ -1,9 +1,9 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Services.LoginService;
+import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
+import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
+import SOT.Squad.code.generation.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package SOT.Squad.code.generation.Generators;
+package SOT.Squad.code.generation.generators;
 
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

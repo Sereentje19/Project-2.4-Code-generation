@@ -1,10 +1,8 @@
-package SOT.Squad.code.generation.Repositories;
+package SOT.Squad.code.generation.repositories;
 
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.Transaction;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package SOT.Squad.code.generation.configuration;
 
-import SOT.Squad.code.generation.JWT.JWTTokenFilter;
+import SOT.Squad.code.generation.jwt.JWTTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

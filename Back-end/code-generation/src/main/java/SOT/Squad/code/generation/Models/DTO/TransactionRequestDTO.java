@@ -1,6 +1,6 @@
-package SOT.Squad.code.generation.Models.DTO;
+package SOT.Squad.code.generation.models.dto;
 
-import SOT.Squad.code.generation.Models.User;
+import SOT.Squad.code.generation.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

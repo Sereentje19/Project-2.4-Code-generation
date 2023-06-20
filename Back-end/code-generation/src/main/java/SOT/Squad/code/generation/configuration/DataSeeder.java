@@ -1,9 +1,9 @@
 package SOT.Squad.code.generation.configuration;
 
-import SOT.Squad.code.generation.Models.*;
-import SOT.Squad.code.generation.Services.BankAccountService;
-import SOT.Squad.code.generation.Services.TransactionService;
-import SOT.Squad.code.generation.Services.UserService;
+import SOT.Squad.code.generation.models.*;
+import SOT.Squad.code.generation.services.BankAccountService;
+import SOT.Squad.code.generation.services.TransactionService;
+import SOT.Squad.code.generation.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

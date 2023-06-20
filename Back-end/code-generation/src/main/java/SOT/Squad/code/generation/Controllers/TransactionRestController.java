@@ -1,11 +1,11 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.TransactionResponseDTO;
-import SOT.Squad.code.generation.Models.Transaction;
-import SOT.Squad.code.generation.Services.TransactionService;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
+import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
+import SOT.Squad.code.generation.models.Transaction;
+import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

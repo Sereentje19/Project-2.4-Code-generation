@@ -1,6 +1,6 @@
-package SOT.Squad.code.generation.Models.DTO;
+package SOT.Squad.code.generation.models.dto;
 
-import SOT.Squad.code.generation.Models.AccountType;
+import SOT.Squad.code.generation.models.AccountType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import lombok.Data;

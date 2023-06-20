@@ -1,11 +1,11 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
-import SOT.Squad.code.generation.Generators.IbanGenerator;
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
-import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.generators.IbanGenerator;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
+import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,20 +1,16 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
 
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
-import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
-import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.TransactionResponseDTO;
-import SOT.Squad.code.generation.Models.Transaction;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Repositories.TransactionRepository;
-import com.fasterxml.jackson.core.PrettyPrinter;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
+import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
+import SOT.Squad.code.generation.models.Transaction;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Repositories.UserRepository;
+import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
+import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
