@@ -1,9 +1,13 @@
 package SOT.Squad.code.generation.models;
 
+import SOT.Squad.code.generation.exceptions.UserCreateException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.List;
 
 @Data
@@ -34,4 +38,8 @@ public class User {
     private String pincode;
     private double dailyLimit;
     private int transactionLimit;
+
+
+
+
 }

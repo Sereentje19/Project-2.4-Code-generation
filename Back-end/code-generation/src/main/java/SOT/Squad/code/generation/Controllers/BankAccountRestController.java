@@ -1,15 +1,21 @@
 package SOT.Squad.code.generation.controllers;
 
+import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
 import SOT.Squad.code.generation.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -22,17 +28,27 @@ public class BankAccountRestController {
     @Autowired
     private BankAccountService bankAccountService;
 
-    @PostMapping //Employee & Customer
-    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+//    @PostMapping //Employee & Customer
+//    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+//        try {
+//            keyProvider.decodeJWT();
+//            return bankAccountService.addBankAccount(bankAccount);
+//        } catch (UserCreateException e) {
+//            return e;
+//        }
+//    }
+
+    @PostMapping // Employee & Customer
+    public ResponseEntity<?> addBankAccount(@RequestBody BankAccount bankAccount) {
         try {
             keyProvider.decodeJWT();
-
-            return bankAccountService.addBankAccount(bankAccount);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.addBankAccount(bankAccount));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
+
+
 
     @GetMapping("/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable long id) {

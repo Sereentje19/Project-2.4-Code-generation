@@ -111,39 +111,13 @@ export default {
         this.checkUser();
     },
     methods: {
-        // checkFieldsNotEmpty() {
-        //     if (!this.user.password || this.user.password.length < 8) {
-        //         alert("Password has to be at least 8 characters.");
-        //         return false;
-        //     }
-        //     else if (!this.user.username || this.user.username.length < 5) {
-        //         alert("Username has to be at least 5 characters.");
-        //         return false;
-        //     }
-        //     else if (!this.user.pincode || !/^\d{4}$/.test(this.user.pincode)) {
-        //         alert("Pincode has to be exactly 4 numbers.");
-        //         return false;
-        //     }
-        //     else if (!this.user.email.includes('@')) {
-        //         alert("Please enter a valid email.");
-        //         return false;
-        //     }
-        //     else if (!/^\d{10,}$/.test(this.user.phoneNumber)) {
-        //         alert("Phonenumber has to be at least 10 numbers");
-        //         return false;
-        //     }
-        //     else if (!this.user.firstName || !this.user.lastName
-        //         || !this.user.postalCode || !this.user.city
-        //         || !this.user.street || !/^\d+$/.test(this.user.houseNumber)) {
-        //         alert("Please fill al fields before savings all changes");
-        //         return false;
-        //     }
-        //     else if (this.currentUser == 'EMPLOYEE' && !this.user.accountType) {
-        //         alert("No accounttype is entered");
-        //         return false;
-        //     }
-        //     return true
-        // },
+        checkFieldsNotEmpty() {
+             if (this.currentUser == 'EMPLOYEE' && !this.user.accountType) {
+                alert("No accounttype is entered");
+                return false;
+            }
+            return true
+        },
         checkUser() {
             if (localStorage.getItem("jwt") !== null) {
                 this.currentUser = "EMPLOYEE";
@@ -156,7 +130,8 @@ export default {
         },
         addUser() {
             this.user.accountType = this.selectedAccountType;
-            this.user.roles.push("CUSTOMER");
+            this.user.roles = ["CUSTOMER"];
+            // this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {
 
