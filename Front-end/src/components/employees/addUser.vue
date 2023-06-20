@@ -151,7 +151,7 @@ export default {
             }
         },
         cancel() {
-            this.$router.push("/");
+            this.$router.go(-1);
         },
         checkFieldsNotEmpty() {
             if (!this.user.password || this.user.password.length < 8) {
@@ -192,14 +192,14 @@ export default {
             this.user.accountType = this.selectedAccountType;
             this.user.roles.push("CUSTOMER");
 
-            if (this.checkFieldsNotEmpty()) {
+            // if (this.checkFieldsNotEmpty()) {
                 if (this.currentUser == "CUSTOMER") {
 
                     console.log(this.user)
                     axios
                         .post('users/register', this.user)
                         .then((res) => {
-                            this.$router.push("/");
+                            this.$router.go(-1);
 
                         }).catch(error => {
                             // if (error.response.status === 403) {
@@ -221,7 +221,7 @@ export default {
                             //     alert("The username you entered is already used");
                             // }
                         });
-                }
+                // }
             }
         },
         addBankAccount(userId) {
