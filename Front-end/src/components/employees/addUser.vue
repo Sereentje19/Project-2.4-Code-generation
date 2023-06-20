@@ -199,12 +199,12 @@ export default {
                     axios
                         .post('users/register', this.user)
                         .then((res) => {
-                            this.$router.go(-1);
+                            this.$router.push("/");
 
                         }).catch(error => {
-                            if (error.response.status === 403) {
-                                alert("The username you entered is already used");
-                            }
+                            // if (error.response.status === 403) {
+                            //     alert("The username you entered is already used");
+                            // }
                         });
                 }
                 else {
