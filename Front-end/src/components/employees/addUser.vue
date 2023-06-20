@@ -169,7 +169,11 @@ export default {
             }
             else {
                 axios
-                    .post('users', this.user, headerToken)
+                    .post('users', this.user, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
                     .then((res) => {
                         this.addBankAccount(res.data.id);
                         this.$router.push("/allAccounts");
