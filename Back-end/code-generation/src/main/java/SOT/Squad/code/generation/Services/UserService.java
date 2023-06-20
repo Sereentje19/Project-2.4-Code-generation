@@ -22,8 +22,7 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
-    @Autowired
-    private JWTTokenProvider tokenProvider;
+
     @Autowired
     private UserRepository userRepository;
     private List<User> users = new ArrayList<>();
@@ -43,7 +42,6 @@ public class UserService {
         }
         throw new IllegalArgumentException("Username is already taken");
     }
-
 
 
     public List<User> getAllUsers() {
