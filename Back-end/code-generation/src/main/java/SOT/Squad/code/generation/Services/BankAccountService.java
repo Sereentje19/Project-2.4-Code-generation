@@ -44,15 +44,13 @@ public class BankAccountService {
                     IbanGenerator generator = new IbanGenerator(bankAccountRepository);
                     bankAccount.setIban(generator.getGeneratedIban());
                 }
-                else if(bankAccount.getIban() == null){
-                    if (user.getBankAccountList() != null && !user.getBankAccountList().isEmpty()) {
-                        Long bankAccountId = user.getBankAccountList().get(0);
-                        Optional<BankAccount> optionalAccount = bankAccountRepository.findById(bankAccountId);
+                else if(bankAccount.getIban() == null && !user.getBankAccountList().isEmpty()) {
+                    Long bankAccountId = user.getBankAccountList().get(0);
+                    Optional<BankAccount> optionalAccount = bankAccountRepository.findById(bankAccountId);
 
-                        if (optionalAccount.isPresent()) {
-                            BankAccount account = optionalAccount.get();
-                            bankAccount.setIban(account.getIban());
-                        }
+                    if (optionalAccount.isPresent()) {
+                        BankAccount account = optionalAccount.get();
+                        bankAccount.setIban(account.getIban());
                     }
                 }
                 
@@ -61,6 +59,7 @@ public class BankAccountService {
             if (!bankAccountList.contains(savedBankAccount.getId())) {
                 bankAccountList.add(savedBankAccount.getId());
             }
+
             user.setBankAccountList(bankAccountList);
             userRepository.save(user);
         }
