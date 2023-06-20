@@ -71,6 +71,10 @@ export default {
 
     data() {
         return {
+            currentUser: localStorage.getItem("role"),
+            bankAccount: [],
+            accountTypes: ['CURRENT', 'SAVINGS'],
+            selectedAccountType: '',
             user: {
                 id: 0,
                 username: '',
@@ -84,19 +88,10 @@ export default {
                 postalCode: '',
                 city: '',
                 pincode: '',
-                roles: [],
+                roles: ["CUSTOMER"],
                 bankAccountList: [],
             },
-            currentUser: '',
-            generatedPassword: '',
-            generatedPincode: '',
-            generatedIban: '',
-            ibanExists: false,
-            bankAccount: [],
-            accountTypes: ['CURRENT', 'SAVINGS'],
-            selectedAccountType: '',
-            newBankAccount:
-            {
+            newBankAccount: {
                 id: 0,
                 iban: '',
                 balance: 0,
@@ -107,31 +102,11 @@ export default {
             },
         };
     },
-    mounted() {
-        this.checkUser();
-    },
     methods: {
-        checkFieldsNotEmpty() {
-             if (this.currentUser == 'EMPLOYEE' && !this.user.accountType) {
-                alert("No accounttype is entered");
-                return false;
-            }
-            return true
-        },
-        checkUser() {
-            if (localStorage.getItem("jwt") !== null) {
-                this.currentUser = "EMPLOYEE";
-            } else {
-                this.currentUser = "CUSTOMER";
-            }
-        },
         cancel() {
             this.$router.go(-1);
         },
         addUser() {
-            this.user.accountType = this.selectedAccountType;
-            this.user.roles = ["CUSTOMER"];
-            // this.user.roles.push("CUSTOMER");
 
             if (this.currentUser == "CUSTOMER") {
 
@@ -161,11 +136,15 @@ export default {
         },
         addBankAccount(userId) {
             this.newBankAccount.userId = userId;
-            this.newBankAccount.iban = this.generatedIban;
             this.newBankAccount.accountType.push(this.selectedAccountType);
+            console.log(this.selectedAccountType)
 
             axios
-                .post('bankaccounts', this.newBankAccount, headerToken)
+                .post('bankaccounts', this.newBankAccount, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     console.log(res.data)
                     this.updateUserBankList(res.data.id, res.data.userId);
@@ -176,7 +155,11 @@ export default {
             this.user.bankAccountList.push(id)
 
             axios
-                .put('users/' + userId, this.user, headerToken)
+                .put('users/' + userId, this.user, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     console.log(res.data)
                 })

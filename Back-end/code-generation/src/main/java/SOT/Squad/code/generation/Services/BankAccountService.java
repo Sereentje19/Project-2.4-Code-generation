@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.services;
 
+import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
@@ -21,12 +22,16 @@ public class BankAccountService {
     private BankAccountRepository bankAccountRepository;
 
     public List<BankAccount> getAllBankAccounts() {
-        return (List<BankAccount>) bankAccountRepository.findAll();
+        return bankAccountRepository.findAll();
     }
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
         IbanGenerator generator = new IbanGenerator(bankAccountRepository);
         bankAccount.setIban(generator.getGeneratedIban());
+
+        if (bankAccount.getAccountType() == null) {
+            throw new UserCreateException("Account type is not yet selected");
+        }
 
         return bankAccountRepository.save(bankAccount);
     }

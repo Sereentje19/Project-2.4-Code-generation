@@ -54,11 +54,13 @@ public class UserRestController {
 
 
     @PostMapping("/register")//Employee
-    public User register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            return userService.addUser(user);
-        }catch (Exception e){
-            return null;
+            userService.checkInputFieldsNotEmpty(user); // Check if input fields are empty
+            userService.checkPasswordStrength(user.getPassword()); // Check password strength
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

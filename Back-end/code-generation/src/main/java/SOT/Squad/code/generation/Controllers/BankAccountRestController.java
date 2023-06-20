@@ -28,15 +28,6 @@ public class BankAccountRestController {
     @Autowired
     private BankAccountService bankAccountService;
 
-//    @PostMapping //Employee & Customer
-//    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
-//        try {
-//            keyProvider.decodeJWT();
-//            return bankAccountService.addBankAccount(bankAccount);
-//        } catch (UserCreateException e) {
-//            return e;
-//        }
-//    }
 
     @PostMapping // Employee & Customer
     public ResponseEntity<?> addBankAccount(@RequestBody BankAccount bankAccount) {
