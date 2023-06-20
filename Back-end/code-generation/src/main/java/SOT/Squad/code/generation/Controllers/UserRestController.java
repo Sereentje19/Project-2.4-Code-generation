@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.controllers;
 
+import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.services.UserService;
@@ -38,6 +39,11 @@ public class UserRestController {
     @PostMapping //Employee
     public User addUser(@RequestBody User user) {
         try {
+
+            if (1 > 0) {
+                throw new UserCreateException("User could not be created, please try again later.");
+            }
+            
             keyProvider.decodeJWT();
             return userService.addUser(user);
         } catch (Exception e) {

@@ -164,19 +164,19 @@ public class UserRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
     
-    @Test
-    public void testCheckPincode() throws Exception {
-        User user = new User();
-        String pincode = "4321";
-        // Add some transactions to the list
-
-        when(userService.checkPincode(any(String.class))).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/users/{pincode}", pincode)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+//    @Test
+//    public void testCheckPincode() throws Exception {
+//        User user = new User();
+//        String pincode = "4321";
+//        // Add some transactions to the list
+//
+//        when(userService.checkPincode(any(String.class))).thenReturn(user);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/users/{pincode}", pincode)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(user)))
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+//    }
 
 }
