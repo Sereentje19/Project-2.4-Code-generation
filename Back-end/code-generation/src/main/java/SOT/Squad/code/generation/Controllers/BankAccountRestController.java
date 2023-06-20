@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.controllers;
 
+import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -34,7 +35,7 @@ public class BankAccountRestController {
         try {
             keyProvider.decodeJWT();
             return ResponseEntity.ok(bankAccountService.addBankAccount(bankAccount));
-        } catch (UserCreateException e) {
+        } catch (BankAccountCreateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

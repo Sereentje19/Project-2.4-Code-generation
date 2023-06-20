@@ -45,8 +45,8 @@
     </div>
     <div>
       <label>Status:</label>
-      <span v-if="!editMode">{{ customer.active ? 'Active' : 'Inactive' }}</span>
-      <select v-else v-model="editedUser.active">
+      <span v-if="!editMode">{{ customer.inActive ? 'Active' : 'Inactive' }}</span>
+      <select v-else v-model="editedUser.inActive">
         <option :value="true">Active</option>
         <option :value="false">Inactive</option>
       </select>
@@ -72,12 +72,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-  headers: {
-    Authorization: "Bearer " + localStorage.getItem("jwt")
-  }
-};
-
 export default {
   components: {
     headerNavigation,
@@ -96,7 +90,7 @@ export default {
         street: "",
         houseNumber: "",
         postalCode: "",
-        active: true,
+        inActive: false,
         city: ""
       },
       editedUser: {},
@@ -111,7 +105,11 @@ export default {
   methods: {
     getUserInfo(userId) {
       axios
-        .get(`/users/${userId}`, headerToken)
+        .get(`/users/${userId}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt")
+          }
+        })
         .then((res) => {
           this.customer = res.data;
           this.editedUser = { ...this.customer }; // Initialize editedUser with customer data
@@ -143,7 +141,11 @@ export default {
         return;
       }
       axios
-        .put(`/users/${this.customer.id}`, this.editedUser, headerToken)
+        .put(`/users/${this.customer.id}`, this.editedUser, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwt")
+          }
+        })
         .then((response) => {
           console.log('User information updated successfully!');
           this.customer = { ...this.editedUser }; // Update customer with editedUser data

@@ -37,12 +37,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
     header: {
         name: "header",
@@ -85,11 +79,16 @@ export default {
             const decodedId = atob(this.id)
 
             axios
-                .get('transactions/' + decodedId, headerToken)
+                .get('transactions/' + decodedId, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.transaction = res.data;
-                })
-                .catch(error => console.log(error))
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
 
         },
     },

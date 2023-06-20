@@ -9,14 +9,12 @@
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
                     <div class="groupOptions">
-                        <div v-if="this.roleUser == 'CUSTOMER'"
-                            class="option">
+                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="this.roleUser == 'CUSTOMER'"
-                            class="option">
+                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
@@ -87,12 +85,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
     header: {
         name: "header",
@@ -146,20 +138,30 @@ export default {
         getBankAccount() {
             const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/info/' + decodedId, headerToken)
+                .get('/bankaccounts/info/' + decodedId, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.getTransactions();
-                })
-                .catch(error => console.log(error))
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
         },
         getTransactions() {
             axios
-                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], headerToken)
+                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.transactions = res.data;
-                })
-                .catch(error => console.log(error))
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
         },
         WithDrawOrDeposit() {
             this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.id));

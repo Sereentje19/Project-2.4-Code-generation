@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.services;
 
+import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -7,33 +8,69 @@ import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.repositories.BankAccountRepository;
+import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();
     }
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
-        IbanGenerator generator = new IbanGenerator(bankAccountRepository);
-        bankAccount.setIban(generator.getGeneratedIban());
+        BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+        savedBankAccount.setId(bankAccount.getId());
 
-        if (bankAccount.getAccountType() == null) {
-            throw new UserCreateException("Account type is not yet selected");
+        if (bankAccount.getUserId() != 0) { // Add bank account to user
+            User user = userRepository.findById(bankAccount.getUserId()).get();
+
+                if(user.getBankAccountList() == null && bankAccount.getIban() == null) {
+                    //Generate iban
+                    IbanGenerator generator = new IbanGenerator(bankAccountRepository);
+                    bankAccount.setIban(generator.getGeneratedIban());
+                }
+                else if(bankAccount.getIban() == null){
+                    if (user.getBankAccountList() != null && !user.getBankAccountList().isEmpty()) {
+                        Long bankAccountId = user.getBankAccountList().get(0);
+                        Optional<BankAccount> optionalAccount = bankAccountRepository.findById(bankAccountId);
+
+                        if (optionalAccount.isPresent()) {
+                            BankAccount account = optionalAccount.get();
+                            bankAccount.setIban(account.getIban());
+                        }
+                    }
+                }
+                
+            //Add bank account to user
+            List<Long> bankAccountList = user.getBankAccountList();
+            if (!bankAccountList.contains(savedBankAccount.getId())) {
+                bankAccountList.add(savedBankAccount.getId());
+            }
+            user.setBankAccountList(bankAccountList);
+            userRepository.save(user);
         }
 
-        return bankAccountRepository.save(bankAccount);
+        //Check if AccountType is not empty
+        if (savedBankAccount.getAccountType() == null) {
+            throw new BankAccountCreateException("Account type is not yet selected");
+        }
+
+        return savedBankAccount;
     }
 
     public BankAccount updateBankAccount(BankAccount bankAccount, long id) {
@@ -41,7 +78,7 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
     public BankAccount getBankAccountById(long id) {
-        return (BankAccount)bankAccountRepository.getAllById(id);
+        return bankAccountRepository.getAllById(id);
     }
 
     public void deleteBankAccount(BankAccount bankAccount) {
@@ -50,7 +87,6 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIban(List<BankAccount> bankList) {
-//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 1; i < bankList.size(); i++) {
@@ -66,7 +102,6 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIbanFirst(List<BankAccount> bankList) {
-//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 0; i < bankList.size(); i++) {
@@ -94,10 +129,10 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
-        return (List<BankAccount>) bankAccountRepository.getAllByUserId(id);
+        return bankAccountRepository.getAllByUserId(id);
     }
 
     public BankAccount getBankAccountByIban(String iban) {
-        return (BankAccount) bankAccountRepository.findFirstByIban(iban);
+        return bankAccountRepository.findFirstByIban(iban);
     }
 }

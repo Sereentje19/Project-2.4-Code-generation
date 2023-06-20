@@ -61,12 +61,6 @@
 <script>
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
 
     data() {
@@ -76,7 +70,6 @@ export default {
             accountTypes: ['CURRENT', 'SAVINGS'],
             selectedAccountType: '',
             user: {
-                id: 0,
                 username: '',
                 password: '',
                 firstName: '',
@@ -92,10 +85,7 @@ export default {
                 bankAccountList: [],
             },
             newBankAccount: {
-                id: 0,
-                iban: '',
                 balance: 0,
-                userId: 0,
                 disabled: false,
                 currencies: "EUR",
                 accountType: [],
@@ -107,10 +97,7 @@ export default {
             this.$router.go(-1);
         },
         addUser() {
-
             if (this.currentUser == "CUSTOMER") {
-
-                console.log(this.user)
                 axios
                     .post('users/register', this.user)
                     .then((res) => {
@@ -128,7 +115,6 @@ export default {
                     })
                     .then((res) => {
                         this.addBankAccount(res.data.id);
-                        this.$router.push("/allAccounts");
                     }).catch((error) => {
                         alert(error.response.data);
                     });
@@ -137,7 +123,7 @@ export default {
         addBankAccount(userId) {
             this.newBankAccount.userId = userId;
             this.newBankAccount.accountType.push(this.selectedAccountType);
-            console.log(this.selectedAccountType)
+            console.log(this.newBankAccount)
 
             axios
                 .post('bankaccounts', this.newBankAccount, {
@@ -146,24 +132,10 @@ export default {
                     }
                 })
                 .then((res) => {
-                    console.log(res.data)
-                    this.updateUserBankList(res.data.id, res.data.userId);
                     this.$router.push("/allAccounts");
-                }).catch((error) => console.log(error));
-        },
-        updateUserBankList(id, userId) {
-            this.user.bankAccountList.push(id)
-
-            axios
-                .put('users/' + userId, this.user, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    console.log(res.data)
-                })
-                .catch((error) => console.log(error));
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
         },
     },
 };
