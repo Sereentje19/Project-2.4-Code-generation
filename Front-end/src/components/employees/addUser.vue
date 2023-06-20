@@ -97,39 +97,52 @@ export default {
         };
     },
     mounted() {
-        this.generatePassword();
-        this.generatePincode();
+        // this.generatePassword();
+        // this.generatePincode();
         this.checkUser();
     },
     methods: {
-        generatePassword() {
-            const length = 10;
-            const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
-            let password = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * charset.length);
-                password += charset[randomIndex];
-            }
-            this.generatedPassword = password;
-        },
-        generatePincode() {
-            const length = 4;
-            let pincode = '';
-            for (let i = 0; i < length; i++) {
-                const digit = Math.floor(Math.random() * 10);
-                pincode += digit;
-            }
-            this.generatedPincode = pincode;
-        },
-        generateIBAN() {
-            const countryCode = 'NL';
-            const additionalDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-            const bankCode = 'INHO';
-            const accountNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+        // generatePassword() {
+        //     const length = 10;
+        //     const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
+        //     let password = '';
+        //     for (let i = 0; i < length; i++) {
+        //         const randomIndex = Math.floor(Math.random() * charset.length);
+        //         password += charset[randomIndex];
+        //     }
+        //     this.generatedPassword = password;
+        // },
+        // generatePincode() {
+        //     const length = 4;
+        //     let pincode = '';
+        //     for (let i = 0; i < length; i++) {
+        //         const digit = Math.floor(Math.random() * 10);
+        //         pincode += digit;
+        //     }
+        //     this.generatedPincode = pincode;
+        // },
+        // generateIBAN() {
+        //     const countryCode = 'NL';
+        //     const additionalDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+        //     const bankCode = 'INHO';
+        //     const accountNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
 
-            this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
-            this.checkIbanExists();
-        },
+        //     this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
+        //     this.checkIbanExists();
+        // },
+        // checkIbanExists() {
+        //     axios
+        //         .get('bankaccounts', headerToken)
+        //         .then((res) => {
+        //             this.bankAccount = res.data;
+
+        //             for (const element of this.bankAccount) {
+        //                 if (element.iban == this.generatedIban) {
+        //                     this.generateIBAN();
+        //                 }
+        //             }
+        //         }).catch((error) => console.log(error));
+        // },
         checkUser() {
             if (localStorage.getItem("jwt") !== null) {
                 this.currentUser = "EMPLOYEE";
@@ -139,19 +152,6 @@ export default {
         },
         cancel() {
             this.$router.go(-1);
-        },
-        checkIbanExists() {
-            axios
-                .get('bankaccounts', headerToken)
-                .then((res) => {
-                    this.bankAccount = res.data;
-
-                    for (const element of this.bankAccount) {
-                        if (element.iban == this.generatedIban) {
-                            this.generateIBAN();
-                        }
-                    }
-                }).catch((error) => console.log(error));
         },
         checkFieldsNotEmpty() {
             if (!this.user.password || this.user.password.length < 8) {
@@ -208,7 +208,8 @@ export default {
                         });
                 }
                 else {
-                    this.generateIBAN();
+                    // this.generateIBAN();
+
 
                     axios
                         .post('users', this.user, headerToken)
@@ -216,9 +217,9 @@ export default {
                             this.addBankAccount(res.data.id);
                             this.$router.push("/allAccounts");
                         }).catch(error => {
-                            if (error.response.status === 403) {
-                                alert("The username you entered is already used");
-                            }
+                            // if (error.response.status === 403) {
+                            //     alert("The username you entered is already used");
+                            // }
                         });
                 }
             }
@@ -231,6 +232,7 @@ export default {
             axios
                 .post('bankaccounts', this.newBankAccount, headerToken)
                 .then((res) => {
+                    console.log(res.data)
                     this.updateUserBankList(res.data.id, res.data.userId);
                     this.$router.push("/allAccounts");
                 })

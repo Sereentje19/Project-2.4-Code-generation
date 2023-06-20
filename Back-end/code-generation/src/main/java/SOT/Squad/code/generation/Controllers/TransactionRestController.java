@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.Controllers;
 import SOT.Squad.code.generation.JWT.JWTKeyProvider;
 import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
+import SOT.Squad.code.generation.Models.DTO.TransactionResponseDTO;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,10 @@ public class TransactionRestController {
     }
 
     @GetMapping("/account/{iban}/{type}") //Employee & Customer
-    public List<Transaction> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
+    public List<TransactionResponseDTO> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.findByBankAccountAndAccountType(iban, type);
+            return transactionService.findBankAccountResponse(iban, type);
         }catch (Exception e) {
             return null;
         }

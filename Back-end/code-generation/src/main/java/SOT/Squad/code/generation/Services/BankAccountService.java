@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.Services;
 
+import SOT.Squad.code.generation.Generators.IbanGenerator;
 import SOT.Squad.code.generation.Models.BankAccount;
 import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
 import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
@@ -24,6 +25,9 @@ public class BankAccountService {
     }
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
+        IbanGenerator generator = new IbanGenerator(bankAccountRepository);
+        bankAccount.setIban(generator.getGeneratedIban());
+
         return bankAccountRepository.save(bankAccount);
     }
 

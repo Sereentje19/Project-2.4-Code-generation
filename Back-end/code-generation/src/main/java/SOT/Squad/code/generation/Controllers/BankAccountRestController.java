@@ -62,7 +62,6 @@ public class BankAccountRestController {
     public List<BankAccount> getAllBankAccounts() {
         try {
             keyProvider.decodeJWT();
-
             return bankAccountService.getAllBankAccounts();
         }catch (Exception e) {
             return null;
@@ -123,7 +122,6 @@ public class BankAccountRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping("/iban/{iban}") //Employee & Customer

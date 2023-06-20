@@ -3,7 +3,10 @@ package SOT.Squad.code.generation.Services;
 
 import SOT.Squad.code.generation.Models.AccountType;
 import SOT.Squad.code.generation.Models.BankAccount;
+import SOT.Squad.code.generation.Models.DTO.BankAccountInfoDTO;
+import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
 import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
+import SOT.Squad.code.generation.Models.DTO.TransactionResponseDTO;
 import SOT.Squad.code.generation.Models.Transaction;
 import SOT.Squad.code.generation.Models.User;
 import SOT.Squad.code.generation.Repositories.TransactionRepository;
@@ -36,6 +39,23 @@ public class TransactionService {
     }
     public List<Transaction> findByBankAccountAndAccountType(String iban, List<AccountType> accountType) {
         return transactionRepository.findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(iban, accountType, iban, accountType);
+    }
+
+    public List<TransactionResponseDTO> findBankAccountResponse(String iban, List<AccountType> accountType) {
+        List<Transaction> transactionList = transactionRepository.findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(iban, accountType, iban, accountType);
+        List<TransactionResponseDTO> dtoList = new ArrayList<>();
+
+        for (int i = 0; i < transactionList.size(); i++) {
+            TransactionResponseDTO transactionResponseDTOList = new TransactionResponseDTO();
+            transactionResponseDTOList.setId(transactionList.get(i).getId());
+            transactionResponseDTOList.setAmount(transactionList.get(i).getAmount());
+            transactionResponseDTOList.setBankAccountFrom(transactionList.get(i).getBankAccountFrom());
+            transactionResponseDTOList.setBankAccountTo(transactionList.get(i).getBankAccountTo());
+            transactionResponseDTOList.setDate(transactionList.get(i).getDate());
+            dtoList.add(transactionResponseDTOList);
+        }
+
+        return dtoList;
     }
     public List<Transaction> GetTransactionsByIban(String iban) {
         return transactionRepository.findByBankAccountFromOrBankAccountTo(iban, iban);
