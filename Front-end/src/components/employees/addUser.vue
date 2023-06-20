@@ -151,7 +151,7 @@ export default {
             }
         },
         cancel() {
-            this.$router.go(-1);
+            this.$router.push("/");
         },
         checkFieldsNotEmpty() {
             if (!this.user.password || this.user.password.length < 8) {
