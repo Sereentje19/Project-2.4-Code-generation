@@ -3,8 +3,8 @@
         <h2>Personal Details</h2>
         <div>
             <label>User:</label>
-            <select v-model="this.selectedUser" @change="getAccountType()">
-                <option v-for="user in this.users" :value="user">{{ user.firstName + " " + user.lastName }}</option>
+            <select v-model="this.newBankAccount.userId" @change="getAccountType()">
+                <option v-for="user in this.users" :value="user.id">{{ user.firstName + " " + user.lastName }}</option>
             </select>
         </div>
         <div>
@@ -34,7 +34,6 @@ export default {
     data() {
         return {
             users: [],
-            selectedUser: {},
             generatedIban: '',
             bankAccounts: [],
             accountTypes: [],
@@ -70,7 +69,7 @@ export default {
         },
         getAccountType() {
             axios
-                .get('bankaccounts/accountType/' + this.selectedUser.id, {
+                .get('bankaccounts/accountType/' + this.newBankAccount.userId, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -82,7 +81,6 @@ export default {
                 });
         },
         addBankAccount() {
-            this.newBankAccount.userId = this.selectedUser.id;
             this.newBankAccount.accountType = [this.selectedAccountType];
 
             axios
