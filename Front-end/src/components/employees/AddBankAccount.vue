@@ -34,8 +34,6 @@ export default {
     data() {
         return {
             users: [],
-            generatedIban: '',
-            bankAccounts: [],
             accountTypes: [],
             selectedAccountType: '',
             newBankAccount:
