@@ -50,7 +50,7 @@ export default {
 
                 this.getUser(res.data.token);
             }).catch((error) => {
-                alert(error.response.data.token);
+                alert(error.response.data);
             });
         },
         getUser(token) {
@@ -74,7 +74,7 @@ export default {
 
                     });
                 }).catch((error) => {
-                    alert(error.response.data.token);
+                    alert(error.response.data);
                 });
         },
     }

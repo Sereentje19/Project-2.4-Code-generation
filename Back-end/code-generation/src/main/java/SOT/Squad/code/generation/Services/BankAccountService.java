@@ -37,11 +37,8 @@ public class BankAccountService {
         //Save bank account
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         savedBankAccount.setId(bankAccount.getId());
-
-        //Check if AccountType is not empty
-        if (savedBankAccount.getAccountType() == null || savedBankAccount.getAccountType().equals("")) {
-            throw new BankAccountCreateException("Account type is not yet selected");
-        }else if (bankAccount.getUserId() != 0) {
+        
+        if (bankAccount.getUserId() != 0) {
             //Get user
             User user = userRepository.findById(bankAccount.getUserId()).get();
 
@@ -59,7 +56,7 @@ public class BankAccountService {
             IbanGenerator generator = new IbanGenerator(bankAccountRepository);
             bankAccount.setIban(generator.getGeneratedIban());
         }
-        else if(bankAccount.getIban() == null && !user.getBankAccountList().isEmpty()) {
+        else if(bankAccount.getIban() == null) {
             //Get iban from user
             Long bankAccountId = user.getBankAccountList().get(0);
             BankAccount optionalAccount = bankAccountRepository.findById(bankAccountId).get();

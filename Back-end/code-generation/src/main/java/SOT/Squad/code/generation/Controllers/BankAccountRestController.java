@@ -1,7 +1,6 @@
 package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
-import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -11,13 +10,9 @@ import SOT.Squad.code.generation.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -37,7 +32,7 @@ public class BankAccountRestController {
             keyProvider.decodeJWT();
             return ResponseEntity.ok(bankAccountService.addBankAccount(bankAccount));
         } catch (BankAccountCreateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 

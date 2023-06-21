@@ -31,7 +31,6 @@ public class TransactionRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping() //Employee
@@ -43,7 +42,6 @@ public class TransactionRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping("/{id}") //Employee & Customer

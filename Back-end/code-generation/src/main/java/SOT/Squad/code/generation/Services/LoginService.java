@@ -1,5 +1,7 @@
 package SOT.Squad.code.generation.services;
 
+import SOT.Squad.code.generation.exceptions.InActiveAccountException;
+import SOT.Squad.code.generation.exceptions.InvalidCredentialsException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
 import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
@@ -22,14 +24,16 @@ public class LoginService {
     private UserRepository userRepository;
 
     public LoginResponseDTO login(LoginRequestDTO requestDTO) {
-        User user = userRepository.findUserByUsername(requestDTO.getUsername()).orElseThrow(() -> new IllegalArgumentException("Username not found"));
-        if (encoder.matches(requestDTO.getPassword(), user.getPassword())) {
+        User user = userRepository.findUserByUsername(requestDTO.getUsername()).orElseThrow(() -> new InvalidCredentialsException("Username is incorrect"));
+        if (user.isInActive()) {
+            throw new InActiveAccountException("User is inactive");
+        } else if (encoder.matches(requestDTO.getPassword(), user.getPassword())) {
             String token = tokenProvider.createToken(user.getUsername(), user.getRoles());
             LoginResponseDTO response = new LoginResponseDTO(token);
             response.setToken(token);
             return response;
         }
-        throw new IllegalArgumentException("Password is incorrect");
+        throw new InvalidCredentialsException("Password is incorrect");
     }
 
 }

@@ -74,12 +74,14 @@ export default {
                 })
                 .then((res) => {
                     this.accountTypes = res.data;
+                    this.selectedAccountType = res.data[0];
                 }).catch((error) => {
                     alert(error.response.data);
                 });
         },
         addBankAccount() {
             this.newBankAccount.accountType = [this.selectedAccountType];
+            console.log(this.newBankAccount)
 
             axios
                 .post('bankaccounts', this.newBankAccount, {
