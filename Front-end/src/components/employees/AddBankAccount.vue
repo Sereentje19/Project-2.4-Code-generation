@@ -4,7 +4,7 @@
         <div>
             <label>User:</label>
             <select v-model="this.selectedUser" @change="checkAccountType()">
-                <option v-for="user in this.users" :value="user">{{ user.username }}</option>
+                <option v-for="user in this.users" :value="user">{{ user.firstName + " " + user.lastName }}</option>
             </select>
         </div>
         <div>
@@ -57,15 +57,16 @@ export default {
         },
         getUsers() {
             axios
-                .get('/users', {
+                .get('/users/dropdown', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
                     this.users = res.data;
-                })
-                .catch(error => console.log(error));
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
         checkAccountType() {
             axios
@@ -101,7 +102,9 @@ export default {
                         this.accountTypes = ['SAVINGS']
                     }
 
-                }).catch((error) => console.log(error));
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
         addBankAccount() {
             this.newBankAccount.accountType = [];
@@ -116,9 +119,9 @@ export default {
                 })
                 .then((res) => {
                     this.$router.push("/allAccounts");
-                })
-                .catch((error) => console.log(error));
-
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
 
     },

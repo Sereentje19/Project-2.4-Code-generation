@@ -34,6 +34,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
                 .requestMatchers("/users/{id}").authenticated()
+                .requestMatchers("/users/dropdown").authenticated()
 
                 //transactions
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()

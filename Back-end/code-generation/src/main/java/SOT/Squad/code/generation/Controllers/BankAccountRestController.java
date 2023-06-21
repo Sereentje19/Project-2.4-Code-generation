@@ -50,8 +50,8 @@ public class BankAccountRestController {
         }catch (Exception e){
             return null;
         }
-
     }
+
     @GetMapping("/dto/{id}") //Employee & Customer
     public List<BankDropDownDTO> getAccountDtoById(@PathVariable long id) {
         try {
@@ -63,7 +63,6 @@ public class BankAccountRestController {
         }catch (Exception e){
             return null;
         }
-
     }
 
     @GetMapping //Employee

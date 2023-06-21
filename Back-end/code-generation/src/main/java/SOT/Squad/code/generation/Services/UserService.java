@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,21 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
+    }
+
+    public List<UserDropDownDTO> getAllUserIdsAndNames() {
+        List<User> users = (List<User>) userRepository.findAll();
+        List<UserDropDownDTO> userDropDownDTOList = new ArrayList<>();
+
+        for (User user : users) {
+            UserDropDownDTO userDropDownDTO = new UserDropDownDTO();
+            userDropDownDTO.setId(user.getId());
+            userDropDownDTO.setFirstName(user.getFirstName());
+            userDropDownDTO.setLastName(user.getLastName());
+            userDropDownDTOList.add(userDropDownDTO);
+        }
+
+        return userDropDownDTOList;
     }
     public User getUser(long id) {
         return userRepository.findById(id).get();

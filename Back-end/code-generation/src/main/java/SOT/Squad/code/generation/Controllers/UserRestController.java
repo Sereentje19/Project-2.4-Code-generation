@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.controllers;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,17 @@ public class UserRestController {
         try {
             keyProvider.decodeJWT();
             return userService.getAllUsers();
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/dropdown") //Employee
+    public List<UserDropDownDTO> getAllUserIdsAndNames() {
+        try {
+            keyProvider.decodeJWT();
+            return userService.getAllUserIdsAndNames();
 
         } catch (Exception e) {
             return null;
@@ -104,8 +116,5 @@ public class UserRestController {
         }catch (Exception e) {
             return false;
         }
-
-
     }
-
 }
