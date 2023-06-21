@@ -36,38 +36,44 @@ public class BankAccountService {
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         savedBankAccount.setId(bankAccount.getId());
 
-        if (bankAccount.getUserId() != 0) { // Add bank account to user
-            User user = userRepository.findById(bankAccount.getUserId()).get();
-
-                if(user.getBankAccountList() == null && bankAccount.getIban() == null) {
-                    //Generate iban
-                    IbanGenerator generator = new IbanGenerator(bankAccountRepository);
-                    bankAccount.setIban(generator.getGeneratedIban());
-                }
-                else if(bankAccount.getIban() == null && !user.getBankAccountList().isEmpty()) {
-                    Long bankAccountId = user.getBankAccountList().get(0);
-                    Optional<BankAccount> optionalAccount = bankAccountRepository.findById(bankAccountId);
-
-                    if (optionalAccount.isPresent()) {
-                        BankAccount account = optionalAccount.get();
-                        bankAccount.setIban(account.getIban());
-                    }
-                }
-                
-            //Add bank account to user
-            List<Long> bankAccountList = user.getBankAccountList();
-            if (!bankAccountList.contains(savedBankAccount.getId())) {
-                bankAccountList.add(savedBankAccount.getId());
-            }
-
-            user.setBankAccountList(bankAccountList);
-            userRepository.save(user);
-        }
-
         //Check if AccountType is not empty
         if (savedBankAccount.getAccountType() == null) {
             throw new BankAccountCreateException("Account type is not yet selected");
+        }else if (bankAccount.getUserId() != 0) { // Add bank account to user
+            User user = userRepository.findById(bankAccount.getUserId()).get();
+
+            savedBankAccount  = this.addIbanToBankAccount(bankAccount, user);
+            savedBankAccount  = this.addAccountListToBankAccount(savedBankAccount, user);
         }
+
+        return savedBankAccount;
+    }
+
+    private BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
+    {
+        if(user.getBankAccountList().isEmpty() && bankAccount.getIban() == null) {
+            //Generate iban
+            IbanGenerator generator = new IbanGenerator(bankAccountRepository);
+            bankAccount.setIban(generator.getGeneratedIban());
+        }
+        else if(bankAccount.getIban() == null && !user.getBankAccountList().isEmpty()) {
+            Long bankAccountId = user.getBankAccountList().get(0);
+            BankAccount optionalAccount = bankAccountRepository.findById(bankAccountId).get();
+            bankAccount.setIban(optionalAccount.getIban());
+        }
+
+        return bankAccount;
+    }
+
+    private BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
+    {
+        List<Long> bankAccountList = user.getBankAccountList();
+        if (!bankAccountList.contains(savedBankAccount.getId())) {
+            bankAccountList.add(savedBankAccount.getId());
+        }
+
+        user.setBankAccountList(bankAccountList);
+        userRepository.save(user);
 
         return savedBankAccount;
     }

@@ -25,9 +25,10 @@ public class IbanGenerator {
             String countryCode = "NL";
             String additionalDigits = String.format("%02d", new Random().nextInt(100));
             String bankCode = "INHO";
-            String accountNumber = String.format("%010d", new Random().nextLong() % 10000000000L);
+            String accountNumber = String.format("%08d", new Random().nextLong() % 100000000L);
 
-            generatedIban = countryCode + additionalDigits + bankCode + "0" + accountNumber;
+            generatedIban = countryCode + additionalDigits + bankCode + additionalDigits + accountNumber.substring(0, 8);
+
         } while (checkIbanExists());
     }
 
@@ -40,7 +41,7 @@ public class IbanGenerator {
         List<BankAccount> bankAccountList = bankAccountRepository.findAll();
 
         for (BankAccount bankAccount : bankAccountList) {
-            if (bankAccount.getIban().equals(generatedIban)) {
+            if (bankAccount.getIban() != null && bankAccount.getIban().equals(generatedIban)) {
                 return true;
             }
         }
