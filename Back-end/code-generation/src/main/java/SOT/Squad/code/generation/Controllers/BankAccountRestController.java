@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.controllers;
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
@@ -39,7 +40,6 @@ public class BankAccountRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 
 
     @GetMapping("/{id}") //Employee & Customer

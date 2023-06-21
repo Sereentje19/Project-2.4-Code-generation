@@ -70,9 +70,8 @@ public class UserService {
         if (userRepository.findUserByUsername(user.getUsername()).isEmpty()) {
             user.setPassword(encoder.encode(user.getPassword()));
             return userRepository.save(user);
-        } else {
-            throw new UserCreateException("Username is already taken.");
         }
+        throw new UserCreateException("Username is already taken.");
     }
 
 

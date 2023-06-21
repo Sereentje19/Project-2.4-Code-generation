@@ -33,13 +33,15 @@ public class BankAccountService {
     }
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
+        //Save bank account
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         savedBankAccount.setId(bankAccount.getId());
 
         //Check if AccountType is not empty
-        if (savedBankAccount.getAccountType() == null) {
+        if (savedBankAccount.getAccountType() == null || savedBankAccount.getAccountType().equals("")) {
             throw new BankAccountCreateException("Account type is not yet selected");
-        }else if (bankAccount.getUserId() != 0) { // Add bank account to user
+        }else if (bankAccount.getUserId() != 0) {
+            //Get user
             User user = userRepository.findById(bankAccount.getUserId()).get();
 
             savedBankAccount  = this.addIbanToBankAccount(bankAccount, user);
@@ -57,6 +59,7 @@ public class BankAccountService {
             bankAccount.setIban(generator.getGeneratedIban());
         }
         else if(bankAccount.getIban() == null && !user.getBankAccountList().isEmpty()) {
+            //Get iban from user
             Long bankAccountId = user.getBankAccountList().get(0);
             BankAccount optionalAccount = bankAccountRepository.findById(bankAccountId).get();
             bankAccount.setIban(optionalAccount.getIban());
@@ -67,6 +70,7 @@ public class BankAccountService {
 
     private BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
     {
+        //Add bank account to user
         List<Long> bankAccountList = user.getBankAccountList();
         if (!bankAccountList.contains(savedBankAccount.getId())) {
             bankAccountList.add(savedBankAccount.getId());

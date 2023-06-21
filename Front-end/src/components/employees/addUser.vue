@@ -126,7 +126,7 @@ export default {
             console.log(this.newBankAccount)
 
             axios
-                .post('bankaccounts', this.newBankAccount, {
+                .post('bankaccounts', this.newBankAccount, this.selectedAccountType, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -134,7 +134,7 @@ export default {
                 .then((res) => {
                     this.$router.push("/allAccounts");
                 }).catch((error) => {
-                    alert(error.response.data.token);
+                    alert(error.response.data);
                 });
         },
     },

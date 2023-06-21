@@ -39,7 +39,6 @@ public class UserRestController {
     }
 
 
-
     @PostMapping //Employee
     public ResponseEntity<?> addUser(@RequestBody User user) {
         try {

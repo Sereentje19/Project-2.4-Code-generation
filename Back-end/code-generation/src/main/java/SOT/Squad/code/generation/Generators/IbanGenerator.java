@@ -22,13 +22,13 @@ public class IbanGenerator {
 
     public void generateIban() {
         do {
+            Random random = new Random();
             String countryCode = "NL";
-            String additionalDigits = String.format("%02d", new Random().nextInt(100));
+            long additionalDigits = 10L + ((long) (random.nextDouble() * (99L - 10L)));
             String bankCode = "INHO";
-            String accountNumber = String.format("%08d", new Random().nextLong() % 100000000L);
+            long accountNumber = 10000000L + ((long) (random.nextDouble() * (99999999L - 10000000L)));
 
-            generatedIban = countryCode + additionalDigits + bankCode + additionalDigits + accountNumber.substring(0, 8);
-
+            generatedIban = countryCode + additionalDigits + bankCode + additionalDigits + accountNumber;
         } while (checkIbanExists());
     }
 
