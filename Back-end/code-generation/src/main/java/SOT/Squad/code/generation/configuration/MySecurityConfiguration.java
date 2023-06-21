@@ -50,6 +50,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/bankaccounts/userID/{id}").authenticated()
                 .requestMatchers("/bankaccounts/All").authenticated()
                 .requestMatchers("/bankaccounts/dto/{id}").authenticated()
+                .requestMatchers("/bankaccounts/accountType/{userId}").authenticated()
                 .requestMatchers("/bankaccounts/iban/{iban}").authenticated();
 
 

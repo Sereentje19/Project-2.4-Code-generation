@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.services;
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
+import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
@@ -139,6 +140,28 @@ public class BankAccountService {
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
         return bankAccountRepository.getAllByUserId(id);
+    }
+
+    public List<AccountType> getAccountTypes(long userId) {
+        List<BankAccount> bankaccList = bankAccountRepository.getAllByUserId(userId);
+        List<AccountType> accountTypes = new ArrayList<>();
+        accountTypes.add(AccountType.CURRENT);
+        accountTypes.add(AccountType.SAVINGS);
+
+        int counter = 0;
+
+        for (int i = 0; i < bankaccList.size(); i++) {
+            if(bankaccList.get(i).getAccountType().contains(AccountType.CURRENT)){
+                accountTypes.remove(AccountType.CURRENT);
+                continue;
+            }
+            else if(bankaccList.get(i).getAccountType().contains(AccountType.SAVINGS) && counter == 4){
+                accountTypes.remove(AccountType.SAVINGS);
+            }
+
+            counter++;
+        }
+        return accountTypes;
     }
 
     public BankAccount getBankAccountByIban(String iban) {

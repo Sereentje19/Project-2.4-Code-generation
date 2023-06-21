@@ -3,7 +3,7 @@
         <h2>Personal Details</h2>
         <div>
             <label>User:</label>
-            <select v-model="this.selectedUser" @change="checkAccountType()">
+            <select v-model="this.selectedUser" @change="getAccountType()">
                 <option v-for="user in this.users" :value="user">{{ user.firstName + " " + user.lastName }}</option>
             </select>
         </div>
@@ -37,7 +37,7 @@ export default {
             selectedUser: {},
             generatedIban: '',
             bankAccounts: [],
-            accountTypes: ['CURRENT', 'SAVINGS'],
+            accountTypes: [],
             selectedAccountType: '',
             newBankAccount:
             {
@@ -68,48 +68,22 @@ export default {
                     alert(error.response.data);
                 });
         },
-        checkAccountType() {
+        getAccountType() {
             axios
-                .get('bankaccounts', {
+                .get('bankaccounts/accountType/' + this.selectedUser.id, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
-                    this.bankAccount = res.data;
-                    let savingsAccountsCount = 5;
-                    let currentsAccountsCount = 1;
-
-                    for (const element of this.bankAccount) {
-                        if (element.userId == this.selectedUser.id) {
-
-                            if (element.accountType == 'CURRENT') {
-                                currentsAccountsCount--;
-                            }
-                            else if (element.accountType == 'SAVINGS') {
-                                savingsAccountsCount--;
-                            }
-                        }
-                    }
-
-                    if (savingsAccountsCount <= 0 && currentsAccountsCount <= 0) {
-                        this.accountTypes = null
-                    }
-                    else if (savingsAccountsCount <= 0) {
-                        this.accountTypes = ['CURRENT']
-                    }
-                    else if (currentsAccountsCount <= 0) {
-                        this.accountTypes = ['SAVINGS']
-                    }
-
+                    this.accountTypes = res.data;
                 }).catch((error) => {
                     alert(error.response.data);
                 });
         },
         addBankAccount() {
-            this.newBankAccount.accountType = [];
-            this.newBankAccount.accountType.push(this.selectedAccountType);
             this.newBankAccount.userId = this.selectedUser.id;
+            this.newBankAccount.accountType = [this.selectedAccountType];
 
             axios
                 .post('bankaccounts', this.newBankAccount, {

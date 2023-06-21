@@ -122,8 +122,7 @@ export default {
         },
         addBankAccount(userId) {
             this.newBankAccount.userId = userId;
-            this.newBankAccount.accountType.push(this.selectedAccountType);
-            console.log(this.newBankAccount)
+            this.newBankAccount.accountType = [this.selectedAccountType];
 
             axios
                 .post('bankaccounts', this.newBankAccount, this.selectedAccountType, {

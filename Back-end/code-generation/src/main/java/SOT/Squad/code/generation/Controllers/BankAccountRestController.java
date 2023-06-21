@@ -119,6 +119,16 @@ public class BankAccountRestController {
         }
     }
 
+    @GetMapping("/accountType/{userId}") //Employee
+    public List<AccountType> getAccountTypes(@PathVariable long userId) {
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getAccountTypes(userId);
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
 
     @GetMapping("/All") //Employee
     public List<BankDropDownDTO> getAllNameAndIban() {
