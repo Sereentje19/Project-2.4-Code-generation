@@ -1,12 +1,16 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
-import SOT.Squad.code.generation.Services.BankAccountService;
+import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
+import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
+import SOT.Squad.code.generation.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +25,17 @@ public class BankAccountRestController {
     @Autowired
     private BankAccountService bankAccountService;
 
-    @PostMapping //Employee & Customer
-    public BankAccount addBankAccount(@RequestBody BankAccount bankAccount) {
+
+    @PostMapping // Employee & Customer
+    public ResponseEntity<?> addBankAccount(@RequestBody BankAccount bankAccount) {
         try {
             keyProvider.decodeJWT();
-
-            return bankAccountService.addBankAccount(bankAccount);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.addBankAccount(bankAccount));
+        } catch (BankAccountCreateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
-
     }
+
 
     @GetMapping("/{id}") //Employee & Customer
     public BankAccount getAccountById(@PathVariable long id) {
@@ -41,8 +45,8 @@ public class BankAccountRestController {
         }catch (Exception e){
             return null;
         }
-
     }
+
     @GetMapping("/dto/{id}") //Employee & Customer
     public List<BankDropDownDTO> getAccountDtoById(@PathVariable long id) {
         try {
@@ -54,14 +58,12 @@ public class BankAccountRestController {
         }catch (Exception e){
             return null;
         }
-
     }
 
     @GetMapping //Employee
     public List<BankAccount> getAllBankAccounts() {
         try {
             keyProvider.decodeJWT();
-
             return bankAccountService.getAllBankAccounts();
         }catch (Exception e) {
             return null;
@@ -89,8 +91,8 @@ public class BankAccountRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
+
     @GetMapping("/userID/{id}")
     public List<BankDropDownDTO> getAllBankAccountsByUserId(@PathVariable long id) {
         try {
@@ -100,7 +102,26 @@ public class BankAccountRestController {
         }catch (Exception e) {
             return null;
         }
+    }
 
+    @GetMapping("/info/{id}") //Employee
+    public BankAccountInfoDTO getBankAccountInfo(@PathVariable long id) {
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getBankAccountInfo(id);
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/accountType/{userId}") //Employee
+    public List<AccountType> getAccountTypes(@PathVariable long userId) {
+        try {
+            keyProvider.decodeJWT();
+            return bankAccountService.getAccountTypes(userId);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
 
@@ -113,7 +134,6 @@ public class BankAccountRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping("/iban/{iban}") //Employee & Customer

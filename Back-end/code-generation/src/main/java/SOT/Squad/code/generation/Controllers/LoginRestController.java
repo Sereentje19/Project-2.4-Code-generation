@@ -1,9 +1,14 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Services.LoginService;
+import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.exceptions.InActiveAccountException;
+import SOT.Squad.code.generation.exceptions.InvalidCredentialsException;
+import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
+import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
+import SOT.Squad.code.generation.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +28,9 @@ public class LoginRestController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO) {
         try {
-            LoginResponseDTO response = loginService.login(requestDTO);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO("Invalid username or password"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("An error occurred"));
+            return ResponseEntity.ok(loginService.login(requestDTO));
+        } catch (InvalidCredentialsException | InActiveAccountException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 }

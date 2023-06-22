@@ -1,8 +1,8 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.Models.DTO.LoginRequestDTO;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Services.LoginService;
+import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
+import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
+import SOT.Squad.code.generation.services.LoginService;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

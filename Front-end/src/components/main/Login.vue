@@ -23,7 +23,6 @@
 <script>
 import axios from '../../axios-auth.js';
 
-
 export default {
     data() {
         return {
@@ -48,16 +47,17 @@ export default {
                 axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
                 localStorage.setItem("jwt", res.data.token);
                 console.log(res.data.token);
-                this.getUser();
+
+                this.getUser(res.data.token);
             }).catch((error) => {
-                alert(error.response.data.token);
+                alert(error.response.data);
             });
         },
-        getUser() {
+        getUser(token) {
             axios
                 .get('users/current', {
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                        Authorization: "Bearer " + token
                     }
                 })
                 .then((res) => {
@@ -68,12 +68,14 @@ export default {
                             this.$router.push(`/question`);
                         }
                         else {
+                            localStorage.setItem("role", "CUSTOMER")
                             this.$router.push(`/customerAccountOverview`);
                         }
 
                     });
-                })
-                .catch(error => console.log(error));
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
     }
 }

@@ -1,10 +1,11 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.DTO.TransactionRequestDTO;
-import SOT.Squad.code.generation.Models.Transaction;
-import SOT.Squad.code.generation.Services.TransactionService;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
+import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
+import SOT.Squad.code.generation.models.Transaction;
+import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,6 @@ public class TransactionRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping() //Employee
@@ -42,7 +42,6 @@ public class TransactionRestController {
         }catch (Exception e) {
             return null;
         }
-
     }
 
     @GetMapping("/{id}") //Employee & Customer
@@ -56,10 +55,10 @@ public class TransactionRestController {
     }
 
     @GetMapping("/account/{iban}/{type}") //Employee & Customer
-    public List<Transaction> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
+    public List<TransactionResponseDTO> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.findByBankAccountAndAccountType(iban, type);
+            return transactionService.findBankAccountResponse(iban, type);
         }catch (Exception e) {
             return null;
         }

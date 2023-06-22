@@ -1,11 +1,7 @@
-package SOT.Squad.code.generation.Repositories;
+package SOT.Squad.code.generation.repositories;
 
-import SOT.Squad.code.generation.Models.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import SOT.Squad.code.generation.models.User;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

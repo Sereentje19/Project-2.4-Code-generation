@@ -1,6 +1,6 @@
 package SOT.Squad.code.generation.configuration;
 
-import SOT.Squad.code.generation.JWT.JWTTokenFilter;
+import SOT.Squad.code.generation.jwt.JWTTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +34,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
                 .requestMatchers("/users/{id}").authenticated()
+                .requestMatchers("/users/dropdown").authenticated()
 
                 //transactions
                 .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
@@ -41,14 +42,15 @@ public class MySecurityConfiguration {
                 .requestMatchers("/transactions/{id}").authenticated()
 
                 //bankaccounts
+                .requestMatchers("/bankaccounts").authenticated()
                 .requestMatchers("/bankaccounts/{id}").authenticated()
                 .requestMatchers("/bankaccounts/change/{id}").authenticated()
                 .requestMatchers("/bankaccounts/info/{id}").authenticated()
-                .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
-                .requestMatchers("/bankaccounts").authenticated()
+//                .requestMatchers("/bankaccounts/changebalance/{id}").authenticated()
                 .requestMatchers("/bankaccounts/userID/{id}").authenticated()
                 .requestMatchers("/bankaccounts/All").authenticated()
                 .requestMatchers("/bankaccounts/dto/{id}").authenticated()
+                .requestMatchers("/bankaccounts/accountType/{userId}").authenticated()
                 .requestMatchers("/bankaccounts/iban/{iban}").authenticated();
 
 

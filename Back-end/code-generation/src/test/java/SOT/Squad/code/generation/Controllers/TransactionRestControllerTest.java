@@ -1,8 +1,8 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.Models.Role;
-import SOT.Squad.code.generation.Models.User;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.Role;
+import SOT.Squad.code.generation.models.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -17,9 +17,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.Transaction;
-import SOT.Squad.code.generation.Services.TransactionService;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.Transaction;
+import SOT.Squad.code.generation.services.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;

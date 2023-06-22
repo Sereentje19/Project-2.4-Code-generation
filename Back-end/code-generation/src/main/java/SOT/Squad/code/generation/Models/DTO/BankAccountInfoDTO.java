@@ -8,10 +8,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class BankDropDownDTO {
+public class BankAccountInfoDTO {
     private long id;
-    private String Name;
-    private String Iban;
+    private String iban;
+    private String currencies;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountType;
+
 }

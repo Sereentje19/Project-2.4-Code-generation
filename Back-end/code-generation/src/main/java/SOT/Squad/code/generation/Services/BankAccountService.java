@@ -1,29 +1,83 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.BankDropDownDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.generators.IbanGenerator;
+import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
+import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.repositories.BankAccountRepository;
+import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountService {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<BankAccount> getAllBankAccounts() {
-        return (List<BankAccount>) bankAccountRepository.findAll();
+        return bankAccountRepository.findAll();
     }
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
-        return bankAccountRepository.save(bankAccount);
+        //Save bank account
+        BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
+        savedBankAccount.setId(bankAccount.getId());
+        
+        if (bankAccount.getUserId() != 0) {
+            //Get user
+            User user = userRepository.findById(bankAccount.getUserId()).get();
+
+            savedBankAccount  = this.addIbanToBankAccount(bankAccount, user);
+            savedBankAccount  = this.addAccountListToBankAccount(savedBankAccount, user);
+        }
+
+        return savedBankAccount;
+    }
+
+    private BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
+    {
+        if(user.getBankAccountList().isEmpty() && bankAccount.getIban() == null) {
+            //Generate iban
+            IbanGenerator generator = new IbanGenerator(bankAccountRepository);
+            bankAccount.setIban(generator.getGeneratedIban());
+        }
+        else if(bankAccount.getIban() == null) {
+            //Get iban from user
+            Long bankAccountId = user.getBankAccountList().get(0);
+            BankAccount optionalAccount = bankAccountRepository.findById(bankAccountId).get();
+            bankAccount.setIban(optionalAccount.getIban());
+        }
+
+        return bankAccount;
+    }
+
+    private BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
+    {
+        //Add bank account to user
+        List<Long> bankAccountList = user.getBankAccountList();
+        if (!bankAccountList.contains(savedBankAccount.getId())) {
+            bankAccountList.add(savedBankAccount.getId());
+        }
+
+        user.setBankAccountList(bankAccountList);
+        userRepository.save(user);
+
+        return savedBankAccount;
     }
 
     public BankAccount updateBankAccount(BankAccount bankAccount, long id) {
@@ -31,7 +85,7 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
     public BankAccount getBankAccountById(long id) {
-        return (BankAccount)bankAccountRepository.getAllById(id);
+        return bankAccountRepository.getAllById(id);
     }
 
     public void deleteBankAccount(BankAccount bankAccount) {
@@ -40,7 +94,6 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIban(List<BankAccount> bankList) {
-//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 1; i < bankList.size(); i++) {
@@ -56,7 +109,6 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIbanFirst(List<BankAccount> bankList) {
-//        List<BankAccount> bankList = (List<BankAccount>) bankAccountRepository.findAll();
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 0; i < bankList.size(); i++) {
@@ -71,11 +123,45 @@ public class BankAccountService {
         return dtoList;
     }
 
+    public BankAccountInfoDTO getBankAccountInfo(long id) {
+        BankAccount bankList = bankAccountRepository.getAllById(id);
+
+        BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
+        bankAccountInfoDTO.setId(bankList.getId());
+        bankAccountInfoDTO.setIban(bankList.getIban());
+        bankAccountInfoDTO.setAccountType(bankList.getAccountType());
+        bankAccountInfoDTO.setCurrencies(bankList.getCurrencies());
+
+        return bankAccountInfoDTO;
+    }
+
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
-        return (List<BankAccount>) bankAccountRepository.getAllByUserId(id);
+        return bankAccountRepository.getAllByUserId(id);
+    }
+
+    public List<AccountType> getAccountTypes(long userId) {
+        List<BankAccount> bankaccList = bankAccountRepository.getAllByUserId(userId);
+        List<AccountType> accountTypes = new ArrayList<>();
+        accountTypes.add(AccountType.CURRENT);
+        accountTypes.add(AccountType.SAVINGS);
+
+        int counter = 0;
+
+        for (int i = 0; i < bankaccList.size(); i++) {
+            if(bankaccList.get(i).getAccountType().contains(AccountType.CURRENT)){
+                accountTypes.remove(AccountType.CURRENT);
+                continue;
+            }
+            else if(bankaccList.get(i).getAccountType().contains(AccountType.SAVINGS) && counter == 4){
+                accountTypes.remove(AccountType.SAVINGS);
+            }
+
+            counter++;
+        }
+        return accountTypes;
     }
 
     public BankAccount getBankAccountByIban(String iban) {
-        return (BankAccount) bankAccountRepository.findFirstByIban(iban);
+        return bankAccountRepository.findFirstByIban(iban);
     }
 }

@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.JWT;
+package SOT.Squad.code.generation.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

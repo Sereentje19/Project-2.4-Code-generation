@@ -1,14 +1,11 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
-import SOT.Squad.code.generation.Models.*;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import SOT.Squad.code.generation.models.*;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;

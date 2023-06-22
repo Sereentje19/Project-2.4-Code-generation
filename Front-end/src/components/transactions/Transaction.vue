@@ -8,19 +8,19 @@
                     <div class="accountNumber">
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
-                    <div v-for="role in this.user.roles" class="groupOptions">
-                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
+                    <div class="groupOptions">
+                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="(role == 'CUSTOMER') || (role == 'EMPLOYEE' && this.roleUser == 'CUSTOMER')" class="option">
+                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
                         </div>
-                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
-                        <div v-if="role == 'EMPLOYEE' && this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
                         <div class="option">
                             <button class="btn" @click="createTransaction()">
                                 Transaction
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="rowBelow">
                     <div class="options" id="datepicker">
                         <h4>From</h4>&nbsp;&nbsp;
@@ -85,12 +85,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
     header: {
         name: "header",
@@ -110,18 +104,14 @@ export default {
     },
     data() {
         return {
+            searchQuery: '',
+            fromDate: null,
+            toDate: null,
             roleUser: localStorage.getItem("role"),
-            balanceFilter: {
-                comparison: '',
-                value: null,
-            },
             transactions: [
                 {
                     id: '',
-                    description: '',
                     amount: '',
-                    accountTypeFrom: '',
-                    accountTypeTo: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',
                     date: '',
@@ -131,38 +121,48 @@ export default {
             {
                 id: 0,
                 iban: '',
-                balance: '',
-                userId: 0,
-                disabled: '',
-                currencies: [],
+                currencies: '',
                 accountType: [],
             },
-            user:
+            balanceFilter:
             {
-                id: 0,
-                username: '',
-                password: '',
-                firstName: '',
-                lastName: '',
-                phoneNumber: '',
-                email: '',
-                street: '',
-                houseNumber: '',
-                postalCode: '',
-                city: '',
-                bankAccountList: [],
-                roles: [],
+                comparison: '',
+                value: null,
             },
-            searchQuery: '',
-            fromDate: null,
-            toDate: null,
         };
     },
     mounted() {
-        this.getUser();
         this.getBankAccount();
     },
     methods: {
+        getBankAccount() {
+            const decodedId = atob(this.id)
+            axios
+                .get('/bankaccounts/info/' + decodedId, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.bankAccount = res.data;
+                    this.getTransactions();
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
+        },
+        getTransactions() {
+            axios
+                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.transactions = res.data;
+                }).catch((error) => {
+                    alert(error.response.data.token);
+                });
+        },
         WithDrawOrDeposit() {
             this.$router.push("/customer/withdrawOrDeposit/" + btoa(this.bankAccount.id));
         },
@@ -171,32 +171,6 @@ export default {
         },
         ViewTransactions(id) {
             this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
-        },
-        getUser() {
-            axios
-                .get('users/current', headerToken)
-                .then((res) => {
-                    this.user = res.data;
-                })
-                .catch(error => console.log(error));
-        },
-        getBankAccount() {
-            const decodedId = atob(this.id)
-            axios
-                .get('/bankaccounts/' + decodedId, headerToken)
-                .then((res) => {
-                    this.bankAccount = res.data;
-                    this.getTransactions();
-                })
-                .catch(error => console.log(error))
-        },
-        getTransactions() {
-            axios
-                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], headerToken)
-                .then((res) => {
-                    this.transactions = res.data;
-                })
-                .catch(error => console.log(error))
         },
     },
     computed: {

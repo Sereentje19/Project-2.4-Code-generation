@@ -1,10 +1,11 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Services.UserService;
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
+import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
+import SOT.Squad.code.generation.services.UserService;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,22 +39,39 @@ public class UserRestController {
         }
     }
 
-    @PostMapping //Employee
-    public User addUser(@RequestBody User user) {
+    @GetMapping("/dropdown") //Employee
+    public List<UserDropDownDTO> getAllUserIdsAndNames() {
         try {
             keyProvider.decodeJWT();
-            return userService.addUser(user);
+            return userService.getAllUserIdsAndNames();
+
         } catch (Exception e) {
             return null;
         }
     }
 
-    @PostMapping("/register")//Employee
-    public User register(@RequestBody User user) {
+
+    @PostMapping //Employee
+    public ResponseEntity<?> addUser(@RequestBody User user) {
         try {
-            return userService.addUser(user);
-        }catch (Exception e){
-            return null;
+            keyProvider.decodeJWT();
+            userService.checkInputFieldsNotEmpty(user); // Check if input fields are empty
+            userService.checkPasswordStrength(user.getPassword()); // Check password strength
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/register")//Employee
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            userService.checkInputFieldsNotEmpty(user); // Check if input fields are empty
+            userService.checkPasswordStrength(user.getPassword()); // Check password strength
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -98,8 +116,5 @@ public class UserRestController {
         }catch (Exception e) {
             return false;
         }
-
-
     }
-
 }
