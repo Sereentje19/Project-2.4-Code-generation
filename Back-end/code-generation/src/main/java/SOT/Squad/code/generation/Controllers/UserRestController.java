@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.controllers;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
@@ -87,7 +88,7 @@ public class UserRestController {
     }
 
     @GetMapping("/current") //Employee & Customer
-    public User getUserOnUsername() {
+    public CurrentUserResponseDTO getUserOnUsername() {
         try {
             String username = keyProvider.decodeJWT();
             return userService.getUserByUsername(username);

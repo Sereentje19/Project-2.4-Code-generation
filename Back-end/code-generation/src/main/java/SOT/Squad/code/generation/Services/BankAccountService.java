@@ -75,6 +75,8 @@ public class BankAccountService {
     {
         //Add bank account to user
         List<Long> bankAccountList = user.getBankAccountList();
+
+        //Check if bank account list is empty
         if (!bankAccountList.contains(savedBankAccount.getId())) {
             bankAccountList.add(savedBankAccount.getId());
         }

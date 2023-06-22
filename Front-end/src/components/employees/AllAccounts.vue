@@ -13,7 +13,7 @@
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show users with bankaccount</button>
+            <button class="filter-button" @click="resetFilter">Show all users</button>
         </div>
 
         <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">

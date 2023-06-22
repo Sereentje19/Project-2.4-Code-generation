@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
@@ -23,9 +24,17 @@ public class UserService {
     private UserRepository userRepository;
     private List<User> users = new ArrayList<>();
 
-    public User getUserByUsername(String username) throws UsernameNotFoundException {
+    public CurrentUserResponseDTO getUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            return userRepository.findUserByUsername(username).get();
+            User user = userRepository.findUserByUsername(username).get();
+            CurrentUserResponseDTO currentUserResponseDTO = new CurrentUserResponseDTO();
+            currentUserResponseDTO.setId(user.getId());
+            currentUserResponseDTO.setFirstName(user.getFirstName());
+            currentUserResponseDTO.setLastName(user.getLastName());
+            currentUserResponseDTO.setRoles(user.getRoles());
+            currentUserResponseDTO.setBankAccountList(user.getBankAccountList());
+
+            return currentUserResponseDTO;
         } catch (Exception e) {
             throw new UsernameNotFoundException("Username not found");
         }
