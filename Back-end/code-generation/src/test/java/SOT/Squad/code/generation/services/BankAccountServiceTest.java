@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.services;
 
+import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +54,7 @@ class BankAccountServiceTest {
         BankAccount bankAccount = new BankAccount();
 
         when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
-        BankAccount result = bankAccountService.addBankAccount(bankAccount);
+        BankAccount result = bankAccountService.addBankAccount(bankAccount, List.of(AccountType.CURRENT));
 
         assertEquals(bankAccount, result);
         verify(bankAccountRepository, times(1)).save(bankAccount);
