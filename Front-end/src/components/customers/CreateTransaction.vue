@@ -183,7 +183,7 @@ export default {
             ibanTo: "",
             transactionDTO:
             {
-                id: 0,//check
+                id: 1,//check
                 description: "",//check
                 amount: 0,//check
                 accountIdFrom: 0,//check
@@ -247,7 +247,7 @@ export default {
         },
         getUser() {
             axios
-                .get('users/current', {
+                .get('users/currentUser', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -359,7 +359,9 @@ export default {
         },
         postTransaction(){
           this.transactionDTO.date = new Date();
+          this.transactionDTO.amount = parseInt(this.transactionDTO.amount);
           console.log(this.transactionDTO);
+
           axios
                     .post('transactions',this.transactionDTO, {
                         headers: {
