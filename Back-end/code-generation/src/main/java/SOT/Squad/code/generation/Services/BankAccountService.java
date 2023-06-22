@@ -35,10 +35,13 @@ public class BankAccountService {
 
     public BankAccount addBankAccount(BankAccount bankAccount) {
         //Save bank account
+
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         savedBankAccount.setId(bankAccount.getId());
-        
-        if (bankAccount.getUserId() != 0) {
+
+        if(bankAccount.getUserId() == 0 && bankAccount.getId() != 1) {
+            throw new BankAccountCreateException("User id is required");
+        }else if (bankAccount.getUserId() != 0) {
             //Get user
             User user = userRepository.findById(bankAccount.getUserId()).get();
 

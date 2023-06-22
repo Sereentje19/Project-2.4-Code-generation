@@ -8,8 +8,6 @@ import SOT.Squad.code.generation.models.Transaction;
 import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.List;
 
 @CrossOrigin(origins = "*")
