@@ -27,7 +27,7 @@ public class TransactionService {
     private List<Transaction> transactions = new ArrayList<>();
 
     public List<Transaction> GetAllTransactions() {
-        return (List<Transaction>) transactionRepository.findAll();
+        return transactionRepository.findAll();
     }
 
     public Transaction GetTransactionById(long id) {
