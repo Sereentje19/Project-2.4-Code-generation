@@ -7,6 +7,7 @@ import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.exceptions.ValidateTransactionException;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
@@ -120,7 +121,8 @@ public class TransactionService {
         if(newBankAccountTo == null || newBankAccountFrom == null){
             throw new BankAccountCreateException("something went wrong while updating the bankaccount");
         }
-        User newUser = userService.updateUser(performedByUser);
+        EditUserRequestDTO editUserRequestDTO = new EditUserRequestDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive());
+        User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
             throw new UserCreateException("something went wrong while updating the user");
         }
