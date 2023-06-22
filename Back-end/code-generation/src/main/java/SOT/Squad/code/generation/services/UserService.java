@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
+
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -107,6 +109,7 @@ public class UserService {
                 }
         throw new UserCreateException("Username is not found.");
 
+
     }
     public boolean checkPincode(String pincode) {
         User user = userRepository.findUserByPincode(pincode);
@@ -145,4 +148,5 @@ public class UserService {
         }
         return userToUpdate;
     }
+
 }
