@@ -2,7 +2,7 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
-import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
+import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;

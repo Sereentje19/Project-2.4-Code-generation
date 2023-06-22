@@ -110,7 +110,7 @@ export default {
             roleUser: localStorage.getItem("role"),
             transactions: [
                 {
-                    id: '',
+                    id: 0,
                     amount: '',
                     bankAccountFrom: '',
                     bankAccountTo: '',

@@ -1,13 +1,12 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
-import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
+import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
-import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,4 +1,4 @@
-package SOT.Squad.code.generation.models.DTO;
+package SOT.Squad.code.generation.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

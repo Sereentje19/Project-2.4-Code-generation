@@ -7,7 +7,7 @@ import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.exceptions.ValidateTransactionException;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
-import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
+import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
@@ -16,7 +16,6 @@ import SOT.Squad.code.generation.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
