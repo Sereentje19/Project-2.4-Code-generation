@@ -68,7 +68,7 @@ export default {
             currentUser: localStorage.getItem("role"),
             bankAccount: [],
             accountTypes: ['CURRENT', 'SAVINGS'],
-            selectedAccountType: '',
+            selectedAccountType: 'CURRENT',
             user: {
                 username: '',
                 password: '',
@@ -122,15 +122,16 @@ export default {
         },
         addBankAccount(userId) {
             this.newBankAccount.userId = userId;
-            this.newBankAccount.accountType = [this.selectedAccountType];
+            // this.newBankAccount.accountType = [this.selectedAccountType];
 
             axios
-                .post('bankaccounts', this.newBankAccount, this.selectedAccountType, {
+                .post('bankaccounts', this.newBankAccount, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
+                    console.error(res.data)
                     this.$router.push("/allAccounts");
                 }).catch((error) => {
                     alert(error.response.data);
