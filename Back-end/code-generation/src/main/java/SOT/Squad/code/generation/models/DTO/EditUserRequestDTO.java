@@ -1,8 +1,10 @@
 package SOT.Squad.code.generation.models.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class EditUserRequestDTO {
     private long id;
     private String firstName;
