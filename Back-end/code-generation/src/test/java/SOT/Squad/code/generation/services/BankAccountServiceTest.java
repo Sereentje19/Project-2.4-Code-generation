@@ -55,7 +55,7 @@ class BankAccountServiceTest {
         BankAccount bankAccount = new BankAccount();
 
         when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
-        BankAccount result = bankAccountService.addBankAccount(bankAccount, List.of(AccountType.CURRENT));
+        BankAccount result = bankAccountService.addBankAccount(bankAccount);
 
         assertEquals(bankAccount, result);
         verify(bankAccountRepository, times(1)).save(bankAccount);
