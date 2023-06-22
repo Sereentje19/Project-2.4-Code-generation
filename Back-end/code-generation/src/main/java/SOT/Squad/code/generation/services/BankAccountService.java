@@ -12,7 +12,7 @@ import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import SOT.Squad.code.generation.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

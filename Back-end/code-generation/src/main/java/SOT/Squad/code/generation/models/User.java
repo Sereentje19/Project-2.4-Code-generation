@@ -39,7 +39,4 @@ public class User {
     private double dailyLimit;
     private int transactionLimit;
 
-
-
-
 }

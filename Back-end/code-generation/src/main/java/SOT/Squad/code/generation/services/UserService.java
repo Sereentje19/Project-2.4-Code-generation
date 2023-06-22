@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -97,8 +99,14 @@ public class UserService {
     public User getUser(long id) {
         return userRepository.findById(id).get();
     }
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public User updateUser(Long id, EditUserRequestDTO user) {
+            Optional<User> userToUpdate = userRepository.findById(id);
+            if (userToUpdate.isPresent()) {
+                User userUpdate = UpdateFilledFields(user, userToUpdate.get());
+                return userRepository.save(userUpdate);
+                }
+        throw new UserCreateException("Username is not found.");
+
     }
     public boolean checkPincode(String pincode) {
         User user = userRepository.findUserByPincode(pincode);
@@ -106,5 +114,35 @@ public class UserService {
             return true;
         }
         return false;
+    }
+    private User UpdateFilledFields(EditUserRequestDTO user, User userToUpdate){
+        long phoneNumber = user.getPhoneNumber();
+        String phoneNumberString = String.valueOf(phoneNumber);
+
+        if(user.getFirstName() != null){
+            userToUpdate.setFirstName(user.getFirstName());
+        }
+        if(user.getLastName() != null){
+            userToUpdate.setLastName(user.getLastName());
+        }
+        if(user.getStreet() != null){
+            userToUpdate.setStreet(user.getStreet());
+        }
+        if(user.getHouseNumber() != 0){
+            userToUpdate.setHouseNumber(user.getHouseNumber());
+        }
+        if(user.getPostalCode() != null){
+            userToUpdate.setPostalCode(user.getPostalCode());
+        }
+        if(user.getCity() != null){
+            userToUpdate.setCity(user.getCity());
+        }
+        if (phoneNumberString.length() == 10){
+            userToUpdate.setPhoneNumber(phoneNumber);
+        }
+        if(user.getEmail() != null){
+            userToUpdate.setEmail(user.getEmail());
+        }
+        return userToUpdate;
     }
 }
