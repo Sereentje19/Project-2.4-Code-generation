@@ -1,9 +1,10 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
-import SOT.Squad.code.generation.Models.*;
-import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
-import SOT.Squad.code.generation.Services.BankAccountService;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.models.*;
+import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
+import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
+import SOT.Squad.code.generation.services.BankAccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -139,34 +141,139 @@ public class BankAccountRestControllerTest {
 
 
     @Test
-    public void testGetAllNameAndIban() throws Exception {
-        // Mocking the response from bankAccountService.getAllNameAndIban()
-        List<IbanAndNameDTO> mockList = new ArrayList<>();
-        // Add sample data to the mock list
-        IbanAndNameDTO dto1 = new IbanAndNameDTO();
-        dto1.setId(1L);
-        dto1.setName("John Doe");
-        dto1.setIban("IBAN123");
-        mockList.add(dto1);
+    void testGetAccountDtoById() throws Exception {
+        long accountId = 1;
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setId(accountId);
 
-        IbanAndNameDTO dto2 = new IbanAndNameDTO();
-        dto2.setId(2L);
-        dto2.setName("Jane Smith");
-        dto2.setIban("IBAN456");
-        mockList.add(dto2);
+        List<BankAccount> bankList = Collections.singletonList(bankAccount);
+        when(bankAccountService.getBankAccountById(accountId)).thenReturn(bankAccount);
+        when(bankAccountService.getAllNameAndIbanFirst(bankList)).thenReturn(Collections.singletonList(new BankDropDownDTO()));
 
-        when(bankAccountService.getAllNameAndIban()).thenReturn(mockList);
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/dto/{id}", accountId))
+                .andExpect(status().isOk());
 
-        // Perform the GET request
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/bankaccounts/All")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("John Doe"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].iban").value("IBAN123"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Jane Smith"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].iban").value("IBAN456"));
+        verify(bankAccountService, times(1)).getBankAccountById(accountId);
+        verify(bankAccountService, times(1)).getAllNameAndIbanFirst(bankList);
     }
+
+
+    @Test
+    void testGetAllBankAccountsByUserId() throws Exception {
+        long userId = 1;
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setUserId(userId);
+
+        List<BankAccount> bankList = Collections.singletonList(bankAccount);
+        when(bankAccountService.getAllBankAccountsByUserId(userId)).thenReturn(bankList);
+        when(bankAccountService.getAllNameAndIbanFirst(bankList)).thenReturn(Collections.singletonList(new BankDropDownDTO()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/userID/{id}", userId))
+                .andExpect(status().isOk());
+
+        verify(bankAccountService, times(1)).getAllBankAccountsByUserId(userId);
+        verify(bankAccountService, times(1)).getAllNameAndIbanFirst(bankList);
+    }
+
+
+    @Test
+    void testGetBankAccountInfo() throws Exception {
+        long accountId = 1;
+        BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
+
+        when(bankAccountService.getBankAccountInfo(accountId)).thenReturn(bankAccountInfoDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/info/{id}", accountId))
+                .andExpect(status().isOk());
+
+        verify(bankAccountService, times(1)).getBankAccountInfo(accountId);
+    }
+
+
+    @Test
+    void testGetAccountTypes() throws Exception {
+        long userId = 1;
+        List<AccountType> accountTypes = Collections.singletonList(AccountType.CURRENT);
+
+        when(bankAccountService.getAccountTypes(userId)).thenReturn(accountTypes);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/accountType/{userId}", userId))
+                .andExpect(status().isOk());
+
+        verify(bankAccountService, times(1)).getAccountTypes(userId);
+    }
+
+
+
+    @Test
+    void testGetBankAccountByIban() throws Exception {
+        String iban = "NL12INHO0123456789";
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setIban(iban);
+
+        List<BankAccount> bankList = Collections.singletonList(bankAccount);
+        when(bankAccountService.getBankAccountByIban(iban)).thenReturn(bankAccount);
+        when(bankAccountService.getAllNameAndIbanFirst(bankList)).thenReturn(Collections.singletonList(new BankDropDownDTO()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/iban/{iban}", iban))
+                .andExpect(status().isOk());
+
+        verify(bankAccountService, times(1)).getBankAccountByIban(iban);
+        verify(bankAccountService, times(1)).getAllNameAndIbanFirst(bankList);
+    }
+
+
+    @Test
+    void testGetAllNameAndIban() throws Exception {
+        List<BankAccount> bankAccounts = new ArrayList<>();
+        bankAccounts.add(new BankAccount());
+        bankAccounts.add(new BankAccount());
+
+        List<BankDropDownDTO> expectedDTOs = new ArrayList<>();
+        expectedDTOs.add(new BankDropDownDTO());
+        expectedDTOs.add(new BankDropDownDTO());
+
+        when(bankAccountService.getAllBankAccounts()).thenReturn(bankAccounts);
+        when(bankAccountService.getAllNameAndIban(bankAccounts)).thenReturn(expectedDTOs);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/bankaccounts/All"))
+                .andExpect(status().isOk());
+
+        verify(bankAccountService, times(1)).getAllBankAccounts();
+        verify(bankAccountService, times(1)).getAllNameAndIban(bankAccounts);
+    }
+    
+
+//    @Test
+//    public void testGetAllNameAndIban() throws Exception {
+//        // Mocking the response from bankAccountService.getAllNameAndIban()
+//        List<BankDropDownDTO> mockList = new ArrayList<>();
+//        // Add sample data to the mock list
+//        BankDropDownDTO dto1 = new BankDropDownDTO();
+//        dto1.setId(1L);
+//        dto1.setName("John Doe");
+//        dto1.setIban("IBAN123");
+//        mockList.add(dto1);
+//
+//        BankDropDownDTO dto2 = new BankDropDownDTO();
+//        dto2.setId(2L);
+//        dto2.setName("Jane Smith");
+//        dto2.setIban("IBAN456");
+//        mockList.add(dto2);
+//
+//        when(bankAccountService.getAllNameAndIban()).thenReturn(mockList);
+//
+//        // Perform the GET request
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/bankaccounts/All")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("John Doe"))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].iban").value("IBAN123"))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Jane Smith"))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[1].iban").value("IBAN456"));
+//    }
+
 }

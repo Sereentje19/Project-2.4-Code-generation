@@ -5,7 +5,8 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="van rekeningnummer...." :value=this.bankAccount.iban id="fromInput">
+                    <input type="text" class="input" placeholder="van rekeningnummer...." :value=this.bankAccount.iban
+                        id="fromInput">
                 </div>
             </div>
             <div class="body">
@@ -128,12 +129,6 @@ import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
     header: {
         name: "header",
@@ -194,11 +189,11 @@ export default {
 
     },
     methods: {
-        fillfield(){
+        fillfield() {
             let fromInput = document.getElementById("fromInput");
             console.log(this.user.roles[0]);
-            if(this.user.roles[0]== "CUSTOMER"){
-                fromInput.setAttribute( 'readonly', true );
+            if (this.user.roles[0] == "CUSTOMER") {
+                fromInput.setAttribute('readonly', true);
             }
         },
         getUser() {
@@ -217,7 +212,11 @@ export default {
         getBankAccount() {
             const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + decodedId, headerToken)
+                .get('/bankaccounts/' + decodedId, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.bankAccount = res.data;
                     this.rekening = this.bankAccount.iban;
@@ -235,7 +234,11 @@ export default {
         },
         checkPincode() {
             axios
-                .get('users/pincode/' + this.pincode, headerToken)
+                .get('users/pincode/' + this.pincode, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     console.log(res.data)
                     // console.log(this.bankAccount);
@@ -289,7 +292,7 @@ export default {
                 alert("you need to fill in all the fields");
                 location.reload();
             }
-            if(this.bedrag < 0){
+            if (this.bedrag < 0) {
                 alert("you can't withdraw or deposit a negative amount");
                 location.reload();
             }
@@ -297,7 +300,11 @@ export default {
         changeBankAcount() {
             const decodedId = atob(this.id)
             axios
-                .put("/bankaccounts/change/" + decodedId, this.bankAccount, headerToken)
+                .put("/bankaccounts/change/" + decodedId, this.bankAccount, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     console.log(res.data);
                     this.$router.push("/transactions/" + btoa(decodedId));

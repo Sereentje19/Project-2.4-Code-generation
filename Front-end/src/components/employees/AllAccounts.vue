@@ -9,11 +9,11 @@
         </div>
 
         <div v-if="!showUsersWithNoAccounts">
-            <button class="filter-button" @click="filterUsersWithNoAccounts">No Accounts</button>
+            <button class="filter-button" @click="filterUsersWithNoAccounts">show users without Accounts</button>
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show with bankaccount</button>
+            <button class="filter-button" @click="resetFilter">Show users with bankaccount</button>
         </div>
 
         <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
@@ -58,7 +58,7 @@ export default {
                 });
             }
 
-            return this.users.filter(user => user.active); // Only display active users
+            return this.users.filter(user => !user.inActive); // Only display active users
         }
     },
     methods: {

@@ -1,10 +1,11 @@
-package SOT.Squad.code.generation.Controllers;
+package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.JWT.JWTTokenProvider;
-import SOT.Squad.code.generation.Models.DTO.LoginResponseDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Services.UserService;
-import SOT.Squad.code.generation.JWT.JWTKeyProvider;
+import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
+import SOT.Squad.code.generation.services.UserService;
+import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,43 +30,91 @@ public class UserRestController {
 
     @GetMapping() //Employee
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        try {
+            keyProvider.decodeJWT();
+            return userService.getAllUsers();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
+
+    @GetMapping("/dropdown") //Employee
+    public List<UserDropDownDTO> getAllUserIdsAndNames() {
+        try {
+            keyProvider.decodeJWT();
+            return userService.getAllUserIdsAndNames();
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     @PostMapping //Employee
-    public User addUser(@RequestBody User user) {
-        keyProvider.decodeJWT();
-        return userService.addUser(user);
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        try {
+            keyProvider.decodeJWT();
+            userService.checkInputFieldsNotEmpty(user); // Check if input fields are empty
+            userService.checkPasswordStrength(user.getPassword()); // Check password strength
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
+
     @PostMapping("/register")//Employee
-    public User register(@RequestBody User user) {
-        return userService.addUser(user);
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            userService.checkInputFieldsNotEmpty(user); // Check if input fields are empty
+            userService.checkPasswordStrength(user.getPassword()); // Check password strength
+            return ResponseEntity.ok(userService.addUser(user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}") //Employee & Customer
     public User getUser(@PathVariable long id) {
-        return userService.getUser(id);
+        try {
+            keyProvider.decodeJWT();
+
+            return userService.getUser(id);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/current") //Employee & Customer
     public User getUserOnUsername() {
-        String username = keyProvider.decodeJWT();
-        return userService.getUserByUsername(username);
+        try {
+            String username = keyProvider.decodeJWT();
+            return userService.getUserByUsername(username);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @PutMapping("/{id}") //Employee & Customer
     public User updateUser(@PathVariable long id, @RequestBody User user) {
-        keyProvider.decodeJWT();
-        user.setId(id);
-        return userService.updateUser(user);
+        try {
+            keyProvider.decodeJWT();
+            user.setId(id);
+            return userService.updateUser(user);
+        }catch (Exception e) {
+            return null;
+        }
+
     }
 
     @GetMapping("/pincode/{pincode}") //Employee & Customer
-    public User checkPincode(@PathVariable String pincode) {
-
-        keyProvider.decodeJWT();
-        return userService.checkPincode(pincode);
+    public boolean checkPincode(@PathVariable String pincode) {
+        try {
+            keyProvider.decodeJWT();
+            return userService.checkPincode(pincode);
+        }catch (Exception e) {
+            return false;
+        }
     }
-
 }

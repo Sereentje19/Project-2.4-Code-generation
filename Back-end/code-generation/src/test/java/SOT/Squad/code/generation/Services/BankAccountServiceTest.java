@@ -1,16 +1,13 @@
-package SOT.Squad.code.generation.Services;
+package SOT.Squad.code.generation.services;
 
-import SOT.Squad.code.generation.Models.AccountType;
-import SOT.Squad.code.generation.Models.BankAccount;
-import SOT.Squad.code.generation.Models.DTO.IbanAndNameDTO;
-import SOT.Squad.code.generation.Models.User;
-import SOT.Squad.code.generation.Repositories.BankAccountRepository;
+import SOT.Squad.code.generation.models.BankAccount;
+import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

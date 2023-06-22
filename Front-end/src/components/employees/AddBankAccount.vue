@@ -3,8 +3,8 @@
         <h2>Personal Details</h2>
         <div>
             <label>User:</label>
-            <select v-model="this.selectedUser" @change="checkAccountType()">
-                <option v-for="user in this.users" :value="user">{{ user.username }}</option>
+            <select v-model="this.newBankAccount.userId" @change="getAccountType()">
+                <option v-for="user in this.users" :value="user.id">{{ user.firstName + " " + user.lastName }}</option>
             </select>
         </div>
         <div>
@@ -20,7 +20,7 @@
         </div>
         <div>
             <button id="btn2" class="btnUpdate" @click="cancel()">Cancel</button>
-            <button id="btn2" @click="getIbanOfUser()">Save Changes</button>
+            <button id="btn2" @click="addBankAccount()">Save Changes</button>
         </div>
     </div>
 </template>
@@ -29,28 +29,16 @@
 <script>
 import axios from '../../axios-auth.js';
 
-const headerToken = {
-    headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-    }
-};
-
 export default {
 
     data() {
         return {
             users: [],
-            selectedUser: {},
-            generatedIban: '',
-            bankAccounts: [],
-            accountTypes: ['CURRENT', 'SAVINGS'],
+            accountTypes: [],
             selectedAccountType: '',
             newBankAccount:
             {
-                id: 0,
-                iban: '',
                 balance: 0,
-                userId: 0,
                 disabled: false,
                 currencies: "EUR",
                 accountType: [],
@@ -66,112 +54,46 @@ export default {
         },
         getUsers() {
             axios
-                .get('/users', headerToken)
+                .get('/users/dropdown', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
                     this.users = res.data;
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
+        },
+        getAccountType() {
+            axios
+                .get('bankaccounts/accountType/' + this.newBankAccount.userId, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
                 })
-                .catch(error => console.log(error));
-        },
-        generateIBAN() {
-            const countryCode = 'NL';
-            const additionalDigits = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-            const bankCode = 'INHO';
-            const accountNumber = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
-
-            this.generatedIban = `${countryCode}${additionalDigits}${bankCode}0${accountNumber}`;
-            this.checkIbanExists();
-        },
-        checkIbanExists() {
-            axios
-                .get('bankaccounts', headerToken)
                 .then((res) => {
-                    this.bankAccount = res.data;
-
-                    for (const element of this.bankAccount) {
-                        if (element.iban == this.generatedIban) {
-                            this.generateIBAN();
-                        }
-                    }
-                }).catch((error) => console.log(error));
-        },
-        checkAccountType() {
-            axios
-                .get('bankaccounts', headerToken)
-                .then((res) => {
-                    this.bankAccount = res.data;
-                    let savingsAccountsCount = 5;
-                    let currentsAccountsCount = 1;
-
-                    for (const element of this.bankAccount) {
-                        if (element.userId == this.selectedUser.id) {
-
-                            if (element.accountType == 'CURRENT') {
-                                currentsAccountsCount--;
-                            }
-                            else if (element.accountType == 'SAVINGS') {
-                                savingsAccountsCount--;
-                            }
-                        }
-                    }
-
-                    if (savingsAccountsCount <= 0 && currentsAccountsCount <= 0) {
-                        this.accountTypes = null
-                    }
-                    else if (savingsAccountsCount <= 0) {
-                        this.accountTypes = ['CURRENT']
-                    }
-                    else if (currentsAccountsCount <= 0) {
-                        this.accountTypes = ['SAVINGS']
-                    }
-
-                }).catch((error) => console.log(error));
-        },
-        getIbanOfUser() {
-            axios
-                .get('/bankaccounts', headerToken)
-                .then((res) => {
-                    this.bankAccounts = res.data;
-
-                    for (const element of this.bankAccounts) {
-                        if (this.selectedUser.id == element.userId) {
-                            this.newBankAccount.iban = element.iban;
-                            this.ibanExists = true;
-                            break;
-                        }
-                    }
-
-                    if (!this.ibanExists) {
-                        this.generateIBAN();
-                        this.newBankAccount.iban = this.generatedIban;
-                    }
-
-                    this.addBankAccount();
-
-                }).catch((error) => console.log(error));
+                    this.accountTypes = res.data;
+                    this.selectedAccountType = res.data[0];
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
         addBankAccount() {
-            this.newBankAccount.accountType = [];
-            this.newBankAccount.accountType.push(this.selectedAccountType);
-            this.newBankAccount.userId = this.selectedUser.id;
+            this.newBankAccount.accountType = [this.selectedAccountType];
+            console.log(this.newBankAccount)
 
             axios
-                .post('bankaccounts', this.newBankAccount, headerToken)
+                .post('bankaccounts', this.newBankAccount, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
                 .then((res) => {
-                    this.updateUserBankList(res.data.id);
                     this.$router.push("/allAccounts");
-                })
-                .catch((error) => console.log(error));
-
-        },
-        updateUserBankList(id) {
-            this.selectedUser.bankAccountList.push(id)
-
-            axios
-                .put('users/' + this.selectedUser.id, this.selectedUser, headerToken)
-                .then((res) => {
-                    console.log(res.data)
-                })
-                .catch((error) => console.log(error));
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
         },
 
     },
