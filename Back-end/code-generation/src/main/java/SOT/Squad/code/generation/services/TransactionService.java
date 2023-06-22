@@ -75,6 +75,7 @@ public class TransactionService {
         User performedByUser = transactionRequestDTO.getPerformedByUser();
         if(bankAccountFrom.getIban() == bankAccountTo.getIban()){
             if(bankAccountFrom.getAccountType().get(0) == AccountType.CURRENT && bankAccountTo.getAccountType().get(0) == AccountType.CURRENT || bankAccountFrom.getAccountType().get(0) == AccountType.SAVINGS && bankAccountTo.getAccountType().get(0) == AccountType.SAVINGS){
+
                 throw new ValidateTransactionException("you can't transfer to the same account");
             }
         }
@@ -98,12 +99,14 @@ public class TransactionService {
         bankAccountTo.setBalance(newbalanceTo);
         double newDailyLimit = performedByUser.getDailyLimit() - transactionRequestDTO.getAmount();
         if(newDailyLimit < 0){
+
             throw new ValidateTransactionException("you will end below your daily limit");
         }
         performedByUser.setDailyLimit(newDailyLimit);
         return performTransaction(transactionRequestDTO, bankAccountFrom, bankAccountTo, performedByUser);
     }
     private Transaction performTransaction(TransactionRequestDTO transactionRequestDTO, BankAccount bankAccountFrom, BankAccount bankAccountTo, User performedByUser){
+
 //new Transaction(0, "test", 10.20,  "NL12INHO0123456787", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),null)
 //       return AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().minusDays(3),null));
         Transaction transaction = new Transaction(0, transactionRequestDTO.getDescription(), transactionRequestDTO.getAmount(), bankAccountFrom.getIban(), bankAccountTo.getIban(), bankAccountFrom.getAccountType(), bankAccountTo.getAccountType(), transactionRequestDTO.getPaymentReference(), transactionRequestDTO.getDate(), performedByUser);

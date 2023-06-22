@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.DTO.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.services.UserService;
@@ -97,11 +98,12 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}") //Employee & Customer
-    public User updateUser(@PathVariable long id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody EditUserRequestDTO user) {
         try {
             keyProvider.decodeJWT();
             user.setId(id);
-            return userService.updateUser(user);
+            return ResponseEntity.ok(userService.updateUser(id, user));
+
         }catch (Exception e) {
             return null;
         }

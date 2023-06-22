@@ -37,6 +37,7 @@ export default {
     mounted() {
         delete axios.defaults.headers.common['Authorization'];
         localStorage.removeItem("jwt");
+        localStorage.setItem("role", "CUSTOMER")
     },
     methods: {
         login() {

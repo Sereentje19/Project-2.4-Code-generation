@@ -22,7 +22,6 @@ public class Transaction {
     private String bankAccountFrom;
     private String bankAccountTo;
     private List<AccountType> accountTypeFrom;
-
     private List<AccountType> accountTypeTo;
     private String paymentReference;
     private LocalDateTime date;

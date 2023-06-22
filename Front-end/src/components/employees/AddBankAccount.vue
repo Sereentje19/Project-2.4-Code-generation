@@ -35,9 +35,10 @@ export default {
         return {
             users: [],
             accountTypes: [],
-            selectedAccountType: '',
+            selectedAccountType: "CURRENT",
             newBankAccount:
             {
+                userId: 0,
                 balance: 0,
                 disabled: false,
                 currencies: "EUR",
@@ -81,7 +82,6 @@ export default {
         },
         addBankAccount() {
             this.newBankAccount.accountType = [this.selectedAccountType];
-            console.log(this.newBankAccount)
 
             axios
                 .post('bankaccounts', this.newBankAccount, {
@@ -91,7 +91,8 @@ export default {
                 })
                 .then((res) => {
                     this.$router.push("/allAccounts");
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     alert(error.response.data);
                 });
         },
