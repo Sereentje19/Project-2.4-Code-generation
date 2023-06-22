@@ -55,7 +55,7 @@ public class BankAccountService {
         return savedBankAccount;
     }
 
-    private BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
+    public BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
     {
         if(user.getBankAccountList().isEmpty() && bankAccount.getIban() == null) {
             //Generate iban
@@ -72,7 +72,7 @@ public class BankAccountService {
         return bankAccount;
     }
 
-    private BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
+    public BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
     {
         //Add bank account to user
         List<Long> bankAccountList = user.getBankAccountList();
