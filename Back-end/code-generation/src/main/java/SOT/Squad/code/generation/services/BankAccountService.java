@@ -40,12 +40,14 @@ public class BankAccountService {
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         savedBankAccount.setId(bankAccount.getId());
 
+        //check if a user is selected
         if(bankAccount.getUserId() == 0 && bankAccount.getId() != 1) {
-            throw new BankAccountCreateException("User id is required");
+            throw new BankAccountCreateException("User is not selected");
         }else if (bankAccount.getUserId() != 0) {
             //Get user
             User user = userRepository.findById(bankAccount.getUserId()).get();
 
+            //Add iban and bankAccountList to bank account
             savedBankAccount  = this.addIbanToBankAccount(bankAccount, user);
             savedBankAccount  = this.addAccountListToBankAccount(savedBankAccount, user);
         }
@@ -74,6 +76,8 @@ public class BankAccountService {
     {
         //Add bank account to user
         List<Long> bankAccountList = user.getBankAccountList();
+
+        //Check if bank account list is empty
         if (!bankAccountList.contains(savedBankAccount.getId())) {
             bankAccountList.add(savedBankAccount.getId());
         }
