@@ -370,10 +370,7 @@ export default {
                         console.log(res.data);
                         this.$router.push("/transactions/" + btoa(this.decodedId));
                     })
-                    .catch((error) => {
-                        alert(error.response.data);
-                        console.log(error);
-                    });
+                    .catch((error) => console.log(error));
           
         },
         

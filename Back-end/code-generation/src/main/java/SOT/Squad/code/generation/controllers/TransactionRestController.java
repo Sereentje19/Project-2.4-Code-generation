@@ -1,6 +1,5 @@
 package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.exceptions.TransactionCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
@@ -8,11 +7,7 @@ import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
 import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -27,13 +22,12 @@ public class TransactionRestController {
 
 //    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
-
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+    public Transaction addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         try {
             keyProvider.decodeJWT();
-            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
-        }catch (TransactionCreateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return transactionService.validateTransaction(transactionRequestDTO);
+        }catch (Exception e) {
+            return null;
         }
     }
 
