@@ -102,7 +102,7 @@ public class UserRestController {
         try {
             keyProvider.decodeJWT();
             user.setId(id);
-            return ResponseEntity.ok(userService.updateUser(user));
+            return ResponseEntity.ok(userService.updateUser(id, user));
         }catch (Exception e) {
             return null;
         }
