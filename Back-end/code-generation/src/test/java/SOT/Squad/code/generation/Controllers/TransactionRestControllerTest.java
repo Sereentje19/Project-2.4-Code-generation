@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
+import SOT.Squad.code.generation.controllers.TransactionRestController;
 import SOT.Squad.code.generation.models.Role;
 import SOT.Squad.code.generation.models.User;
 import org.junit.jupiter.api.Test;
