@@ -32,31 +32,30 @@
                 <div id="rowBelow">
                     <div class="options" id="datepicker">
                         <h4>From</h4>&nbsp;&nbsp;
-                        <input type="date" v-model="fromDate" />
+                        <input type="date" v-model="startDate" />
                     </div>
                     <div class="options" id="datepicker">
                         <h4>To</h4> &nbsp;&nbsp;
-                        <input type="date" v-model="toDate" />
+                        <input type="date" v-model="endDate" />
                     </div>
                     <div class="options">
-                        <select id="inputField" v-model="balanceFilter.comparison">
+                        <select id="inputField" v-model="this.operator">
                             <option value="<">Less than</option>
                             <option value="==">Equal to</option>
                             <option value=">">Greater than</option>
                         </select>
                     </div>
-                    <div v-if="balanceFilter.comparison === '==' || balanceFilter.comparison === '<' || balanceFilter.comparison === '>'"
-                        class="options">
-                        <input type="number" id="inputField" placeholder="Balance" v-model="balanceFilter.value" />
+                    <div v-if="this.operator === '==' || this.operator === '<' || this.operator === '>'" class="options">
+                        <input type="number" id="inputField" placeholder="Balance" v-model="searchField" />
                     </div>
                     <div v-else class="options">
-                        <input type="text" id="inputField" placeholder="Search" v-model="searchQuery">
+                        <input type="text" id="inputField" placeholder="Search" v-model="searchField">
                     </div>
                 </div>
             </div>
             <div id="extraPadding">
                 <div class="bodyInfo">
-                    <div v-for="list in filteredTransactions" class="transaction" @click="ViewTransactions(list.id)">
+                    <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
                         <div id="transactionInfo">
                             <div id="bankAccount">
                                 <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
@@ -68,7 +67,8 @@
                                     <div>{{ this.bankAccount.currencies }}</div>
                                 </div>
                                 <div id="amount">
-                                    <h1>{{ list.amount.toFixed(2) }}</h1>
+                                    <h1>{{ list.amount }}</h1>
+                                    <!-- list.amount.toFixed(2) -->
                                 </div>
                             </div>
                         </div>
@@ -104,9 +104,10 @@ export default {
     },
     data() {
         return {
-            searchQuery: '',
-            fromDate: null,
-            toDate: null,
+            startDate: "2023-06-22",
+            endDate: "2023-06-22",
+            operator: ">",
+            searchField: "e",
             roleUser: localStorage.getItem("role"),
             transactions: [
                 {
@@ -129,6 +130,7 @@ export default {
                 comparison: '',
                 value: null,
             },
+            searchQuery: '',
         };
     },
     mounted() {
@@ -147,20 +149,30 @@ export default {
                     this.bankAccount = res.data;
                     this.getTransactions();
                 }).catch((error) => {
-                    alert(error.response.data.token);
+                    alert(error.response.data);
                 });
         },
         getTransactions() {
+            const params = {
+                startDate: this.startDate,
+                endDate: this.endDate,
+                operator: this.operator,
+                searchField: this.searchField
+            };
+
             axios
-                .get('transactions/account/' + this.bankAccount.iban + "/" + this.bankAccount.accountType[0], {
+                .get('transactions/account/' + this.bankAccount.iban + "/" +
+                    this.bankAccount.accountType[0], {
+                    params,
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
                     this.transactions = res.data;
+                    console.log(res.data)
                 }).catch((error) => {
-                    alert(error.response.data.token);
+                    // alert(error.response.data);
                 });
         },
         WithDrawOrDeposit() {
@@ -173,40 +185,40 @@ export default {
             this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
         },
     },
-    computed: {
-        filteredTransactions() {
-            const searchQuery = this.searchQuery.toLowerCase();
-            const fromDate = this.fromDate;
-            const toDate = this.toDate;
-            const balanceFilter = this.balanceFilter;
+    // computed: {
+    //     filteredTransactions() {
+    //         const searchQuery = this.searchQuery.toLowerCase();
+    //         const fromDate = this.fromDate;
+    //         const toDate = this.toDate;
+    //         const balanceFilter = this.balanceFilter;
 
-            return this.transactions.filter((transaction) => {
-                const fieldsToCheck = ['amount', 'bankAccountFrom', 'bankAccountTo'];
+    //         return this.transactions.filter((transaction) => {
+    //             const fieldsToCheck = ['amount', 'bankAccountFrom', 'bankAccountTo'];
 
-                const isInDateRange =
-                    (!fromDate || transaction.date >= fromDate) &&
-                    (!toDate || transaction.date <= toDate);
+    //             const isInDateRange =
+    //                 (!fromDate || transaction.date >= fromDate) &&
+    //                 (!toDate || transaction.date <= toDate);
 
-                const matchesSearchQuery = fieldsToCheck.some((field) => {
-                    const fieldValue = transaction[field];
-                    return (
-                        fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery)
-                    );
-                });
+    //             const matchesSearchQuery = fieldsToCheck.some((field) => {
+    //                 const fieldValue = transaction[field];
+    //                 return (
+    //                     fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery)
+    //                 );
+    //             });
 
-                let matchesBalanceFilter = true;
-                if (balanceFilter.comparison === '<') {
-                    matchesBalanceFilter = parseFloat(transaction.amount) < balanceFilter.value;
-                } else if (balanceFilter.comparison === '==') {
-                    matchesBalanceFilter = parseFloat(transaction.amount) === balanceFilter.value;
-                } else if (balanceFilter.comparison === '>') {
-                    matchesBalanceFilter = parseFloat(transaction.amount) > balanceFilter.value;
-                }
+    //             let matchesBalanceFilter = true;
+    //             if (balanceFilter.comparison === '<') {
+    //                 matchesBalanceFilter = parseFloat(transaction.amount) < balanceFilter.value;
+    //             } else if (balanceFilter.comparison === '==') {
+    //                 matchesBalanceFilter = parseFloat(transaction.amount) === balanceFilter.value;
+    //             } else if (balanceFilter.comparison === '>') {
+    //                 matchesBalanceFilter = parseFloat(transaction.amount) > balanceFilter.value;
+    //             }
 
-                return isInDateRange && matchesSearchQuery && matchesBalanceFilter;
-            });
-        },
-    },
+    //             return isInDateRange && matchesSearchQuery && matchesBalanceFilter;
+    //         });
+    //     },
+    // },
 };
 </script>
 

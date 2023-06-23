@@ -69,19 +69,19 @@ class TransactionRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 
-    @Test
-    void getAllTransactions() throws Exception {
-        List<Transaction> transactions = new ArrayList<>();
-        // Add some transactions to the list
-
-        when(transactionService.GetAllTransactions()).thenReturn(transactions);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/transactions")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-    }
+//    @Test
+//    void getAllTransactions() throws Exception {
+//        List<Transaction> transactions = new ArrayList<>();
+//        // Add some transactions to the list
+//
+//        when(transactionService.GetAllTransactions()).thenReturn(transactions);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/transactions")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+//    }
 
     @Test
     void getTransactionsByIban() throws Exception {

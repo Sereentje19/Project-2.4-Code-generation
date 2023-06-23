@@ -15,8 +15,10 @@ import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,7 +34,7 @@ public class TransactionService {
     private List<Transaction> transactions = new ArrayList<>();
 
     public List<Transaction> GetAllTransactions() {
-        return transactionRepository.findAll();
+        return (List<Transaction>)transactionRepository.findAll();
     }
 
     public Transaction GetTransactionById(long id) {
@@ -45,6 +47,8 @@ public class TransactionService {
     public List<TransactionResponseDTO> findBankAccountResponse(String iban, List<AccountType> accountType) {
         List<Transaction> transactionList = transactionRepository.findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(iban, accountType, iban, accountType);
         List<TransactionResponseDTO> dtoList = new ArrayList<>();
+
+//        List<Transaction> transactionList = transactionRepository.findAllTransactions(startDate, endDate, iban, operator, amount);
 
         for (int i = 0; i < transactionList.size(); i++) {
             TransactionResponseDTO transactionResponseDTOList = new TransactionResponseDTO();

@@ -8,11 +8,14 @@ import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
 import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -59,8 +62,19 @@ public class TransactionRestController {
     }
 
     @GetMapping("/account/{iban}/{type}") //Employee & Customer
-    public List<TransactionResponseDTO> findByBankAccountAndAccountType(@PathVariable String iban, @PathVariable List<AccountType> type) {
+    public List<TransactionResponseDTO> findByBankAccountAndAccountType(
+            @PathVariable String iban,
+            @PathVariable List<AccountType> type,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate,
+            @RequestParam("operator") String operator,
+            @RequestParam("searchField") String searchField
+    ) {
         try{
+//            System.out.println("Test: " + startDate);
+//            System.out.println("Test: " + endDate);
+//            System.out.println("Test: " + operator);
+//            System.out.println("Test: " + searchField);
             keyProvider.decodeJWT();
             return transactionService.findBankAccountResponse(iban, type);
         }catch (Exception e) {
