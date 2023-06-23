@@ -107,7 +107,7 @@ export default {
             startDate: "2023-06-22",
             endDate: "2023-06-22",
             operator: "",
-            searchField: "",
+            searchField: 0,
             roleUser: localStorage.getItem("role"),
             transactions: [
                 {

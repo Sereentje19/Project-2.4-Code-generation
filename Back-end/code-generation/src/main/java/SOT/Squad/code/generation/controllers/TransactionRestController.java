@@ -65,10 +65,10 @@ public class TransactionRestController {
     public List<TransactionResponseDTO> findByBankAccountAndAccountType(
             @PathVariable String iban,
             @PathVariable List<AccountType> type,
-            @RequestParam("startDate") String startDate,
-            @RequestParam("endDate") String endDate,
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
             @RequestParam("operator") String operator,
-            @RequestParam("searchField") String searchField) {
+            @RequestParam("searchField") int searchField) {
         try{
             keyProvider.decodeJWT();
             return transactionService.findBankAccountResponse(iban, type, startDate, endDate, operator, searchField);
