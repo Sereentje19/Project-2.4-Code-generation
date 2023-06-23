@@ -106,8 +106,8 @@ export default {
         return {
             startDate: "2023-06-22",
             endDate: "2023-06-22",
-            operator: ">",
-            searchField: "e",
+            operator: "",
+            searchField: "",
             roleUser: localStorage.getItem("role"),
             transactions: [
                 {
@@ -153,17 +153,15 @@ export default {
                 });
         },
         getTransactions() {
-            const params = {
-                startDate: this.startDate,
-                endDate: this.endDate,
-                operator: this.operator,
-                searchField: this.searchField
-            };
-
             axios
                 .get('transactions/account/' + this.bankAccount.iban + "/" +
                     this.bankAccount.accountType[0], {
-                    params,
+                    params: {
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        operator: this.operator,
+                        searchField: this.searchField
+                    },
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
