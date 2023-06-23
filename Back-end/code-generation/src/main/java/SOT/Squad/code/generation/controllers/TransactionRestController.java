@@ -68,15 +68,10 @@ public class TransactionRestController {
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
             @RequestParam("operator") String operator,
-            @RequestParam("searchField") String searchField
-    ) {
+            @RequestParam("searchField") String searchField) {
         try{
-//            System.out.println("Test: " + startDate);
-//            System.out.println("Test: " + endDate);
-//            System.out.println("Test: " + operator);
-//            System.out.println("Test: " + searchField);
             keyProvider.decodeJWT();
-            return transactionService.findBankAccountResponse(iban, type);
+            return transactionService.findBankAccountResponse(iban, type, startDate, endDate, operator, searchField);
         }catch (Exception e) {
             return null;
         }

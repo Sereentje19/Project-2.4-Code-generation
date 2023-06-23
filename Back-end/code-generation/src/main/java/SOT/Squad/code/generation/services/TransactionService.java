@@ -44,7 +44,7 @@ public class TransactionService {
         return transactionRepository.findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(iban, accountType, iban, accountType);
     }
 
-    public List<TransactionResponseDTO> findBankAccountResponse(String iban, List<AccountType> accountType) {
+    public List<TransactionResponseDTO> findBankAccountResponse(String iban, List<AccountType> accountType, String startDate, String endDate, String operator, String amount) {
         List<Transaction> transactionList = transactionRepository.findByBankAccountToAndAccountTypeToInOrBankAccountFromAndAccountTypeFromIn(iban, accountType, iban, accountType);
         List<TransactionResponseDTO> dtoList = new ArrayList<>();
 
