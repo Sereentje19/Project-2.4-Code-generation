@@ -37,7 +37,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
                 "AND t.date <= :endDate AND t.date >= :startDate " +
                 "AND (:operator is null OR :operator = '' OR (:operator = '<' " +
                 "AND t.amount < :amount) OR (:operator = '>' AND t.amount > :amount) " +
-                "OR (:operator = '=' AND t.amount = :amount))")
+                "OR (:operator = '==' AND t.amount = :amount))")
         List<Transaction> findAllTransactions(
                 @Param("startDate") LocalDateTime startDate,
                 @Param("endDate") LocalDateTime endDate,

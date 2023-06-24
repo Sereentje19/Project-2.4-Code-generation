@@ -48,7 +48,6 @@ public class TransactionService {
     @Autowired
     BankAccountRepository bankAccountRepository;
     public List<TransactionResponseDTO> findBankAccountResponse(long id, Date startDate, Date endDate, String operator, int amount) {
-//        List<Transaction> transactionList = (List<Transaction>) transactionRepository.findAll();
         List<TransactionResponseDTO> dtoList = new ArrayList<>();
         LocalDateTime startDateTime = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime endDateTime = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();

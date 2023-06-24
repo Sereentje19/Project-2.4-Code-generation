@@ -46,10 +46,10 @@
                         </select>
                     </div>
                     <div v-if="this.operator === '==' || this.operator === '<' || this.operator === '>'" class="options">
-                        <input type="number" id="inputField" placeholder="Balance" v-model="this.searchField"  @change="getTransactions()"/>
+                        <input type="text" id="inputField" placeholder="Balance" v-model="this.searchField" @change="getTransactions()"/>
                     </div>
                     <div v-else class="options">
-                        <input type="text" id="inputField" placeholder="Search" v-model="this.searchField"  @change="getTransactions()">
+                        <input type="text" id="inputField" placeholder="Search" v-model="this.searchField" @change="getTransactions()">
                     </div>
                 </div>
             </div>
