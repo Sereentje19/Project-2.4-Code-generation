@@ -65,6 +65,7 @@ public class BankAccountRestControllerTest {
                         .content(objectMapper.writeValueAsString(bankAccount)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+
     }
 
     @Test
