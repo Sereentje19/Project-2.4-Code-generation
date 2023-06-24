@@ -145,6 +145,9 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
+        if(id == 0){
+            throw new BankAccountGetException("user id is not defined");
+        }
         return bankAccountRepository.getAllByUserId(id);
     }
 
@@ -164,7 +167,6 @@ public class BankAccountService {
             else if(bankaccList.get(i).getAccountType().contains(AccountType.SAVINGS) && counter == 4){
                 accountTypes.remove(AccountType.SAVINGS);
             }
-
             counter++;
         }
         return accountTypes;

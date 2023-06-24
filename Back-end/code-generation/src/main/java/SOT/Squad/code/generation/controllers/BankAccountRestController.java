@@ -95,13 +95,13 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/userID/{id}")
-    public List<BankDropDownDTO> getAllBankAccountsByUserId(@PathVariable long id) {
+    public ResponseEntity<?> getAllBankAccountsByUserId(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
             List<BankAccount> bankList = bankAccountService.getAllBankAccountsByUserId(id);
-            return bankAccountService.getAllNameAndIbanFirst(bankList);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllNameAndIbanFirst(bankList));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
