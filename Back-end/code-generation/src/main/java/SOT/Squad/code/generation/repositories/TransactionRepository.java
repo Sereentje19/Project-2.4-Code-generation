@@ -16,21 +16,6 @@ import java.util.List;
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
     List<Transaction> findByBankAccountFromOrBankAccountTo(String bankAccountFrom, String bankAccountTo);
 
-//    @Query("SELECT t FROM Transaction t " +
-//            "WHERE (t.bankAccountFrom = :bankAccountFrom OR t.bankAccountTo = :bankAccountTo) ")
-//    List<Transaction> findAllTransactions(@Param("bankAccountTo") long bankAccountTo,
-//                                          @Param("bankAccountFrom") long bankAccountFrom);
-//
-//
-//    @Query("SELECT t FROM Transaction t " +
-//            "WHERE t.date <= :endDate AND t.date >= :startDate " +
-//            "AND (:operator is null OR :operator = '' OR (:operator = '<' " +
-//            "AND t.amount < :amount) OR (:operator = '>' AND t.amount > :amount) " +
-//            "OR (:operator = '=' AND t.amount = :amount)) AND (:iban = '' " +
-//            "OR :iban is null OR (t.bankAccountFrom IS NOT null AND t.bankAccountFrom = :iban ) " +
-//            "OR (t.bankAccountTo IS NOT null and t.bankAccountTo = :iban))")
-//    List<Transaction> findAllTransactions2(Date startDate, Date endDate, String iban, String operator, int amount);
-
 
         @Query("SELECT t FROM Transaction t " +
                 "WHERE (t.bankAccountFrom = :bankAccountFrom OR t.bankAccountTo = :bankAccountTo) " +

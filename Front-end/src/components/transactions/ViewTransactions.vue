@@ -18,10 +18,10 @@
                     <div class="bodyInfoText"> <b>Amount:</b> {{ this.transaction.amount }}</div>
                     <div class="bodyInfoText"> <b>Description:</b> {{ this.transaction.description }}</div>
                     <div class="bodyInfoText"> <b>payment reference:</b> {{ this.transaction.paymentReference }}</div>
-                    <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.bankAccountFrom }}</div>
+                    <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.ibanFrom }}</div>
                     <div v-for="accFrom in this.transaction.accountTypeFrom" class="bodyInfoText"> <b>Account type from:</b>
                         {{ accFrom }} </div>
-                    <div class="bodyInfoText"> <b>Bank account to:</b> {{ this.transaction.bankAccountTo }}</div>
+                    <div class="bodyInfoText"> <b>Bank account to:</b> {{ this.transaction.ibanTo }}</div>
                     <div v-for="accTo in this.transaction.accountTypeTo" class="bodyInfoText"> <b>Account type to:</b> {{
                         accTo }}</div>
                 </div>
@@ -63,10 +63,10 @@ export default {
                 id: 0,
                 amount: '',
                 description: '',
-                accountTypeFrom: [],
-                accountTypeTo: [],
-                bankAccountFrom: '',
-                bankAccountTo: '',
+                accountTypeTo: '',
+                accountTypeFrom: '',
+                ibanFrom: '',
+                ibanTo: '',
                 paymentReference: ''
             },
         };

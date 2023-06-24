@@ -3,6 +3,7 @@ package SOT.Squad.code.generation.controllers;
 import SOT.Squad.code.generation.exceptions.TransactionCreateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
+import SOT.Squad.code.generation.models.dto.TransactionOverViewDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
@@ -53,7 +54,7 @@ public class TransactionRestController {
     }
 
     @GetMapping("/{id}") //Employee & Customer
-    public Transaction getTransactionById(@PathVariable long id) {
+    public TransactionOverViewDTO getTransactionById(@PathVariable long id) {
         try{
             keyProvider.decodeJWT();
             return transactionService.GetTransactionById(id);

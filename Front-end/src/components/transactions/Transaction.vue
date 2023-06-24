@@ -58,8 +58,7 @@
                     <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
                         <div id="transactionInfo">
                             <div id="bankAccount">
-                                <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
-                                <h1 v-else-if="list.bankAccountFrom == this.bankAccount.iban">{{ list.bankAccountTo }}</h1>
+                                <h1 >{{ list.iban }}</h1>
                             </div>
 
                             <div>

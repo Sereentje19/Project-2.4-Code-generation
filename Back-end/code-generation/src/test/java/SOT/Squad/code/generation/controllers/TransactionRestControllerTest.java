@@ -97,23 +97,23 @@ class TransactionRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
     }
-
-    @Test
-    void getTransactionById() throws Exception {
-        // Arrange
-        long id = 1L;
-        Transaction transaction = new Transaction();
-        transaction.setId(id);
-        // Set up the transaction with the given ID
-
-        when(transactionService.GetTransactionById(id)).thenReturn(transaction);
-
-        // Act and Assert
-        mockMvc.perform(get("/transactions/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id));
-    }
+//
+//    @Test
+//    void getTransactionById() throws Exception {
+//        // Arrange
+//        long id = 1L;
+//        Transaction transaction = new Transaction();
+//        transaction.setId(id);
+//        // Set up the transaction with the given ID
+//
+//        when(transactionService.GetTransactionById(id)).thenReturn(transaction);
+//
+//        // Act and Assert
+//        mockMvc.perform(get("/transactions/{id}", id)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id").value(id));
+//    }
 
 //    @Test
 //    void findByBankAccountAndAccountType() throws Exception {

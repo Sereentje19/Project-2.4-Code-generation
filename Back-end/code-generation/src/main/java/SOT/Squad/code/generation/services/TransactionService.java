@@ -8,6 +8,7 @@ import SOT.Squad.code.generation.exceptions.ValidateTransactionException;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
+import SOT.Squad.code.generation.models.dto.TransactionOverViewDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
@@ -41,8 +42,23 @@ public class TransactionService {
         return (List<Transaction>)transactionRepository.findAll();
     }
 
-    public Transaction GetTransactionById(long id) {
-        return transactionRepository.findById(id).get();
+    public TransactionOverViewDTO GetTransactionById(long id) {
+        Transaction t = transactionRepository.findById(id).get();
+        TransactionOverViewDTO transactionOverViewDTO = new TransactionOverViewDTO();
+        transactionOverViewDTO.setId(t.getId());
+        transactionOverViewDTO.setAmount(t.getAmount());
+        transactionOverViewDTO.setDate(t.getDate());
+        transactionOverViewDTO.setDescription(t.getDescription());
+        transactionOverViewDTO.setPaymentReference(t.getPaymentReference());
+
+        BankAccount bankFrom = bankAccountRepository.getAllById(t.getBankAccountFrom());
+        BankAccount bankTo = bankAccountRepository.getAllById(t.getBankAccountTo());
+
+        transactionOverViewDTO.setIbanFrom(bankFrom.getIban());
+        transactionOverViewDTO.setIbanTo(bankTo.getIban());
+        transactionOverViewDTO.setAccountTypeFrom(bankFrom.getAccountType());
+        transactionOverViewDTO.setAccountTypeTo(bankTo.getAccountType());
+        return transactionOverViewDTO;
     }
 
     @Autowired
@@ -65,6 +81,15 @@ public class TransactionService {
             transactionResponseDTOList.setBankAccountFrom(transactionList.get(i).getBankAccountFrom());
             transactionResponseDTOList.setBankAccountTo(transactionList.get(i).getBankAccountTo());
             transactionResponseDTOList.setDate(transactionList.get(i).getDate());
+
+            if(transactionList.get(i).getBankAccountFrom() != id) {
+                BankAccount account = bankAccountRepository.getAllById(id);
+                transactionResponseDTOList.setIban(account.getIban());
+            } else{
+                BankAccount account = bankAccountRepository.getAllById(transactionList.get(i).getBankAccountTo());
+                transactionResponseDTOList.setIban(account.getIban());
+            }
+
             dtoList.add(transactionResponseDTOList);
         }
 
