@@ -53,13 +53,13 @@ public class DataSeeder implements ApplicationRunner {
         bankAccountService.addBankAccount(bankacc6);
 
         //Transactions
-        transactionService.AddTransaction(new Transaction(1, "test", 100,  2, 3,  "kenmerk", LocalDateTime.now().minusDays(3),user1));
-        transactionService.AddTransaction(new Transaction(2, "test", 100,  2, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
+        transactionService.AddTransaction(new Transaction(1, "test", 100000,  5, 6,  "kenmerk", LocalDateTime.now().minusDays(3),user1));
+        transactionService.AddTransaction(new Transaction(2, "test", 1002,  3, 2, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(3, "test", 100,  2, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(4, "test", 100,  4, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(5, "test", 100,  2, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(6, "test", 400,  4, 3, "kenmerk", LocalDateTime.now(),user1));
-        transactionService.AddTransaction(new Transaction(7, "test", 90,  2, 3, "kenmerk", LocalDateTime.now(),user1));
+        transactionService.AddTransaction(new Transaction(7, "test", 90,  3, 2, "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(8, "test", 10,  4, 3, "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(9, "test", 1.8,  2, 3, "kenmerk", LocalDateTime.now(),user1));
         transactionService.AddTransaction(new Transaction(0, "test", 10.20,  2, 3, "kenmerk", LocalDateTime.now(),user1));

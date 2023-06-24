@@ -10,4 +10,5 @@ public class TransactionResponseDTO {
     private long bankAccountFrom;
     private long bankAccountTo;
     private LocalDateTime date;
+    private String iban;
 }

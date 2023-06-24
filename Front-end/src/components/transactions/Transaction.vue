@@ -58,16 +58,15 @@
                     <div v-for="list in this.transactions" class="transaction" @click="ViewTransactions(list.id)">
                         <div id="transactionInfo">
                             <div id="bankAccount">
-                                <h1 v-if="list.bankAccountTo == this.bankAccount.iban">{{ list.bankAccountFrom }}</h1>
-                                <h1 v-else-if="list.bankAccountFrom == this.bankAccount.iban">{{ list.bankAccountTo }}</h1>
+                                <h1 >{{ list.iban }}</h1>
                             </div>
 
                             <div>
                                 <div id="currencies">
-                                    <div>{{ this.bankAccount.currencies }}</div>
+                                    <div> {{ this.bankAccount.currencies }}</div>
                                 </div>
                                 <div id="amount">
-                                    <h1>{{ list.amount }}</h1>
+                                    <h1> {{ list.amount }}</h1>
                                     <!-- list.amount.toFixed(2) -->
                                 </div>
                             </div>
@@ -123,7 +122,6 @@ export default {
                 id: 0,
                 iban: '',
                 currencies: '',
-                accountType: [],
             },
             balanceFilter:
             {
