@@ -56,7 +56,7 @@ public class BankAccountService {
         return savedBankAccount;
     }
 
-    private BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
+    public BankAccount addIbanToBankAccount(BankAccount bankAccount, User user)
     {
         if(user.getBankAccountList().isEmpty() && bankAccount.getIban() == null) {
             //Generate iban
@@ -73,7 +73,7 @@ public class BankAccountService {
         return bankAccount;
     }
 
-    private BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
+    public BankAccount addAccountListToBankAccount(BankAccount savedBankAccount, User user)
     {
         //Add bank account to user
         List<Long> bankAccountList = user.getBankAccountList();
@@ -138,7 +138,6 @@ public class BankAccountService {
         BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
         bankAccountInfoDTO.setId(bankList.getId());
         bankAccountInfoDTO.setIban(bankList.getIban());
-        bankAccountInfoDTO.setAccountType(bankList.getAccountType());
         bankAccountInfoDTO.setCurrencies(bankList.getCurrencies());
 
         return bankAccountInfoDTO;

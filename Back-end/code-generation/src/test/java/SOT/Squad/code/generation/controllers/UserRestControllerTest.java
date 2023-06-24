@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.*;
+import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.services.BankAccountService;
 import SOT.Squad.code.generation.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -154,7 +155,7 @@ public class UserRestControllerTest {
         long id = 1L;
 // Add some transactions to the list
 
-        when(userService.updateUser(any(User.class))).thenReturn(user);
+        when(userService.updateUser(id, any(EditUserRequestDTO.class))).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/users/{id}", id)
