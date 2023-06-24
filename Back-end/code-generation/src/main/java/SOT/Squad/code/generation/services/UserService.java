@@ -131,7 +131,7 @@ public class UserService {
     }
     public boolean checkPincode(String pincode) {
         User user = userRepository.findUserByPincode(pincode);
-        if(user == null || user.getId() == 0){
+        if(user == null || user.getId() == 0 || pincode == ""){
             throw new WrongPincodeException("Wrong pincode");
         }
         return true;

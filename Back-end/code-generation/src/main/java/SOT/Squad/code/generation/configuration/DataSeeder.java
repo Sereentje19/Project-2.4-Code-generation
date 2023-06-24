@@ -55,7 +55,7 @@ public class DataSeeder implements ApplicationRunner {
         //Transactions
         transactionService.AddTransaction(new Transaction(1, "test", 100000,  5, 6,  "kenmerk", LocalDateTime.now().minusDays(3),user1));
         transactionService.AddTransaction(new Transaction(2, "test", 1002,  3, 2, "kenmerk", LocalDateTime.now().plusDays(4),user1));
-        transactionService.AddTransaction(new Transaction(3, "test", 100,  2, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
+        transactionService.AddTransaction(new Transaction(3, "test", 103,  2, 3, "wortel", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(4, "test", 100,  4, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(5, "test", 100,  2, 3, "kenmerk", LocalDateTime.now().plusDays(4),user1));
         transactionService.AddTransaction(new Transaction(6, "test", 400,  4, 3, "kenmerk", LocalDateTime.now(),user1));

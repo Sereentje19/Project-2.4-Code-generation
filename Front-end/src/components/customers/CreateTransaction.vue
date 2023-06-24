@@ -243,7 +243,9 @@ export default {
                 .then((res) => {
                     this.nameAndDtoList = res.data;
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                        alert(error.response.data);
+                    })
         },
         getUser() {
             axios
@@ -257,7 +259,9 @@ export default {
                     this.user = res.data;
                     this.fillfield();
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                        alert(error.response.data);
+                    })
         },
         getBankAccount() {
             axios
@@ -269,10 +273,13 @@ export default {
                 .then((res) => {
                     this.bankaccountdto = res.data[0];
                     this.transactionDTO.accountIdFrom = this.bankaccountdto.id;
+                    console.log(this.user.id);
                     this.getBankAccountByUserId(this.user.id);
                     
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                        alert(error.response.data);
+                    })
         },
         //done
         showPincode() {
@@ -292,10 +299,6 @@ export default {
                     }
                 })
                 .then((res) => {
-                    if(res.data == null || res.data == undefined || res.data == ""){
-                            alert("this account doesn't exist");
-                            location.reload();
-                        }
                     this.bankaccounttodto = res.data[0];
                     this.transactionDTO.accountIdTo = this.bankaccounttodto.id;
                     this.postTransaction();
@@ -315,15 +318,13 @@ export default {
                     }
                 })
                 .then((res) => {
-                    if(res.data == null || res.data == undefined || res.data == ""){
-                            alert("this account doesn't exist");
-                            location.reload();
-                        }
                     this.bankaccounttodto = res.data[0];
                     this.transactionDTO.accountIdTo = this.bankaccounttodto.id;
                     this.postTransaction();
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                        alert(error.response.data);
+                    })
             }
         },
         fillfield(){
@@ -342,7 +343,9 @@ export default {
                 .then((res) => {
                     this.usersBankList = res.data;
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                        // alert(error.response.data);
+                    })
         },
         checkPincode() {
             axios
@@ -360,7 +363,6 @@ export default {
         },
         postTransaction(){
           this.transactionDTO.date = new Date();
-          console.log(this.transactionDTO);
           axios
                     .post('transactions',this.transactionDTO, {
                         headers: {
@@ -368,7 +370,6 @@ export default {
                         }
                     })
                     .then((res) => {
-                        console.log(res.data);
                         this.$router.push("/transactions/" + btoa(this.decodedId));
                     })
                     .catch((error) => {

@@ -5,19 +5,19 @@
         <div class="structure">
             <div class="headInfo">
                 <div class="accountNumber">
-                    <input type="text" class="input" placeholder="van rekeningnummer...." :value=this.bankAccount.iban
+                    <input type="text" class="input" placeholder="van rekeningnummer...." :value=this.bankaccountdto.iban
                         id="fromInput">
                 </div>
             </div>
             <div class="body">
                 <div class="other">
-                    <input type="number" class="input" placeholder="bedrag" v-model="bedrag">
+                    <input type="number" class="input" placeholder="bedrag" v-model="this.WithdrawOrDeposit.bedrag">
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="description" v-model="omscrijving">
+                    <input type="text" class="input" placeholder="description" v-model="this.WithdrawOrDeposit.omscrijving">
                 </div>
                 <div class="other">
-                    <select name="choice" v-model="choice">
+                    <select name="choice" v-model="this.WithdrawOrDeposit.choice">
                         <option value="withdraw">withdraw</option>
                         <option value="deposit">deposit</option>
                     </select>
@@ -148,39 +148,21 @@ export default {
     },
     data() {
         return {
-            rekening: "",
-            bedrag: 0,
-            omscrijving: "",
-            choice: "",
-            bankAccount:
-            {
-                id: 0,
-                iban: '',
-                balance: 0,
-                userId: 0,
-                disabled: '',
-                currencies: [],
+            WithdrawOrDeposit:{
+                id:0,
+                bankAccountId: 0,
+                bedrag: "0",
+                omscrijving: "",
+                choise: "",
+                performedByUser: [],
+            },
+            bankaccountdto : {
                 accountType: [],
-                absoluutLimit: 0,
-            },
-            user:
-            {
+                iban: "",
                 id: 0,
-                username: "",
-                password: "",
-                fistName: "",
-                lastName: "",
-                phoneNumber: "",
-                email: "",
-                street: "",
-                houseNumber: "",
-                postalCode: "",
-                city: "",
-                bankAccountList: [],
-                roles: [],
-                dailyLimit: 0,
-                transactionLimit: 0,
+                name: "",
             },
+            pincode: "",
         };
     },
     mounted() {
@@ -191,8 +173,7 @@ export default {
     methods: {
         fillfield() {
             let fromInput = document.getElementById("fromInput");
-            console.log(this.user.roles[0]);
-            if (this.user.roles[0] == "CUSTOMER") {
+            if (this.WithdrawOrDeposit.performedByUser.roles[0] == "CUSTOMER") {
                 fromInput.setAttribute('readonly', true);
             }
         },
@@ -204,7 +185,7 @@ export default {
                     }
                 })
                 .then((res) => {
-                    this.user = res.data;
+                    this.WithdrawOrDeposit.performedByUser = res.data;
                     this.fillfield();
                 })
                 .catch(error => console.log(error))
@@ -212,21 +193,19 @@ export default {
         getBankAccount() {
             const decodedId = atob(this.id)
             axios
-                .get('/bankaccounts/' + decodedId, {
+                .get('/bankaccounts/dto/' + decodedId, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
                 })
                 .then((res) => {
-                    this.bankAccount = res.data;
-                    this.rekening = this.bankAccount.iban;
-                    console.log(this.bankAccount);
-
+                    this.bankaccountdto = res.data[0];
+                    this.WithdrawOrDeposit.bankAccountId = this.bankaccountdto.id
+                    
                 })
                 .catch(error => console.log(error))
         },
         showPincode() {
-            this.rekening = document.getElementById("fromInput").value;
             document.getElementById("test").style.display = "table";
         },
         closePincode() {
@@ -240,77 +219,87 @@ export default {
                     }
                 })
                 .then((res) => {
-                    console.log(res.data)
-                    // console.log(this.bankAccount);
-                    this.withdrawOrDeposit();
+                    this.postWithdrawOrDeposit(this.WithdrawOrDeposit);
                 })
-                .catch((error) => console.log(error));
-
+                .catch((error) => {
+                        console.log(error);
+                        alert(error.response.data);
+                    });
         },
-        withdrawOrDeposit() {
-            if (this.choice == "withdraw") {
-                this.withdraw();
-            } else if (this.choice == "deposit") {
-                this.deposit();
-            }
-            else {
-                alert("please select withdraw or deposit");
-                location.reload();
-            }
-        },
-        withdraw() {
-            let newbalance = this.bankAccount.balance -= this.bedrag;
-            this.verifyRequest(newbalance);
-            this.bankAccount.balance = newbalance;
-            this.changeBankAcount();
-        },
-        deposit() {
-            let newbalance = this.bankAccount.balance += this.bedrag;
-            this.verifyRequest(newbalance);
-            this.bankAccount.balance = newbalance;
-            this.changeBankAcount();
-        },
-        verifyRequest(newbalance) {
-            if (this.bankAccount.accountType[0] == "SAVINGS") {
-                alert("you can't withdraw or deposit from or to a savings account");
-                location.reload();
-            }
-            if (this.bankAccount.disabled == true) {
-                alert("you can't withdraw or deposit from or to a disabled account");
-                location.reload();
-            }
-            if (this.choice == "withdraw" && newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
-                alert("you can't withdraw or deposit more than your absoluut limit");
-                location.reload();
-            }
-            var dailylimit = this.user.dailyLimit - this.bedrag;
-            if (dailylimit < 0) {
-                alert("you can't withdraw or deposit more than your daily limit");
-                location.reload();
-            }
-            if (this.rekening == "" || this.bedrag == 0 || this.choice == "") {
-                alert("you need to fill in all the fields");
-                location.reload();
-            }
-            if (this.bedrag < 0) {
-                alert("you can't withdraw or deposit a negative amount");
-                location.reload();
-            }
-        },
-        changeBankAcount() {
-            const decodedId = atob(this.id)
+        postWithdrawOrDeposit(WithdrawOrDeposit){
+            console.log(WithdrawOrDeposit);
             axios
-                .put("/bankaccounts/change/" + decodedId, this.bankAccount, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("jwt")
-                    }
-                })
-                .then((res) => {
-                    console.log(res.data);
-                    this.$router.push("/transactions/" + btoa(decodedId));
-                })
-                .catch((error) => console.log(error));
-        }
+                    .post('transactions/withdrawOrDeposit',WithdrawOrDeposit, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("jwt")
+                        }
+                    })
+                    .then((res) => {
+                        this.$router.push("/transactions/" + this.id);
+                    })
+                    .catch((error) => {
+                        alert(error.response.data);
+                    });
+        },
+        // withdrawOrDeposit() {
+        //     if (this.choice == "withdraw") {
+        //         let newbalance = this.bankAccount.balance -= this.bedrag;
+        //         this.bankAccount.balance = newbalance;
+        //     } else if (this.choice == "deposit") {
+        //         let newbalance = this.bankAccount.balance += this.bedrag;
+        //         this.bankAccount.balance = newbalance;
+        //     }
+        //     this.verifyRequest(newbalance);
+        //     this.changeBankAcount();
+        // },
+        // withdraw() {
+        //     this.verifyRequest(newbalance);
+        //     this.changeBankAcount();
+        // },
+        // deposit() {
+            
+        // },
+        // verifyRequest(newbalance) {
+        //     if (this.bankAccount.accountType[0] == "SAVINGS") {
+        //         alert("you can't withdraw or deposit from or to a savings account");
+        //         location.reload();
+        //     }
+        //     if (this.bankAccount.disabled == true) {
+        //         alert("you can't withdraw or deposit from or to a disabled account");
+        //         location.reload();
+        //     }
+        //     if (this.choice == "withdraw" && newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
+        //         alert("you can't withdraw or deposit more than your absoluut limit");
+        //         location.reload();
+        //     }
+        //     var dailylimit = this.user.dailyLimit - this.bedrag;
+        //     if (dailylimit < 0) {
+        //         alert("you can't withdraw or deposit more than your daily limit");
+        //         location.reload();
+        //     }
+        //     if (this.rekening == "" || this.bedrag == 0 || this.choice == "") {
+        //         alert("you need to fill in all the fields");
+        //         location.reload();
+        //     }
+        //     if (this.bedrag < 0) {
+        //         alert("you can't withdraw or deposit a negative amount");
+        //         location.reload();
+        //     }
+        // },
+        // changeBankAcount() {
+        //     const decodedId = atob(this.id)
+        //     axios
+        //         .put("/bankaccounts/change/" + decodedId, this.bankAccount, {
+        //             headers: {
+        //                 Authorization: "Bearer " + localStorage.getItem("jwt")
+        //             }
+        //         })
+        //         .then((res) => {
+        //             console.log(res.data);
+        //             this.$router.push("/transactions/" + btoa(decodedId));
+        //         })
+        //         .catch((error) => console.log(error));
+        // }
     },
 };
 </script>
