@@ -43,6 +43,15 @@ public class UserService {
         }
     }
 
+    public User getUserObjecttByUsername(String username) throws UsernameNotFoundException {
+        try {
+            User user = userRepository.findUserByUsername(username).get();
+            return user;
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+    }
+
     public void checkPasswordStrength(String passw) {
         boolean hasUppercase = !passw.equals(passw.toLowerCase());
         boolean hasLowercase = !passw.equals(passw.toUpperCase());

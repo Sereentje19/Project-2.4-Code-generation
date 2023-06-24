@@ -1,6 +1,6 @@
 package SOT.Squad.code.generation.models.dto;
 
-import SOT.Squad.code.generation.models.Role;
+import SOT.Squad.code.generation.models.AccountType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 import lombok.Data;
@@ -8,12 +8,12 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CurrentUserResponseDTO {
+public class BankAccountInfoDTO {
     private long id;
-    private String firstName;
-    private String lastName;
-    private List<Long> bankAccountList;
+    private String iban;
+    private String currencies;
+
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<AccountType> accountType;
 
 }

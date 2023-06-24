@@ -97,6 +97,15 @@ public class UserRestController {
             return null;
         }
     }
+    @GetMapping("/currentUser") //Employee & Customer
+    public User getUserObjectOnUsername() {
+        try {
+            String username = keyProvider.decodeJWT();
+            return userService.getUserObjecttByUsername(username);
+        }catch (Exception e) {
+            return null;
+        }
+    }
 
     @PutMapping("/{id}") //Employee & Customer
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody EditUserRequestDTO user) {

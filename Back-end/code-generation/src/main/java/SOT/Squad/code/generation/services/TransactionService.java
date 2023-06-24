@@ -15,6 +15,7 @@ import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) {
+    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) throws ValidateTransactionException{
         BankAccount bankAccountFrom = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdFrom());
         BankAccount bankAccountTo = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdTo());
         User performedByUser = transactionRequestDTO.getPerformedByUser();
@@ -83,6 +84,9 @@ public class TransactionService {
             if(bankAccountTo.getAccountType().get(0) != AccountType.CURRENT){
                 throw new ValidateTransactionException("you can only transfer to a current account");
             }
+        }
+        if(transactionRequestDTO.getPaymentReference() == ""){
+            throw new ValidateTransactionException("you need to fill in a payment reference");
         }
         if(bankAccountTo.isDisabled() || bankAccountFrom.isDisabled()){
             throw new ValidateTransactionException("you can't transfer to and / or from a disabled account");
@@ -109,12 +113,13 @@ public class TransactionService {
 
 //new Transaction(0, "test", 10.20,  "NL12INHO0123456787", "NL12INHO0123456789", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now(),null)
 //       return AddTransaction(new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456788", List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk", LocalDateTime.now().minusDays(3),null));
-        Transaction transaction = new Transaction(0, transactionRequestDTO.getDescription(), transactionRequestDTO.getAmount(), bankAccountFrom.getIban(), bankAccountTo.getIban(), bankAccountFrom.getAccountType(), bankAccountTo.getAccountType(), transactionRequestDTO.getPaymentReference(), transactionRequestDTO.getDate(), performedByUser);
-        Transaction ReturnedTransaction = AddTransaction(transaction);
+//        Transaction transaction = new Transaction(0, transactionRequestDTO.getDescription(), transactionRequestDTO.getAmount(), bankAccountFrom.getIban(), bankAccountTo.getIban(), bankAccountFrom.getAccountType(), bankAccountTo.getAccountType(), transactionRequestDTO.getPaymentReference(), transactionRequestDTO.getDate(), performedByUser);
+//        Transaction ReturnedTransaction = AddTransaction(transaction);
+        Transaction ReturnedTransaction = AddTransaction(new Transaction(0, transactionRequestDTO.getDescription(), transactionRequestDTO.getAmount(),   bankAccountFrom.getIban(),  bankAccountTo.getIban(), List.of(bankAccountFrom.getAccountType().get(0)), List.of(bankAccountTo.getAccountType().get(0)), transactionRequestDTO.getPaymentReference(), transactionRequestDTO.getDate(),null));
 
-        if(ReturnedTransaction == null){
-            throw new TransactionCreateException("something went wrong while creating the transaction");
-        }
+//        if(ReturnedTransaction == null){
+//            throw new TransactionCreateException("something went wrong while creating the transaction");
+//        }
         BankAccount newBankAccountFrom = bankAccountService.updateBankAccount(bankAccountFrom, transactionRequestDTO.getAccountIdFrom());
         BankAccount newBankAccountTo = bankAccountService.updateBankAccount(bankAccountTo, transactionRequestDTO.getAccountIdTo());
         if(newBankAccountTo == null || newBankAccountFrom == null){
