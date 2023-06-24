@@ -137,7 +137,6 @@ public class BankAccountService {
         BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
         bankAccountInfoDTO.setId(bankList.getId());
         bankAccountInfoDTO.setIban(bankList.getIban());
-        bankAccountInfoDTO.setAccountType(bankList.getAccountType());
         bankAccountInfoDTO.setCurrencies(bankList.getCurrencies());
 
         return bankAccountInfoDTO;

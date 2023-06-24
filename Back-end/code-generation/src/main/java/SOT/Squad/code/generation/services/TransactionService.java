@@ -82,11 +82,11 @@ public class TransactionService {
             transactionResponseDTOList.setBankAccountTo(transactionList.get(i).getBankAccountTo());
             transactionResponseDTOList.setDate(transactionList.get(i).getDate());
 
-            if(transactionList.get(i).getBankAccountFrom() != id) {
-                BankAccount account = bankAccountRepository.getAllById(id);
+            if(transactionList.get(i).getBankAccountFrom() == id) {
+                BankAccount account = bankAccountRepository.getAllById(transactionList.get(i).getBankAccountTo());
                 transactionResponseDTOList.setIban(account.getIban());
             } else{
-                BankAccount account = bankAccountRepository.getAllById(transactionList.get(i).getBankAccountTo());
+                BankAccount account = bankAccountRepository.getAllById(transactionList.get(i).getBankAccountFrom());
                 transactionResponseDTOList.setIban(account.getIban());
             }
 
