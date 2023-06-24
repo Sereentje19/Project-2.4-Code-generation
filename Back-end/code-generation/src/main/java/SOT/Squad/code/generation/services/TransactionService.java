@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,10 +50,16 @@ public class TransactionService {
     public List<TransactionResponseDTO> findBankAccountResponse(long id, Date startDate, Date endDate, String operator, int amount) {
 //        List<Transaction> transactionList = (List<Transaction>) transactionRepository.findAll();
         List<TransactionResponseDTO> dtoList = new ArrayList<>();
+        LocalDateTime localDateTimeStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime localDateTimeEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         BankAccount b = bankAccountRepository.findById(id).get();
 
-        List<Transaction> transactionList = transactionRepository.findAllTransactions(b.getId(), b.getId());
+//        List<Transaction> transactionList = transactionRepository.findAllTransactions(b.getId(), b.getId());
+
+        List<Transaction> transactionList = transactionRepository.findAllTransactions(
+                localDateTimeStartDate, localDateTimeEndDate, b.getId(), b.getId(), operator, amount);
+
 
         for (int i = 0; i < transactionList.size(); i++) {
             TransactionResponseDTO transactionResponseDTOList = new TransactionResponseDTO();
