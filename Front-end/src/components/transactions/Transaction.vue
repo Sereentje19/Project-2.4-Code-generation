@@ -32,24 +32,24 @@
                 <div id="rowBelow">
                     <div class="options" id="datepicker">
                         <h4>From</h4>&nbsp;&nbsp;
-                        <input type="date" v-model="startDate" />
+                        <input type="date" v-model="startDate" @change="getTransactions()" />
                     </div>
                     <div class="options" id="datepicker">
                         <h4>To</h4> &nbsp;&nbsp;
-                        <input type="date" v-model="endDate" />
+                        <input type="date" v-model="endDate"  @change="getTransactions()"/>
                     </div>
                     <div class="options">
-                        <select id="inputField" v-model="this.operator">
+                        <select id="inputField" v-model="this.operator"  @change="getTransactions()">
                             <option value="<">Less than</option>
                             <option value="==">Equal to</option>
                             <option value=">">Greater than</option>
                         </select>
                     </div>
                     <div v-if="this.operator === '==' || this.operator === '<' || this.operator === '>'" class="options">
-                        <input type="number" id="inputField" placeholder="Balance" v-model="searchField" />
+                        <input type="number" id="inputField" placeholder="Balance" v-model="this.searchField"  @change="getTransactions()"/>
                     </div>
                     <div v-else class="options">
-                        <input type="text" id="inputField" placeholder="Search" v-model="searchField">
+                        <input type="text" id="inputField" placeholder="Search" v-model="this.searchField"  @change="getTransactions()">
                     </div>
                 </div>
             </div>
