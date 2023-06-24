@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class TransactionResponseDTO {
     private long id;
     private double amount;
-    private String bankAccountFrom;
-    private String bankAccountTo;
+    private long bankAccountFrom;
+    private long bankAccountTo;
     private LocalDateTime date;
 }
