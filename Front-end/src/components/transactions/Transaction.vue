@@ -168,7 +168,7 @@ export default {
                     this.transactions = res.data;
                     console.log(res.data)
                 }).catch((error) => {
-                    // alert(error.response.data);
+                    alert(error.response.data);
                 });
         },
         WithDrawOrDeposit() {
@@ -181,40 +181,6 @@ export default {
             this.$router.push("/viewTransaction/" + btoa(this.bankAccount.iban) + "/" + btoa(id));
         },
     },
-    // computed: {
-    //     filteredTransactions() {
-    //         const searchQuery = this.searchQuery.toLowerCase();
-    //         const fromDate = this.fromDate;
-    //         const toDate = this.toDate;
-    //         const balanceFilter = this.balanceFilter;
-
-    //         return this.transactions.filter((transaction) => {
-    //             const fieldsToCheck = ['amount', 'bankAccountFrom', 'bankAccountTo'];
-
-    //             const isInDateRange =
-    //                 (!fromDate || transaction.date >= fromDate) &&
-    //                 (!toDate || transaction.date <= toDate);
-
-    //             const matchesSearchQuery = fieldsToCheck.some((field) => {
-    //                 const fieldValue = transaction[field];
-    //                 return (
-    //                     fieldValue && fieldValue.toString().toLowerCase().includes(searchQuery)
-    //                 );
-    //             });
-
-    //             let matchesBalanceFilter = true;
-    //             if (balanceFilter.comparison === '<') {
-    //                 matchesBalanceFilter = parseFloat(transaction.amount) < balanceFilter.value;
-    //             } else if (balanceFilter.comparison === '==') {
-    //                 matchesBalanceFilter = parseFloat(transaction.amount) === balanceFilter.value;
-    //             } else if (balanceFilter.comparison === '>') {
-    //                 matchesBalanceFilter = parseFloat(transaction.amount) > balanceFilter.value;
-    //             }
-
-    //             return isInDateRange && matchesSearchQuery && matchesBalanceFilter;
-    //         });
-    //     },
-    // },
 };
 </script>
 
