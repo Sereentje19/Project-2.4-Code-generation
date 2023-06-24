@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.exceptions.BankAccountGetException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -94,13 +95,13 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/userID/{id}")
-    public List<BankDropDownDTO> getAllBankAccountsByUserId(@PathVariable long id) {
+    public ResponseEntity<?> getAllBankAccountsByUserId(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
             List<BankAccount> bankList = bankAccountService.getAllBankAccountsByUserId(id);
-            return bankAccountService.getAllNameAndIbanFirst(bankList);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllNameAndIbanFirst(bankList));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -137,14 +138,14 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/iban/{iban}") //Employee & Customer
-    public List<BankDropDownDTO> getBankAccountByIban(@PathVariable String iban) {
+    public ResponseEntity<?> getBankAccountByIban(@PathVariable String iban) {
         try {
             keyProvider.decodeJWT();
             List<BankAccount> bankList = new ArrayList<>();
             bankList.add(bankAccountService.getBankAccountByIban(iban));
-            return bankAccountService.getAllNameAndIbanFirst(bankList);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllNameAndIbanFirst(bankList));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }

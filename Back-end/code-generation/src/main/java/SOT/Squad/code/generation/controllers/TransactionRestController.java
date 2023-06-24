@@ -1,6 +1,6 @@
 package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.exceptions.TransactionCreateException;
+import SOT.Squad.code.generation.exceptions.*;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.dto.TransactionOverViewDTO;
@@ -32,15 +32,14 @@ public class TransactionRestController {
 
 //    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
-
-//    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
-//        try {
-//            keyProvider.decodeJWT();
-//            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
-//        }catch (TransactionCreateException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-//        }
-//    }
+    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+        try {
+            keyProvider.decodeJWT();
+            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
+        }catch (TransactionCreateException | BankAccountUpdateException | UserUpdateException | ValidateTransactionException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {

@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.exceptions.BankAccountGetException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
 import SOT.Squad.code.generation.models.AccountType;
@@ -143,6 +144,9 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
+        if(id == 0){
+            throw new BankAccountGetException("user id is not defined");
+        }
         return bankAccountRepository.getAllByUserId(id);
     }
 
@@ -162,13 +166,17 @@ public class BankAccountService {
             else if(bankaccList.get(i).getAccountType().contains(AccountType.SAVINGS) && counter == 4){
                 accountTypes.remove(AccountType.SAVINGS);
             }
-
             counter++;
         }
         return accountTypes;
     }
 
     public BankAccount getBankAccountByIban(String iban) {
+
+        if(iban == null || iban.isEmpty() || iban.isBlank() || iban.length() != 18) {
+            throw new BankAccountGetException("Iban is invalid");
+
+        }
         return bankAccountRepository.findFirstByIban(iban);
     }
 }
