@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
+import SOT.Squad.code.generation.exceptions.BankAccountGetException;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
 import SOT.Squad.code.generation.models.AccountType;
@@ -170,6 +171,11 @@ public class BankAccountService {
     }
 
     public BankAccount getBankAccountByIban(String iban) {
+
+        if(iban == null || iban.isEmpty() || iban.isBlank() || iban.length() != 18) {
+            throw new BankAccountGetException("Iban is invalid");
+
+        }
         return bankAccountRepository.findFirstByIban(iban);
     }
 }

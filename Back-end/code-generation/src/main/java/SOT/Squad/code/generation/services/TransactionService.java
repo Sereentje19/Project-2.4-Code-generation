@@ -1,10 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 
-import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
-import SOT.Squad.code.generation.exceptions.TransactionCreateException;
-import SOT.Squad.code.generation.exceptions.UserCreateException;
-import SOT.Squad.code.generation.exceptions.ValidateTransactionException;
+import SOT.Squad.code.generation.exceptions.*;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
@@ -70,7 +67,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) throws ValidateTransactionException{
+    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) {
         BankAccount bankAccountFrom = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdFrom());
         BankAccount bankAccountTo = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdTo());
         User performedByUser = transactionRequestDTO.getPerformedByUser();
@@ -90,6 +87,9 @@ public class TransactionService {
         }
         if(bankAccountTo.isDisabled() || bankAccountFrom.isDisabled()){
             throw new ValidateTransactionException("you can't transfer to and / or from a disabled account");
+        }
+        if(transactionRequestDTO.getAmount() <= 0){
+            throw new ValidateTransactionException("you can't transfer 0 or less");
         }
         if(performedByUser.getTransactionLimit() < transactionRequestDTO.getAmount()){
             throw new ValidateTransactionException("you can't transfer more than your transaction limit");
@@ -117,18 +117,18 @@ public class TransactionService {
 //        Transaction ReturnedTransaction = AddTransaction(transaction);
         Transaction ReturnedTransaction = AddTransaction(new Transaction(0, transactionRequestDTO.getDescription(), transactionRequestDTO.getAmount(),   bankAccountFrom.getIban(),  bankAccountTo.getIban(), List.of(bankAccountFrom.getAccountType().get(0)), List.of(bankAccountTo.getAccountType().get(0)), transactionRequestDTO.getPaymentReference(), transactionRequestDTO.getDate(),null));
 
-//        if(ReturnedTransaction == null){
-//            throw new TransactionCreateException("something went wrong while creating the transaction");
-//        }
+        if(ReturnedTransaction == null){
+            throw new TransactionCreateException("something went wrong while creating the transaction");
+        }
         BankAccount newBankAccountFrom = bankAccountService.updateBankAccount(bankAccountFrom, transactionRequestDTO.getAccountIdFrom());
         BankAccount newBankAccountTo = bankAccountService.updateBankAccount(bankAccountTo, transactionRequestDTO.getAccountIdTo());
         if(newBankAccountTo == null || newBankAccountFrom == null){
-            throw new BankAccountCreateException("something went wrong while updating the bankaccount");
+            throw new BankAccountUpdateException("something went wrong while updating the bankaccount");
         }
         EditUserRequestDTO editUserRequestDTO = new EditUserRequestDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive());
         User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
-            throw new UserCreateException("something went wrong while updating the user");
+            throw new UserUpdateException("something went wrong while updating the user");
         }
         return ReturnedTransaction;
     }
