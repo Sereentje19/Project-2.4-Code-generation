@@ -31,14 +31,14 @@ public class TransactionRestController {
 //    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
 
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
-        try {
-            keyProvider.decodeJWT();
-            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
-        }catch (TransactionCreateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+//    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+//        try {
+//            keyProvider.decodeJWT();
+//            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
+//        }catch (TransactionCreateException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
 
     @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {
@@ -61,17 +61,16 @@ public class TransactionRestController {
         }
     }
 
-    @GetMapping("/account/{iban}/{type}") //Employee & Customer
+    @GetMapping("/account/{id}") //Employee & Customer
     public List<TransactionResponseDTO> findByBankAccountAndAccountType(
-            @PathVariable String iban,
-            @PathVariable List<AccountType> type,
+            @PathVariable long id,
             @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
             @RequestParam("operator") String operator,
             @RequestParam("searchField") int searchField) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.findBankAccountResponse(iban, type, startDate, endDate, operator, searchField);
+            return transactionService.findBankAccountResponse(id, startDate, endDate, operator, searchField);
         }catch (Exception e) {
             return null;
         }

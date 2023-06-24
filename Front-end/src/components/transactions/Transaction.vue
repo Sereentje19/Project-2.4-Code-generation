@@ -104,8 +104,8 @@ export default {
     },
     data() {
         return {
-            startDate: "2023-06-22",
-            endDate: "2023-06-22",
+            startDate: "2020-06-22",
+            endDate: "2025-01-01",
             operator: "",
             searchField: 0,
             roleUser: localStorage.getItem("role"),
@@ -153,9 +153,9 @@ export default {
                 });
         },
         getTransactions() {
+            console.log(this.bankAccount.id)
             axios
-                .get('transactions/account/' + this.bankAccount.iban + "/" +
-                    this.bankAccount.accountType[0], {
+                .get('transactions/account/' + this.bankAccount.id, {
                     params: {
                         startDate: this.startDate,
                         endDate: this.endDate,
