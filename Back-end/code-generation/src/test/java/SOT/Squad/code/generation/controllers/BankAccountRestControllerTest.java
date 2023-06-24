@@ -243,7 +243,7 @@ public class BankAccountRestControllerTest {
         verify(bankAccountService, times(1)).getAllBankAccounts();
         verify(bankAccountService, times(1)).getAllNameAndIban(bankAccounts);
     }
-    
+
 
 //    @Test
 //    public void testGetAllNameAndIban() throws Exception {

@@ -19,14 +19,9 @@ public class Transaction {
     private long id;
     private String description;
     private double amount;
-    private String bankAccountFrom;
-    private String bankAccountTo;
+    private long bankAccountFrom;
+    private long bankAccountTo;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<AccountType> accountTypeFrom;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<AccountType> accountTypeTo;
     private String paymentReference;
     private LocalDateTime date;
     @OneToOne

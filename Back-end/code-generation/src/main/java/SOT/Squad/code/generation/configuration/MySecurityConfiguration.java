@@ -37,7 +37,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/users/dropdown").authenticated()
 
                 //transactions
-                .requestMatchers("/transactions/account/{iban}/{type}").authenticated()
+                .requestMatchers("/transactions/account/{id}").authenticated()
                 .requestMatchers("/transactions").authenticated()
                 .requestMatchers("/transactions/{id}").authenticated()
 
