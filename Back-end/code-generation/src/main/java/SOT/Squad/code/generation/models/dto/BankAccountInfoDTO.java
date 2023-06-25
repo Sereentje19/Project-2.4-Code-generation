@@ -12,4 +12,8 @@ public class BankAccountInfoDTO {
     private long id;
     private String iban;
     private String currencies;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AccountType> accountType;
+
 }

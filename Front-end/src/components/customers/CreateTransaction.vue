@@ -27,7 +27,7 @@
                     </datalist>
                 </div>
                 <div class="other">
-                    <input type="text" class="input" placeholder="bedrag" v-model="transactionDTO.amount">
+                    <input type="number" min="0" class="input" placeholder="bedrag" v-model="transactionDTO.amount">
                 </div>
                 <div class="other">
                     <input type="text" class="input" placeholder="description" v-model="transactionDTO.description">
@@ -183,13 +183,13 @@ export default {
             ibanTo: "",
             transactionDTO:
             {
-                id: 0,//check
-                description: "",//check
+                id: 1,//check
+                description: '',//check
                 amount: 0,//check
                 accountIdFrom: 0,//check
                 accountIdTo: 0,//check
-                paymentReference: "",//check
-                date: "",//check
+                paymentReference: '',//check
+                date: '',//check
                 performedByUser: [],//check
             },
             pincode: "",
@@ -247,7 +247,7 @@ export default {
         },
         getUser() {
             axios
-                .get('users/current', {
+                .get('users/currentUser', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -282,6 +282,9 @@ export default {
             document.getElementById("test").style.display = "none";
         },
         getBankAccountByIban(){
+            if(this.ibanTo == " " || this.ibanTo == "" || this.ibanTo == null){
+                this.ibanTo = "0";
+            }
             axios
                 .get('bankaccounts/iban/'+this.ibanTo,{
                     headers: {
@@ -297,7 +300,9 @@ export default {
                     this.transactionDTO.accountIdTo = this.bankaccounttodto.id;
                     this.postTransaction();
                 })
-                .catch(error => console.log(error))
+                .catch(error =>{
+                    alert(error.response.data);
+                })
         },
         getOtherBankAccount(){
             if(this.accountID == 0){
@@ -347,15 +352,11 @@ export default {
                     }
                 })
                 .then((res) => {
-                    if(res.data != "" && res.data != null && res.data != undefined && res.data != false && res.data != "false"){
-                        this.getOtherBankAccount();
-                    }
-                    else{
-                        alert("wrong pincode");
-                        location.reload();
-                    }
+                    this.getOtherBankAccount();
                 })
-                .catch((error) => console.log(error));
+                .catch((error) => {
+                        alert(error.response.data);
+                    });
         },
         postTransaction(){
           this.transactionDTO.date = new Date();
@@ -372,7 +373,6 @@ export default {
                     })
                     .catch((error) => {
                         alert(error.response.data);
-                        console.log(error);
                     });
           
         },

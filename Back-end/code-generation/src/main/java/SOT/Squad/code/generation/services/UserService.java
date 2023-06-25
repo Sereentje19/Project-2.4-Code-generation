@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 
 import SOT.Squad.code.generation.models.User;
@@ -38,6 +39,15 @@ public class UserService {
             currentUserResponseDTO.setBankAccountList(user.getBankAccountList());
 
             return currentUserResponseDTO;
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("Username not found");
+        }
+    }
+
+    public User getUserObjecttByUsername(String username) throws UsernameNotFoundException {
+        try {
+            User user = userRepository.findUserByUsername(username).get();
+            return user;
         } catch (Exception e) {
             throw new UsernameNotFoundException("Username not found");
         }
@@ -121,10 +131,10 @@ public class UserService {
     }
     public boolean checkPincode(String pincode) {
         User user = userRepository.findUserByPincode(pincode);
-        if(user != null || user.getId() != 0){
-            return true;
+        if(user == null || user.getId() == 0){
+            throw new WrongPincodeException("Wrong pincode");
         }
-        return false;
+        return true;
     }
     private User UpdateFilledFields(EditUserRequestDTO user, User userToUpdate){
         long phoneNumber = user.getPhoneNumber();
