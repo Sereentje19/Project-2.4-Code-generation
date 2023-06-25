@@ -122,6 +122,7 @@ public class BankAccountService {
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
             ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
             ibanAndNameDTO.setId(bankList.get(i).getId());
+            ibanAndNameDTO.setUserId(user.getId());
             dtoList.add(ibanAndNameDTO);
         }
         return dtoList;
@@ -140,6 +141,7 @@ public class BankAccountService {
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
             ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
             ibanAndNameDTO.setId(bankList.get(i).getId());
+            ibanAndNameDTO.setUserId(user.getId());
             dtoList.add(ibanAndNameDTO);
         }
         return dtoList;
