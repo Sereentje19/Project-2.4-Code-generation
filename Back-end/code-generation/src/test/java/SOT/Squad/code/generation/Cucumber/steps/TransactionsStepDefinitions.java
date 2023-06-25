@@ -65,9 +65,8 @@ public class TransactionsStepDefinitions{
         bankAccount = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
         user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 64567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",
                 List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
-        Transaction transaction = new Transaction(1, "test", 100, "NL12INHO0123456789", "NL12INHO0123456788",
-                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "kenmerk",
-                LocalDateTime.now().minusDays(3), user);
+        Transaction transaction = new Transaction(4, "test", 100,  4, 3, "kenmerk", LocalDateTime.now().plusDays(4),user);
+
 
         response = restTemplate.exchange("http://localhost:8080/transactions",
                 HttpMethod.POST,
@@ -121,9 +120,7 @@ public class TransactionsStepDefinitions{
     @And("updated transaction details")
     public void updatedTransactionDetails() {
         bankAccount = new BankAccount(2, "NL12INHO0123456789", 2000, 1, false, "EUR", List.of(AccountType.CURRENT), 10);
-        Transaction updatedTransaction = new Transaction(1, "updated test", 200, "NL12INHO0123456789", "NL12INHO0123456788",
-                List.of(AccountType.CURRENT), List.of(AccountType.CURRENT), "updated kenmerk",
-                LocalDateTime.now().minusDays(2), user);
+        Transaction updatedTransaction = new Transaction(1, "updated test", 100,  4, 3, "update kenmerk", LocalDateTime.now().plusDays(4), user);
 
 
         retrievedTransaction = updatedTransaction;
