@@ -15,7 +15,7 @@
             <div id="padding">
                 <div class="bodyInfo">
                     <div class="bodyInfoText"> <b>Transaction number:</b> {{ this.transaction.id }}</div>
-                    <div class="bodyInfoText"> <b>Amount:</b> {{ this.transaction.amount }}</div>
+                    <div class="bodyInfoText"> <b>Amount:</b> € {{ this.transaction.amount.toFixed(2) }}</div>
                     <div class="bodyInfoText"> <b>Description:</b> {{ this.transaction.description }}</div>
                     <div class="bodyInfoText"> <b>payment reference:</b> {{ this.transaction.paymentReference }}</div>
                     <div class="bodyInfoText"> <b>Bank account from:</b> {{ this.transaction.ibanFrom }}</div>
@@ -61,7 +61,7 @@ export default {
             transaction:
             {
                 id: 0,
-                amount: '',
+                amount: 0,
                 description: '',
                 accountTypeTo: '',
                 accountTypeFrom: '',
