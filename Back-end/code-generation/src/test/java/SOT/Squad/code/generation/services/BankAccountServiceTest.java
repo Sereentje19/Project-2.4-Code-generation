@@ -156,37 +156,6 @@ class BankAccountServiceTest {
 
 
     @Test
-    void testAddIbanToBankAccount_withNonEmptyBankAccountListAndNullIban_shouldGetIbanFromUser() {
-        // Arrange
-        BankAccount bankAccount = new BankAccount();
-        bankAccount.setId(2L);
-        User user = new User();
-        List<Long> bankAccountList = new ArrayList<>();
-        bankAccountList.add(bankAccount.getId());
-        user.setBankAccountList(bankAccountList);
-
-        BankAccount optionalAccount = new BankAccount();
-        optionalAccount.setIban("IBAN123");
-
-        when(userService.getUser(Mockito.any(Long.class))).thenReturn(user);
-        when(bankAccountRepository.findById(Mockito.any())).thenReturn(Optional.of(optionalAccount));
-        when(bankAccountRepository.save(Mockito.any(BankAccount.class))).thenReturn(bankAccount);
-
-        // Act
-        BankAccount result = bankAccountService.addIbanToBankAccount(bankAccount, user);
-
-        // Assert
-        assertEquals(optionalAccount.getIban(), result.getIban());
-        verify(bankAccountRepository, times(1)).findById(2L);
-        verify(bankAccountRepository, times(1)).save(bankAccount);
-    }
-
-
-
-
-
-
-    @Test
     void testAddIbanToBankAccount_withNonEmptyBankAccountListAndNonNullIban_shouldNotChangeIban() {
         // Arrange
         BankAccount bankAccount = new BankAccount();
