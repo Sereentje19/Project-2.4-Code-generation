@@ -8,12 +8,15 @@ import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,20 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private List<User> users = new ArrayList<>();
+    private final ModelMapper modelMapper;
+
+
+    public UserService() {
+        this.modelMapper = new ModelMapper();
+        configureModelMapper();
+    }
+    private void configureModelMapper() {
+        TypeMap<CurrentUserResponseDTO, User> typeMap = modelMapper.getTypeMap(CurrentUserResponseDTO.class, User.class);
+        if (typeMap == null) {
+            typeMap = modelMapper.createTypeMap(CurrentUserResponseDTO.class, User.class);
+        }
+        typeMap.addMappings(mapper -> mapper.skip(User::setPassword));
+    }
 
     public CurrentUserResponseDTO getUserByUsername(String username) throws UsernameNotFoundException {
         try {
@@ -98,8 +115,19 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
+    public List<UserDropDownDTO> getAllUsers() {
+
+        Iterable<User> users = userRepository.findAll();
+        List<UserDropDownDTO> userDropDownDTOList = new ArrayList<>();
+
+        for (User user : users) {
+            UserDropDownDTO userDropDownDTO = new UserDropDownDTO();
+            userDropDownDTO.setId(user.getId());
+            userDropDownDTO.setFirstName(user.getFirstName());
+            userDropDownDTO.setLastName(user.getLastName());
+            userDropDownDTOList.add(userDropDownDTO);
+        }
+        return userDropDownDTOList;
     }
 
     public List<UserDropDownDTO> getAllUserIdsAndNames() {
@@ -116,8 +144,12 @@ public class UserService {
 
         return userDropDownDTOList;
     }
-    public User getUser(long id) {
-        return userRepository.findById(id).get();
+    public CurrentUserResponseDTO getUser(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return modelMapper.map(user.get(), CurrentUserResponseDTO.class);
+        }
+        throw new UserCreateException("Username is not found.");
     }
     public User updateUser(Long id, EditUserRequestDTO user) {
             Optional<User> userToUpdate = userRepository.findById(id);

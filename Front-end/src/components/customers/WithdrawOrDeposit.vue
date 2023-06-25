@@ -222,13 +222,10 @@ export default {
                     this.postWithdrawOrDeposit(this.WithdrawOrDeposit);
                 })
                 .catch((error) => {
-                        console.log(error);
                         alert(error.response.data);
                     });
         },
         postWithdrawOrDeposit(WithdrawOrDeposit){
-            console.log(this.WithdrawOrDeposit.performedByUser);
-            console.log(WithdrawOrDeposit);
             axios
                     .post('transactions/withdrawOrDeposit',WithdrawOrDeposit, {
                         headers: {
@@ -236,72 +233,12 @@ export default {
                         }
                     })
                     .then((res) => {
-                        console.log(res);
                         this.$router.push("/transactions/" + this.id);
                     })
                     .catch((error) => {
                         alert(error.response.data);
                     });
         },
-        // withdrawOrDeposit() {
-        //     if (this.choice == "withdraw") {
-        //         let newbalance = this.bankAccount.balance -= this.bedrag;
-        //         this.bankAccount.balance = newbalance;
-        //     } else if (this.choice == "deposit") {
-        //         let newbalance = this.bankAccount.balance += this.bedrag;
-        //         this.bankAccount.balance = newbalance;
-        //     }
-        //     this.verifyRequest(newbalance);
-        //     this.changeBankAcount();
-        // },
-        // withdraw() {
-        //     this.verifyRequest(newbalance);
-        //     this.changeBankAcount();
-        // },
-        // deposit() {
-            
-        // },
-        // verifyRequest(newbalance) {
-        //     if (this.bankAccount.accountType[0] == "SAVINGS") {
-        //         alert("you can't withdraw or deposit from or to a savings account");
-        //         location.reload();
-        //     }
-        //     if (this.bankAccount.disabled == true) {
-        //         alert("you can't withdraw or deposit from or to a disabled account");
-        //         location.reload();
-        //     }
-        //     if (this.choice == "withdraw" && newbalance < this.bankAccount.absoluutLimit || newbalance < 0) {
-        //         alert("you can't withdraw or deposit more than your absoluut limit");
-        //         location.reload();
-        //     }
-        //     var dailylimit = this.user.dailyLimit - this.bedrag;
-        //     if (dailylimit < 0) {
-        //         alert("you can't withdraw or deposit more than your daily limit");
-        //         location.reload();
-        //     }
-        //     if (this.rekening == "" || this.bedrag == 0 || this.choice == "") {
-        //         alert("you need to fill in all the fields");
-        //         location.reload();
-        //     }
-        //     if (this.bedrag < 0) {
-        //         alert("you can't withdraw or deposit a negative amount");
-        //         location.reload();
-        //     }
-        // },
-        // changeBankAcount() {
-        //     const decodedId = atob(this.id)
-        //     axios
-        //         .put("/bankaccounts/change/" + decodedId, this.bankAccount, {
-        //             headers: {
-        //                 Authorization: "Bearer " + localStorage.getItem("jwt")
-        //             }
-        //         })
-        //         .then((res) => {
-        //             console.log(res.data);
-        //             this.$router.push("/transactions/" + btoa(decodedId));
-        //         })
-        //         .catch((error) => console.log(error));
-        // }
     },
 };
 </script>

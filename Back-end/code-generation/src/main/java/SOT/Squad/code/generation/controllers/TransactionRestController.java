@@ -31,7 +31,6 @@ public class TransactionRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
-//    @RequestBody Transaction transaction
     @PostMapping //Employee & Customer
     public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
         try {
