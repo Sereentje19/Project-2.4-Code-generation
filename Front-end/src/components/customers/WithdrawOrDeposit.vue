@@ -17,7 +17,7 @@
                     <input type="text" class="input" placeholder="description" v-model="this.WithdrawOrDeposit.omscrijving">
                 </div>
                 <div class="other">
-                    <select name="choice" v-model="this.WithdrawOrDeposit.choice">
+                    <select name="choice" v-model="this.WithdrawOrDeposit.choise">
                         <option value="withdraw">withdraw</option>
                         <option value="deposit">deposit</option>
                     </select>
@@ -151,7 +151,7 @@ export default {
             WithdrawOrDeposit:{
                 id:0,
                 bankAccountId: 0,
-                bedrag: "0",
+                bedrag: 0,
                 omscrijving: "",
                 choise: "",
                 performedByUser: [],
@@ -227,6 +227,7 @@ export default {
                     });
         },
         postWithdrawOrDeposit(WithdrawOrDeposit){
+            console.log(this.WithdrawOrDeposit.performedByUser);
             console.log(WithdrawOrDeposit);
             axios
                     .post('transactions/withdrawOrDeposit',WithdrawOrDeposit, {
@@ -235,6 +236,7 @@ export default {
                         }
                     })
                     .then((res) => {
+                        console.log(res);
                         this.$router.push("/transactions/" + this.id);
                     })
                     .catch((error) => {

@@ -46,8 +46,8 @@ public class TransactionRestController {
     public ResponseEntity<?> withdrawOrDeposit(@RequestBody withdrawOrDepositDTO withdrawOrDeposit) {
         try {
             keyProvider.decodeJWT();
-            transactionService.validateWithdrawOrDeposit(withdrawOrDeposit);
-            return ResponseEntity.ok("Withdraw Or Deposit completed");
+
+            return ResponseEntity.ok(transactionService.validateWithdrawOrDeposit(withdrawOrDeposit));
         }catch (ValidateWithdrawOrTransactionException | BankAccountUpdateException | UserUpdateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

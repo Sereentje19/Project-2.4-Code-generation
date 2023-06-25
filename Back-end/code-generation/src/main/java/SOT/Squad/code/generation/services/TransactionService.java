@@ -159,10 +159,10 @@ public class TransactionService {
         return ReturnedTransaction;
     }
 
-    public void validateWithdrawOrDeposit(withdrawOrDepositDTO withdrawOrDeposit) {
+    public BankAccount validateWithdrawOrDeposit(withdrawOrDepositDTO withdrawOrDeposit) {
         BankAccount bankAccount = bankAccountService.getBankAccountById(withdrawOrDeposit.getBankAccountId());
 //        return bankAccount;
-        User performedByUser = withdrawOrDeposit.getPerformedByUser();
+        User performedByUser = userService.getUser(withdrawOrDeposit.getPerformedByUser().getId());
         if(bankAccount.isDisabled()) {
             throw new ValidateWithdrawOrTransactionException("you can't withdraw or deposit from a disabled account");
         }
@@ -179,7 +179,7 @@ public class TransactionService {
                 throw new ValidateWithdrawOrTransactionException("you will end below your absolute limit or below 0");
             }
             if(performedByUser.getTransactionLimit() < withdrawOrDeposit.getBedrag()) {
-                throw new ValidateWithdrawOrTransactionException("you can't withdraw or deposit more than your transaction limit");
+                throw new ValidateWithdrawOrTransactionException("you can't withdraw or deposit more than your transaction limit|" + performedByUser.getTransactionLimit() +"|" + withdrawOrDeposit.getBedrag());
             }
             double newDailyLimit = performedByUser.getDailyLimit() - withdrawOrDeposit.getBedrag();
             if(newDailyLimit < 0){
@@ -205,6 +205,7 @@ public class TransactionService {
         if(newUser == null){
             throw new UserUpdateException("something went wrong while updating the user");
         }
+        return newBankAccount;
     }
 
 
