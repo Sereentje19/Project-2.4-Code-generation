@@ -2,6 +2,7 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.BankAccountGetException;
+import SOT.Squad.code.generation.exceptions.BankAccountUpdateException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -39,12 +40,12 @@ public class BankAccountRestController {
 
 
     @GetMapping("/{id}") //Employee & Customer
-    public BankAccount getAccountById(@PathVariable long id) {
+    public ResponseEntity<?> getAccountById(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getBankAccountById(id);
-        }catch (Exception e){
-            return null;
+            return ResponseEntity.ok(bankAccountService.getBankAccountById(id));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -61,35 +62,33 @@ public class BankAccountRestController {
     }
 
     @GetMapping //Employee
-    public List<BankAccount> getAllBankAccounts() {
+    public ResponseEntity<?> getAllBankAccounts() {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getAllBankAccounts();
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllBankAccounts());
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @PutMapping //Employee
-    public boolean deleteBankAccount(@RequestBody BankAccount bankAccount) {
+    public ResponseEntity<?> deleteBankAccount(@RequestBody BankAccount bankAccount) {
         try {
             keyProvider.decodeJWT();
             bankAccountService.deleteBankAccount(bankAccount);
-            return true;
-        }catch (Exception e) {
-            return false;
+            return ResponseEntity.ok(true);
+        }catch (BankAccountUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @PutMapping("/change/{id}") //Employee & Customer
-    public BankAccount updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
+    public ResponseEntity<?> updateBankAccount(@PathVariable long id,@RequestBody BankAccount bankAccount) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.updateBankAccount(bankAccount, id);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.updateBankAccount(bankAccount, id));
+        }catch (BankAccountUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -105,22 +104,22 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/info/{id}") //Employee
-    public BankAccountInfoDTO getBankAccountInfo(@PathVariable long id) {
+    public ResponseEntity<?> getBankAccountInfo(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getBankAccountInfo(id);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getBankAccountInfo(id));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/accountType/{userId}") //Employee
-    public List<AccountType> getAccountTypes(@PathVariable long userId) {
+    public ResponseEntity<?> getAccountTypes(@PathVariable long userId) {
         try {
             keyProvider.decodeJWT();
-            return bankAccountService.getAccountTypes(userId);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAccountTypes(userId));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

@@ -45,7 +45,6 @@ public class TransactionRestController {
     public ResponseEntity<?> withdrawOrDeposit(@RequestBody withdrawOrDepositDTO withdrawOrDeposit) {
         try {
             keyProvider.decodeJWT();
-
             return ResponseEntity.ok(transactionService.validateWithdrawOrDeposit(withdrawOrDeposit));
         }catch (ValidateWithdrawOrTransactionException | BankAccountUpdateException | UserUpdateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -53,28 +52,27 @@ public class TransactionRestController {
     }
 
     @GetMapping() //Employee
-    public List<Transaction> getAllTransactions() {
+    public ResponseEntity<?> getAllTransactions() {
         try {
             keyProvider.decodeJWT();
-
-            return transactionService.GetAllTransactions();
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(transactionService.GetAllTransactions());
+        }catch (TransactionCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/{id}") //Employee & Customer
-    public TransactionOverViewDTO getTransactionById(@PathVariable long id) {
+    public ResponseEntity<?> getTransactionById(@PathVariable long id) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.GetTransactionById(id);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(transactionService.GetTransactionById(id));
+        }catch (TransactionCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/account/{id}") //Employee & Customer
-    public List<TransactionResponseDTO> findByBankAccountAndAccountType(
+    public ResponseEntity<?> findByBankAccountAndAccountType(
             @PathVariable long id,
             @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
@@ -82,20 +80,20 @@ public class TransactionRestController {
             @RequestParam("searchField") int searchField) {
         try{
             keyProvider.decodeJWT();
-            return transactionService.findBankAccountResponse(id, startDate, endDate, operator, searchField);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(transactionService.findBankAccountResponse(id, startDate, endDate, operator, searchField));
+        }catch (TransactionCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping("/{id}") //Employee
-    public Transaction updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
+    public ResponseEntity<?> updateTransaction(@PathVariable long id, @RequestBody Transaction transaction) {
         try {
             keyProvider.decodeJWT();
             transaction.setId(id);
-            return transactionService.UpdateTransaction(transaction);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(transactionService.UpdateTransaction(transaction));
+        }catch (TransactionUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }
