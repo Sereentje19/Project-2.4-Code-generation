@@ -151,6 +151,14 @@ public class UserService {
         }
         throw new UserCreateException("Username is not found.");
     }
+
+    public User getUserObject(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new UserCreateException("Username is not found.");
+    }
     public User updateUser(Long id, EditUserRequestDTO user) {
             Optional<User> userToUpdate = userRepository.findById(id);
             if (userToUpdate.isPresent()) {

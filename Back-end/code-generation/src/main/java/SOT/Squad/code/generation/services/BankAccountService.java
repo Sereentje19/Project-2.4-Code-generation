@@ -9,6 +9,7 @@ import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class BankAccountService {
         for (int i = 1; i < bankList.size(); i++) {
             BankDropDownDTO ibanAndNameDTO = new BankDropDownDTO();
             ibanAndNameDTO.setIban(bankList.get(i).getIban());
-            User user = (User)userService.getUser(bankList.get(i).getUserId());
+            CurrentUserResponseDTO user = (CurrentUserResponseDTO)userService.getUser(bankList.get(i).getUserId());
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
             ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
             ibanAndNameDTO.setId(bankList.get(i).getId());
@@ -135,7 +136,7 @@ public class BankAccountService {
         for (int i = 0; i < bankList.size(); i++) {
             BankDropDownDTO ibanAndNameDTO = new BankDropDownDTO();
             ibanAndNameDTO.setIban(bankList.get(i).getIban());
-            User user = (User)userService.getUser(bankList.get(i).getUserId());
+            CurrentUserResponseDTO user = (CurrentUserResponseDTO)userService.getUser(bankList.get(i).getUserId());
             ibanAndNameDTO.setName(user.getFirstName() + " " + user.getLastName());
             ibanAndNameDTO.setAccountType(bankList.get(i).getAccountType());
             ibanAndNameDTO.setId(bankList.get(i).getId());
