@@ -96,6 +96,7 @@ public class UserRestController {
             return null;
         }
     }
+
     @GetMapping("/currentUser") //Employee & Customer
     public User getUserObjectOnUsername() {
         try {

@@ -60,14 +60,12 @@
                             <div id="bankAccount">
                                 <h1 >{{ list.iban }}</h1>
                             </div>
-
                             <div>
                                 <div id="currencies">
                                     <div> {{ this.bankAccount.currencies }}</div>
                                 </div>
                                 <div id="amount">
                                     <h1> {{ list.amount.toFixed(2) }}</h1>
-                                    <!-- list.amount.toFixed(2) -->
                                 </div>
                             </div>
                         </div>
@@ -103,8 +101,9 @@ export default {
     },
     data() {
         return {
-            startDate: "2020-06-22",
-            endDate: "2025-01-01",
+            
+            startDate: "0001-01-01",
+            endDate: "9999-09-09",
             operator: "",
             searchField: 0,
             roleUser: localStorage.getItem("role"),
