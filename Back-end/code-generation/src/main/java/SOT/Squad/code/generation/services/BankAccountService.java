@@ -94,6 +94,12 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
     public BankAccount getBankAccountById(long id) {
+        if(id == 0){
+            throw new BankAccountGetException("Bank account id is not valid");
+        }
+        if(bankAccountRepository.getAllById(id) == null){
+            throw new BankAccountGetException("Bank account not found");
+        }
         return bankAccountRepository.getAllById(id);
     }
 
@@ -103,6 +109,9 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIban(List<BankAccount> bankList) {
+        if(bankList.size() == 0) {
+            throw new BankAccountGetException("Bank account list is empty");
+        }
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 1; i < bankList.size(); i++) {
@@ -118,6 +127,9 @@ public class BankAccountService {
     }
 
     public List<BankDropDownDTO> getAllNameAndIbanFirst(List<BankAccount> bankList) {
+        if(bankList.size() == 0) {
+            throw new BankAccountGetException("Bank account list is empty");
+        }
         List<BankDropDownDTO> dtoList = new ArrayList<>();
 
         for (int i = 0; i < bankList.size(); i++) {
@@ -144,9 +156,7 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
-        if(id == 0){
-            throw new BankAccountGetException("user id is not defined");
-        }
+
         return bankAccountRepository.getAllByUserId(id);
     }
 
@@ -176,6 +186,9 @@ public class BankAccountService {
         if(iban == null || iban.isEmpty() || iban.isBlank() || iban.length() != 18) {
             throw new BankAccountGetException("Iban is invalid");
 
+        }
+        if(bankAccountRepository.findFirstByIban(iban) == null) {
+            throw new BankAccountGetException("Bank account not found");
         }
         return bankAccountRepository.findFirstByIban(iban);
     }
