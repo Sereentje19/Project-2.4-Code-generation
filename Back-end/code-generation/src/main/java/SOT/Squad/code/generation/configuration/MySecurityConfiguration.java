@@ -25,32 +25,34 @@ public class MySecurityConfiguration {
         httpSecurity.cors().and().csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests()
+
                 //login
                 .requestMatchers("/login").permitAll()
 
                 //users
-                .requestMatchers("/users/register").permitAll()
-                .requestMatchers("/users/current").authenticated()
-                .requestMatchers("/users/pincode/{pincode}").authenticated()
                 .requestMatchers("/users").authenticated()
                 .requestMatchers("/users/{id}").authenticated()
+                .requestMatchers("/users/current").authenticated()
+                .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users/dropdown").authenticated()
+                .requestMatchers("/users/pincode/{pincode}").authenticated()
 
                 //transactions
-                .requestMatchers("/transactions/account/{id}").authenticated()
                 .requestMatchers("/transactions").authenticated()
                 .requestMatchers("/transactions/{id}").authenticated()
+                .requestMatchers("/transactions/account/{id}").authenticated()
                 .requestMatchers("/transactions/withdrawOrDeposit").authenticated()
+
                 //bankaccounts
                 .requestMatchers("/bankaccounts").authenticated()
-                .requestMatchers("/bankaccounts/{id}").authenticated()
-                .requestMatchers("/bankaccounts/change/{id}").authenticated()
-                .requestMatchers("/bankaccounts/info/{id}").authenticated()
-                .requestMatchers("/bankaccounts/userID/{id}").authenticated()
                 .requestMatchers("/bankaccounts/All").authenticated()
+                .requestMatchers("/bankaccounts/{id}").authenticated()
                 .requestMatchers("/bankaccounts/dto/{id}").authenticated()
-                .requestMatchers("/bankaccounts/accountType/{userId}").authenticated()
-                .requestMatchers("/bankaccounts/iban/{iban}").authenticated();
+                .requestMatchers("/bankaccounts/info/{id}").authenticated()
+                .requestMatchers("/bankaccounts/iban/{iban}").authenticated()
+                .requestMatchers("/bankaccounts/userID/{id}").authenticated()
+                .requestMatchers("/bankaccounts/change/{id}").authenticated()
+                .requestMatchers("/bankaccounts/accountType/{userId}").authenticated();
 
 
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

@@ -2,7 +2,6 @@ package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.BankAccountGetException;
-import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.generators.IbanGenerator;
 import SOT.Squad.code.generation.models.AccountType;
 import SOT.Squad.code.generation.models.BankAccount;
@@ -14,11 +13,8 @@ import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import SOT.Squad.code.generation.services.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BankAccountService {

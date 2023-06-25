@@ -7,8 +7,6 @@ import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
-import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
-import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController

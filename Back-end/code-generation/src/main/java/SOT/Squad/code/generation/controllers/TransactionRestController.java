@@ -2,15 +2,11 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.*;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
-import SOT.Squad.code.generation.models.AccountType;
-import SOT.Squad.code.generation.models.dto.TransactionOverViewDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
-import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
 import SOT.Squad.code.generation.models.dto.withdrawOrDepositDTO;
 import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

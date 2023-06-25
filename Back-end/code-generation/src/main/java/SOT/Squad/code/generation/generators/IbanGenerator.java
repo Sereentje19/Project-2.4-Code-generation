@@ -4,7 +4,6 @@ import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Random;
 
