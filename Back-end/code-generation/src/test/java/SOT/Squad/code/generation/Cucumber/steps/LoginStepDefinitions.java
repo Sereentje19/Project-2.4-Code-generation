@@ -36,6 +36,7 @@ public class LoginStepDefinitions {
         iHaveValidLoginCredentialsUsernameAndPassword(username, password);
     }
 
+
     @Then("the response should be a successful login response with a token")
     public void theResponseShouldBeASuccessfulLoginResponseWithAToken() {
         assertNotNull(responseEntity);
@@ -66,6 +67,13 @@ public class LoginStepDefinitions {
         );
     }
 
+
+
+    @When("I submit my invalid login credentials username {string} and password {string}")
+    public void iSubmitMyInvalidLoginCredentialsUsernameAndPassword(String username, String password) {
+        iHaveInvalidLoginCredentialsUsernameAndPassword(username, password);
+    }
+
     @Then("the response should be an error indicating invalid credentials")
     public void theResponseShouldBeAnErrorIndicatingInvalidCredentials() {
         assertNotNull(responseEntity);
@@ -74,7 +82,7 @@ public class LoginStepDefinitions {
         System.out.println("Response Status Code: " + responseEntity.getStatusCodeValue());
         System.out.println("Response Body: " + responseEntity.getBody());
 
-        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
     }
 
