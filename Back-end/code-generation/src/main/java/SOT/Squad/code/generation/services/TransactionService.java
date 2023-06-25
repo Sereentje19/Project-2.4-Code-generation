@@ -162,7 +162,7 @@ public class TransactionService {
     public BankAccount validateWithdrawOrDeposit(withdrawOrDepositDTO withdrawOrDeposit) {
         BankAccount bankAccount = bankAccountService.getBankAccountById(withdrawOrDeposit.getBankAccountId());
 //        return bankAccount;
-        User performedByUser = userService.getUser(withdrawOrDeposit.getPerformedByUser().getId());
+        User performedByUser = userService.getUserObject(withdrawOrDeposit.getPerformedByUser().getId());
         if(bankAccount.isDisabled()) {
             throw new ValidateWithdrawOrTransactionException("you can't withdraw or deposit from a disabled account");
         }
