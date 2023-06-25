@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
@@ -121,12 +122,12 @@ public class UserRestController {
     }
 
     @GetMapping("/pincode/{pincode}") //Employee & Customer
-    public boolean checkPincode(@PathVariable String pincode) {
+    public ResponseEntity<?> checkPincode(@PathVariable String pincode) {
         try {
             keyProvider.decodeJWT();
-            return userService.checkPincode(pincode);
-        }catch (Exception e) {
-            return false;
+            return ResponseEntity.ok(userService.checkPincode(pincode));
+        } catch (WrongPincodeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

@@ -7,6 +7,7 @@ import SOT.Squad.code.generation.models.dto.TransactionOverViewDTO;
 import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
 import SOT.Squad.code.generation.models.dto.TransactionResponseDTO;
 import SOT.Squad.code.generation.models.Transaction;
+import SOT.Squad.code.generation.models.dto.withdrawOrDepositDTO;
 import SOT.Squad.code.generation.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -40,6 +41,17 @@ public class TransactionRestController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 //        }
 //    }
+
+    @PostMapping("/withdrawOrDeposit")
+    public ResponseEntity<?> withdrawOrDeposit(@RequestBody withdrawOrDepositDTO withdrawOrDeposit) {
+        try {
+            keyProvider.decodeJWT();
+
+            return ResponseEntity.ok(transactionService.validateWithdrawOrDeposit(withdrawOrDeposit));
+        }catch (ValidateWithdrawOrTransactionException | BankAccountUpdateException | UserUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {

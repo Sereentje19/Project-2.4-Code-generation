@@ -40,7 +40,7 @@ public class MySecurityConfiguration {
                 .requestMatchers("/transactions/account/{id}").authenticated()
                 .requestMatchers("/transactions").authenticated()
                 .requestMatchers("/transactions/{id}").authenticated()
-
+                .requestMatchers("/transactions/withdrawOrDeposit").authenticated()
                 //bankaccounts
                 .requestMatchers("/bankaccounts").authenticated()
                 .requestMatchers("/bankaccounts/{id}").authenticated()

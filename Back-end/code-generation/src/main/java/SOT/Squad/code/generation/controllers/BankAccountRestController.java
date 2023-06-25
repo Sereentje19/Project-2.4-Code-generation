@@ -49,15 +49,14 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/dto/{id}") //Employee & Customer
-    public List<BankDropDownDTO> getAccountDtoById(@PathVariable long id) {
+    public ResponseEntity<?> getAccountDtoById(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
             List<BankAccount> bankList = new ArrayList<>();
             bankList.add(bankAccountService.getBankAccountById(id));
-//            return bankList;
-            return bankAccountService.getAllNameAndIbanFirst(bankList);
-        }catch (Exception e){
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllNameAndIbanFirst(bankList));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -127,13 +126,13 @@ public class BankAccountRestController {
 
 
     @GetMapping("/All") //Employee
-    public List<BankDropDownDTO> getAllNameAndIban() {
+    public ResponseEntity<?> getAllNameAndIban() {
         try {
             keyProvider.decodeJWT();
             List<BankAccount> bankList = bankAccountService.getAllBankAccounts();
-            return bankAccountService.getAllNameAndIban(bankList);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(bankAccountService.getAllNameAndIban(bankList));
+        }catch (BankAccountGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
