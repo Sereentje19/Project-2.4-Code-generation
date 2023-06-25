@@ -8,6 +8,7 @@ import SOT.Squad.code.generation.models.BankAccount;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.BankAccountInfoDTO;
 import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.repositories.BankAccountRepository;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -190,7 +191,7 @@ class BankAccountServiceTest {
         List<Long> bankAccountList = new ArrayList<>();
         user.setBankAccountList(bankAccountList);
 
-        when(userService.getUser(anyLong())).thenReturn(user);  // Use anyLong() instead of any()
+        when(userService.getUserObject(anyLong())).thenReturn(user);  // Use anyLong() instead of any()
         when(userRepository.save(any())).thenReturn(user);
 
         // Act
@@ -214,7 +215,7 @@ class BankAccountServiceTest {
         bankAccountList.add(1L);
         user.setBankAccountList(bankAccountList);
 
-        when(userService.getUser(anyLong())).thenReturn(user);
+        when(userService.getUserObject(anyLong())).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         // Act
@@ -239,7 +240,7 @@ class BankAccountServiceTest {
         bankAccount1.setUserId(1L);
         bankList.add(bankAccount1);
 
-        User user1 = new User();
+        CurrentUserResponseDTO user1 = new CurrentUserResponseDTO();
         user1.setId(1L);
         user1.setFirstName("John");
         user1.setLastName("Doe");
@@ -276,7 +277,7 @@ class BankAccountServiceTest {
         bankAccount2.setUserId(2L);
         bankList.add(bankAccount2);
 
-        User user1 = new User();
+        CurrentUserResponseDTO user1 = new CurrentUserResponseDTO();
         user1.setId(2L);
         user1.setFirstName("John");
         user1.setLastName("Doe");

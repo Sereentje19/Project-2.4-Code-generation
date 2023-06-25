@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.controllers;
 
+import SOT.Squad.code.generation.exceptions.InvalidCredentialsException;
 import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
 import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
 import SOT.Squad.code.generation.services.LoginService;
@@ -50,12 +51,12 @@ public class LoginRestControllerTest {
         requestDTO.setUsername("username");
         requestDTO.setPassword("password");
 
-        when(loginService.login(requestDTO)).thenThrow(new IllegalArgumentException("Invalid username or password"));
+        when(loginService.login(requestDTO)).thenThrow(new InvalidCredentialsException("Invalid username or password"));
 
         ResponseEntity<?> responseEntity = loginRestController.login(requestDTO);
 
-        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
-        assertEquals("Invalid username or password", ((LoginResponseDTO) responseEntity.getBody()).getToken());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Invalid username or password", responseEntity.getBody());
         verify(loginService, times(1)).login(requestDTO);
     }
 }
