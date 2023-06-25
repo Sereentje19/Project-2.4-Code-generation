@@ -1,6 +1,8 @@
 package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.exceptions.UserGetException;
+import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
@@ -36,19 +38,18 @@ public class UserRestController {
         try {
             keyProvider.decodeJWT();
             return ResponseEntity.ok(userService.getAllUserIdsAndNames());
-        } catch (Exception e) {
-            return null;
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/dropdown") //Employee
-    public List<UserDropDownDTO> getAllUserIdsAndNames() {
+    public ResponseEntity<?> getAllUserIdsAndNames() {
         try {
             keyProvider.decodeJWT();
-            return userService.getAllUserIdsAndNames();
-
-        } catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(userService.getAllUserIdsAndNames());
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -82,28 +83,28 @@ public class UserRestController {
         try {
             keyProvider.decodeJWT();
             return ResponseEntity.ok(userService.getUser(id));
-        }catch (Exception e) {
-            return null;
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/current") //Employee & Customer
-    public CurrentUserResponseDTO getUserOnUsername() {
+    public ResponseEntity<?> getUserOnUsername() {
         try {
             String username = keyProvider.decodeJWT();
-            return userService.getUserByUsername(username);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(userService.getUserByUsername(username));
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/currentUser") //Employee & Customer
-    public User getUserObjectOnUsername() {
+    public ResponseEntity<?> getUserObjectOnUsername() {
         try {
             String username = keyProvider.decodeJWT();
-            return userService.getUserObjecttByUsername(username);
-        }catch (Exception e) {
-            return null;
+            return ResponseEntity.ok(userService.getUserObjecttByUsername(username));
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -113,11 +114,9 @@ public class UserRestController {
             keyProvider.decodeJWT();
             user.setId(id);
             return ResponseEntity.ok(userService.updateUser(id, user));
-
-        }catch (Exception e) {
-            return null;
+        } catch (UserUpdateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @GetMapping("/pincode/{pincode}") //Employee & Customer
