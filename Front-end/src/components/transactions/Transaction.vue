@@ -66,7 +66,7 @@
                                     <div> {{ this.bankAccount.currencies }}</div>
                                 </div>
                                 <div id="amount">
-                                    <h1> {{ list.amount }}</h1>
+                                    <h1> {{ list.amount.toFixed(2) }}</h1>
                                     <!-- list.amount.toFixed(2) -->
                                 </div>
                             </div>
@@ -111,7 +111,7 @@ export default {
             transactions: [
                 {
                     id: 0,
-                    amount: '',
+                    amount: 0,
                     bankAccountFrom: '',
                     bankAccountTo: '',
                     date: '',
