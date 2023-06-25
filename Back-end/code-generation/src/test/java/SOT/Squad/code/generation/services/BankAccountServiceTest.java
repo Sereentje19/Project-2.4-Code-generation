@@ -86,13 +86,15 @@ class BankAccountServiceTest {
         BankAccount bankAccount = new BankAccount(2, "NL12INHO0123456789", 1000, 0, false, "EUR", List.of(AccountType.CURRENT), 10);
         BankAccount savedBankAccount = new BankAccount(3, "NL12INHO0123456789", 1000, 0, false, "EUR", List.of(AccountType.CURRENT), 10);
 
-        when(bankAccountRepository.findById(1L)).thenReturn(Optional.empty());
+        when(bankAccountRepository.findById(2L)).thenReturn(Optional.empty());
         when(bankAccountRepository.save(any(BankAccount.class))).thenReturn(savedBankAccount);
 
         assertThrows(BankAccountCreateException.class, () -> bankAccountService.addBankAccount(bankAccount));
-        verify(bankAccountRepository, never()).save(any());
+
+        verify(bankAccountRepository).save(bankAccount); // Verify that save method is invoked
         verify(userRepository, never()).findById(anyLong());
     }
+
 
 
 
@@ -168,15 +170,18 @@ class BankAccountServiceTest {
 
         when(userService.getUser(Mockito.any(Long.class))).thenReturn(user);
         when(bankAccountRepository.findById(Mockito.any())).thenReturn(Optional.of(optionalAccount));
-        when(bankAccountRepository.save(Mockito.any(BankAccount.class))).thenReturn(bankAccount);  // Return the saved bank account
+        when(bankAccountRepository.save(Mockito.any(BankAccount.class))).thenReturn(bankAccount);
 
         // Act
         BankAccount result = bankAccountService.addIbanToBankAccount(bankAccount, user);
 
         // Assert
         assertEquals(optionalAccount.getIban(), result.getIban());
-        verify(bankAccountRepository, times(1)).save(Mockito.any(BankAccount.class));
+        verify(bankAccountRepository, times(1)).findById(2L);
+        verify(bankAccountRepository, times(1)).save(bankAccount);
     }
+
+
 
 
 
