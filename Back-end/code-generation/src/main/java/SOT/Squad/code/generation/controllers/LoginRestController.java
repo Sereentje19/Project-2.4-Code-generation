@@ -1,13 +1,9 @@
 package SOT.Squad.code.generation.controllers;
 
-import SOT.Squad.code.generation.exceptions.BankAccountCreateException;
 import SOT.Squad.code.generation.exceptions.InActiveAccountException;
 import SOT.Squad.code.generation.exceptions.InvalidCredentialsException;
-import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
-import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
-import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
 import SOT.Squad.code.generation.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
