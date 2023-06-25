@@ -32,11 +32,10 @@ public class UserRestController {
     JWTTokenProvider tokenProvider;
 
     @GetMapping() //Employee
-    public List<User> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         try {
             keyProvider.decodeJWT();
-            return userService.getAllUsers();
-
+            return ResponseEntity.ok(userService.getAllUserIdsAndNames());
         } catch (Exception e) {
             return null;
         }
@@ -79,11 +78,10 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}") //Employee & Customer
-    public User getUser(@PathVariable long id) {
+    public ResponseEntity<?> getUser(@PathVariable long id) {
         try {
             keyProvider.decodeJWT();
-
-            return userService.getUser(id);
+            return ResponseEntity.ok(userService.getUser(id));
         }catch (Exception e) {
             return null;
         }
