@@ -31,15 +31,15 @@ public class TransactionRestController {
     JWTKeyProvider keyProvider;
 
 //    @RequestBody Transaction transaction
-    @PostMapping //Employee & Customer
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
-        try {
-            keyProvider.decodeJWT();
-            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
-        }catch (TransactionCreateException | BankAccountUpdateException | UserUpdateException | ValidateTransactionException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+//    @PostMapping //Employee & Customer
+//    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+//        try {
+//            keyProvider.decodeJWT();
+//            return ResponseEntity.ok(transactionService.validateTransaction(transactionRequestDTO));
+//        }catch (TransactionCreateException | BankAccountUpdateException | UserUpdateException | ValidateTransactionException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
 
     @GetMapping() //Employee
     public List<Transaction> getAllTransactions() {
