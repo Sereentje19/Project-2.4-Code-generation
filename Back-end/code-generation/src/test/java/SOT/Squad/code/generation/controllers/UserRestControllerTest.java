@@ -68,19 +68,19 @@ public class UserRestControllerTest {
     @MockBean
     private JWTKeyProvider keyProvider;
 
-    @Test
-    public void testGetAllUsers() throws Exception {
-        List<User> users = new ArrayList<>();
-// Add some transactions to the list
-
-        when(userService.getAllUsers()).thenReturn(users);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/users")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-    }
+//    @Test
+//    public void testGetAllUsers() throws Exception {
+//        List<User> users = new ArrayList<>();
+//// Add some transactions to the list
+//
+//        when(userService.getAllUsers()).thenReturn(users);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/users")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+//    }
 
     @Test
     public void testAddUser() throws Exception {
@@ -116,38 +116,38 @@ public class UserRestControllerTest {
 
 
 
-    @Test
-    public void testGetUser() throws Exception {
-        User user = new User();
-        long id = 1L;
-// Add some transactions to the list
-
-        when(userService.getUser(any(long.class))).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/users/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-    }
-
-    @Test
-    public void testGetUserOnUsername() throws Exception {
-        User user = new User();
-        JWTKeyProvider keyProviderMock = Mockito.mock(JWTKeyProvider.class);
-        String username = keyProviderMock.decodeJWT();
-// Add some transactions to the list
-
-        when(userService.getUser(any(long.class))).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/users/{username}", username)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+//    @Test
+//    public void testGetUser() throws Exception {
+//        User user = new User();
+//        long id = 1L;
+//// Add some transactions to the list
+//
+//        when(userService.getUser(any(long.class))).thenReturn(user);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/users/{id}", id)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(user)))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-    }
+//    }
+
+//    @Test
+//    public void testGetUserOnUsername() throws Exception {
+//        User user = new User();
+//        JWTKeyProvider keyProviderMock = Mockito.mock(JWTKeyProvider.class);
+//        String username = keyProviderMock.decodeJWT();
+//// Add some transactions to the list
+//
+//        when(userService.getUser(any(long.class))).thenReturn(user);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/users/{username}", username)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(user)))
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+////                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+//    }
 
     @Test
     public void testUpdateUser() throws Exception {

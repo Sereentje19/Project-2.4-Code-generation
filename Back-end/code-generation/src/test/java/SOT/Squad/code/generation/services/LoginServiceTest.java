@@ -1,5 +1,6 @@
 package SOT.Squad.code.generation.services;
 
+import SOT.Squad.code.generation.exceptions.InvalidCredentialsException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.LoginRequestDTO;
 import SOT.Squad.code.generation.models.dto.LoginResponseDTO;
@@ -75,7 +76,7 @@ class LoginServiceTest {
 
         when(userRepository.findUserByUsername(username)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(requestDTO));
+        assertThrows(InvalidCredentialsException.class, () -> loginService.login(requestDTO));
         verify(userRepository, times(1)).findUserByUsername(username);
         verify(encoder, never()).matches(anyString(), anyString());
         verify(tokenProvider, never()).createToken(anyString(), any());
@@ -99,7 +100,7 @@ class LoginServiceTest {
         when(userRepository.findUserByUsername(username)).thenReturn(Optional.of(user));
         when(encoder.matches(password, encodedPassword)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(requestDTO));
+        assertThrows(InvalidCredentialsException.class, () -> loginService.login(requestDTO));
         verify(userRepository, times(1)).findUserByUsername(username);
         verify(encoder, times(1)).matches(password, encodedPassword);
         verify(tokenProvider, never()).createToken(anyString(), any());
