@@ -36,3 +36,21 @@ Feature: Bank Account Rest Controller
     And The endpoint for "bankaccounts" is available for the method "GET"
     When I request the ID, iban, name and accountType of all bank accounts
     Then the response should be a list of bank account objects with only the ID, iban, name and accountType
+
+  Scenario: Get Bank Account by IBAN
+    Given I am logged in as user "thijs" with password "moerland"
+    And The endpoint for "bankaccounts" is available for the method "GET"
+    When I request the bank account with IBAN "NL12INHO0123456789"
+    Then the response should be a bank account object with the specified IBAN
+
+  Scenario: Get All Bank Accounts By User ID
+    Given I am logged in as user "thijs" with password "moerland"
+    And The endpoint for "bankaccounts" is available for the method "GET"
+    When I request all bank accounts for the user with ID 3
+    Then the response should be a list of bank account objects
+
+  Scenario: Get Account Types
+    Given I am logged in as user "thijs" with password "moerland"
+    And The endpoint for "bankaccounts" is available for the method "GET"
+    When I request the account types for the user with ID 3
+    Then the response should be a list of account types

@@ -1,17 +1,20 @@
 package SOT.Squad.code.generation.Cucumber.steps;
 
 import SOT.Squad.code.generation.models.*;
+import SOT.Squad.code.generation.models.dto.BankDropDownDTO;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -20,6 +23,8 @@ public class BankAccountStepDefinitions {
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private String jwtToken;
     private ResponseEntity<String> responseEntity;
+    List<BankDropDownDTO> tetreivedBankAccounts;
+    List<AccountType> retreivedAccountType;
     private List<BankAccount> retreivedBankaccount;
     private String uri = "http://localhost:8080/";
 
@@ -176,25 +181,106 @@ public class BankAccountStepDefinitions {
         Assertions.assertEquals(id, actual.intValue());
     }
 
+
     @When("I request the ID, iban, name and accountType of all bank accounts")
     public void iRequestTheIDIbanNameAndAccountTypeOfAllBankAccounts() {
+        ResponseEntity<List<BankDropDownDTO>> responseEntity = restTemplate.exchange(
+                uri + "/bankaccounts/All",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {}
+        );
+
+        List<BankDropDownDTO> bankAccounts = responseEntity.getBody();
+        tetreivedBankAccounts = bankAccounts;
     }
 
     @Then("the response should be a list of bank account objects with only the ID, iban, name and accountType")
     public void theResponseShouldBeAListOfBankAccountObjectsWithOnlyTheIDIbanNameAndAccountType() {
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
+        Assert.assertNotNull(tetreivedBankAccounts);
+
+        for (BankDropDownDTO bankAccount : tetreivedBankAccounts) {
+            Assert.assertNotNull(bankAccount.getId());
+            Assert.assertNotNull(bankAccount.getIban());
+            Assert.assertNotNull(bankAccount.getName());
+            Assert.assertNotNull(bankAccount.getAccountType());
+        }
     }
+
     @Given("I am not logged in")
     public void iAmNotLoggedIn() {
         // No specific implementation needed as this is a precondition
-
     }
 
     @Then("the response should be an unauthorized error")
     public void theResponseShouldBeAnUnauthorizedError() {
         // Verify that the response status code is 401 Unauthorized
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
-
-        // You can add additional assertions or checks to verify the error response body or message if needed
     }
+
+
+    @When("I request the bank account with IBAN {string}")
+    public void iRequestTheBankAccountWithIBAN(String iban) {
+        ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
+                uri + "bankaccounts/iban/{iban}",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {},
+                iban
+        );
+
+        List<BankAccount> bankAccounts = responseEntity.getBody();
+        retreivedBankaccount = bankAccounts;
+
+    }
+
+    @Then("the response should be a bank account object with the specified IBAN")
+    public void theResponseShouldBeABankAccountObjectWithTheSpecifiedIBAN() {
+        // Assert that the response is a bank account object with the specified IBAN
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        String iban = "NL12INHO0123456789";
+
+        // Perform assertions on the bank account object
+        Assert.assertNotNull(retreivedBankaccount);
+        Assert.assertEquals(iban, retreivedBankaccount.get(0).getIban());
+        // Additional assertions for other properties as needed
+    }
+
+    @When("I request all bank accounts for the user with ID {int}")
+    public void iRequestAllBankAccountsForTheUserWithID(int id) {
+        ResponseEntity<List<BankAccount>> responseEntity = restTemplate.exchange(
+                uri + "/bankaccounts/userID/{id}",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {},
+                id
+        );
+
+        List<BankAccount> bankAccounts = responseEntity.getBody();
+        retreivedBankaccount = bankAccounts;
+    }
+
+
+    @When("I request the account types for the user with ID {int}")
+    public void iRequestTheAccountTypesForTheUserWithID(int id) {
+        ResponseEntity<List<AccountType>> responseEntity = restTemplate.exchange(
+                uri + "/bankaccounts/accountType/{userId}",
+                HttpMethod.GET,
+                new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<>() {},
+                id
+        );
+
+        List<AccountType> accountType = responseEntity.getBody();
+        retreivedAccountType = accountType;
+    }
+
+    @Then("the response should be a list of account types")
+    public void theResponseShouldBeAListOfAccountTypes() {
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertNotNull(retreivedAccountType);
+    }
+
 }
