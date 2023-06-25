@@ -105,7 +105,7 @@ public class TransactionService {
     public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) {
         BankAccount bankAccountFrom = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdFrom());
         BankAccount bankAccountTo = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdTo());
-        User performedByUser = transactionRequestDTO.getPerformedByUser();
+        User performedByUser = userService.getUserObject(transactionRequestDTO.getPerformedByUser().getId());
         validateTransaciotnAccounTypes(bankAccountFrom, bankAccountTo);
 
         if(transactionRequestDTO.getPaymentReference() == "") throw new ValidateTransactionException("you need to fill in a payment reference");
@@ -114,7 +114,7 @@ public class TransactionService {
 
         if(transactionRequestDTO.getAmount() <= 0) throw new ValidateTransactionException("you can't transfer 0 or less");
 
-        if(performedByUser.getTransactionLimit() < transactionRequestDTO.getAmount()) throw new ValidateTransactionException("you can't transfer more than your transaction limit");
+        if(performedByUser.getTransactionLimit() < transactionRequestDTO.getAmount()) throw new ValidateTransactionException("you can't transfer more than your transaction limit|"+performedByUser.getTransactionLimit()+"|"+transactionRequestDTO.getAmount());
 
         double newbalanceFrom = bankAccountFrom.getBalance() - transactionRequestDTO.getAmount();
         double newbalanceTo = bankAccountTo.getBalance() + transactionRequestDTO.getAmount();
@@ -162,7 +162,11 @@ public class TransactionService {
     public BankAccount validateWithdrawOrDeposit(withdrawOrDepositDTO withdrawOrDeposit) {
         BankAccount bankAccount = bankAccountService.getBankAccountById(withdrawOrDeposit.getBankAccountId());
 //        return bankAccount;
+
+
         User performedByUser = userService.getUserObject(withdrawOrDeposit.getPerformedByUser().getId());
+
+
         if(bankAccount.isDisabled()) {
             throw new ValidateWithdrawOrTransactionException("you can't withdraw or deposit from a disabled account");
         }

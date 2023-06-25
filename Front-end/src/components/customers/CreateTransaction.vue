@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <input type="text" class="input" v-model="pincode">
+                        <input type="password" class="input" v-model="pincode">
                     </div>
 
                     <div class="modal-footer">
@@ -162,24 +162,7 @@ export default {
     data() {
         return {
             accountID: 0,
-            user:
-            {
-                id: 0,
-                username: "",
-                password: "",
-                fistName: "",
-                lastName: "",
-                phoneNumber: "",
-                email: "",
-                street: "",
-                houseNumber: "",
-                postalCode: "",
-                city: "",
-                bankAccountList: [],
-                roles: [],
-                dailyLimit: 0,
-                transactionLimit: 0,
-            },
+            user:[],
             ibanTo: "",
             transactionDTO:
             {
@@ -198,6 +181,7 @@ export default {
                 iban: "",
                 id: 0,
                 name: "",
+                userId: 0,
             },
             bankaccounttodto : {
                 id: 0,
@@ -249,7 +233,7 @@ export default {
         },
         getUser() {
             axios
-                .get('users/currentUser', {
+                .get('users/current', {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("jwt")
                     }
@@ -274,7 +258,7 @@ export default {
                     this.bankaccountdto = res.data[0];
                     this.transactionDTO.accountIdFrom = this.bankaccountdto.id;
                     console.log(this.user.id);
-                    this.getBankAccountByUserId(this.user.id);
+                    this.getBankAccountByUserId(this.bankaccountdto.userId);
                     
                 })
                 .catch(error => {

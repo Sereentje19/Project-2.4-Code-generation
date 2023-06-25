@@ -14,4 +14,5 @@ public class BankDropDownDTO {
     private String Iban;
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AccountType> accountType;
+    private long userId;
 }
