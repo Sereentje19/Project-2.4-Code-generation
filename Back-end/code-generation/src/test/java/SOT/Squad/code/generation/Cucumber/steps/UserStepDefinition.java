@@ -86,7 +86,7 @@ public class UserStepDefinition{
     @When("I request to create a new user with valid informations")
     public void iRequestToCreateANewUserWithValidInformations() {
         httpHeaders.add("Content-Type", "application/json ");
-        User user = new User(1, "henk", "rick", "joe", "biden", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        User user = new User(1, "henk", "rick", "joe", "biden", "064567", "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
         ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
                 HttpMethod.POST,
                 new HttpEntity<>(user, httpHeaders),
@@ -149,7 +149,7 @@ public class UserStepDefinition{
     @Then("I should receive a new user")
     public void iShouldReceiveANewUser() {
         httpHeaders.add("Content-Type", "application/json ");
-        User user = new User(1, "henk", "rick", "joe", "biden", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        User user = new User(1, "henk", "rick", "joe", "biden", "064567", "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
         ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
                 HttpMethod.POST,
                 new HttpEntity<>(user, httpHeaders),
@@ -161,7 +161,7 @@ public class UserStepDefinition{
     @When("I request to create a new user that already exists")
     public void iRequestToCreateANewUserThatAlreadyExists() {
         httpHeaders.add("Content-Type", "application/json ");
-        User user = new User(1, "joe", "rick", "joe", "biden", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        User user = new User(1, "joe", "rick", "joe", "biden", "064567", "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
         ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
                 HttpMethod.POST,
                 new HttpEntity<>(user, httpHeaders),
@@ -174,7 +174,7 @@ public class UserStepDefinition{
     @Then("A user should not be created and I should receive a error")
     public void aUserShouldNotBeCreatedAndIShouldReceiveAError() {
         httpHeaders.add("Content-Type", "application/json ");
-        User user = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
+        User user = new User(1, "thijs", "moerland", "Thijs", "Moerland", "064567", "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
         ResponseEntity<User> responseEntity = restTemplate.exchange("http://localhost:8080/users",
                 HttpMethod.POST,
                 new HttpEntity<>(user, httpHeaders),
