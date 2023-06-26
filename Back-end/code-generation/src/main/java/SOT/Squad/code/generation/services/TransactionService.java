@@ -99,7 +99,7 @@ public class TransactionService {
     }
 
 
-    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) {
+    public Transaction validateTransaction(SOT.Squad.code.generation.models.dto.TransactionRequestDTO transactionRequestDTO) {
         BankAccount bankAccountFrom = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdFrom());
         BankAccount bankAccountTo = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdTo());
         User performedByUser = userService.getUserObject(transactionRequestDTO.getPerformedByUser().getId());
