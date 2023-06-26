@@ -99,7 +99,7 @@ public class TransactionService {
     }
 
 
-    public Transaction validateTransaction(TransactionRequestDTO transactionRequestDTO) {
+    public Transaction validateTransaction(SOT.Squad.code.generation.models.dto.TransactionRequestDTO transactionRequestDTO) {
         BankAccount bankAccountFrom = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdFrom());
         BankAccount bankAccountTo = bankAccountService.getBankAccountById(transactionRequestDTO.getAccountIdTo());
         User performedByUser = userService.getUserObject(transactionRequestDTO.getPerformedByUser().getId());
@@ -148,7 +148,7 @@ public class TransactionService {
         if(newBankAccountTo == null || newBankAccountFrom == null){
             throw new BankAccountUpdateException("something went wrong while updating the bankaccounts");
         }
-        EditUserRequestDTO editUserRequestDTO = new EditUserRequestDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive());
+        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getRoles());
         User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
             throw new UserUpdateException("something went wrong while updating the user");
@@ -201,7 +201,7 @@ public class TransactionService {
         if(newBankAccount == null){
             throw new BankAccountUpdateException("something went wrong while updating the bankaccount");
         }
-        EditUserRequestDTO editUserRequestDTO = new EditUserRequestDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive());
+        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getRoles());
         User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
             throw new UserUpdateException("something went wrong while updating the user");

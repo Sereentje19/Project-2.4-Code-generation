@@ -45,10 +45,10 @@
     </div>
     <div>
       <label>Status:</label>
-      <span v-if="!editMode">{{ customer.inActive ? 'Active' : 'Inactive' }}</span>
+      <span v-if="!editMode">{{ customer.inActive ? 'Inactive' : 'Active' }}</span>
       <select v-else v-model="editedUser.inActive">
-        <option :value="true">Active</option>
-        <option :value="false">Inactive</option>
+        <option :value="true">Inactive</option>
+        <option :value="false">Active</option>
       </select>
     </div>
     <div>
@@ -116,30 +116,7 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    checkFieldsNotEmpty() {
-      if (!this.editedUser.email.includes('@')) {
-        alert("Please enter a valid email.");
-        return false;
-      } else if (!/^\d{10,}$/.test(this.editedUser.phoneNumber)) {
-        alert("Phone number has to be at least 10 numbers");
-        return false;
-      } else if (
-        !this.editedUser.firstName ||
-        !this.editedUser.lastName ||
-        !this.editedUser.postalCode ||
-        !this.editedUser.city ||
-        !this.editedUser.street ||
-        !/^\d+$/.test(this.editedUser.houseNumber)
-      ) {
-        alert("Please fill all fields before saving changes");
-        return false;
-      }
-      return true;
-    },
     updateInfo() {
-      if (!this.checkFieldsNotEmpty()) {
-        return;
-      }
       axios
         .put(`/users/${this.customer.id}`, this.editedUser, {
           headers: {
@@ -153,7 +130,7 @@ export default {
           console.log(response);
         })
         .catch((error) => {
-          console.error('Error updating user information:', error);
+          alert(error.response.data);
         });
     },
     cancelEdit() {

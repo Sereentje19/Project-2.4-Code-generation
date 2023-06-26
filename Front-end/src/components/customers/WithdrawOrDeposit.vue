@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <input type="text" class="input" v-model="pincode">
+                        <input type="password" class="input" v-model="pincode">
                     </div>
 
                     <div class="modal-footer">

@@ -5,6 +5,7 @@ import SOT.Squad.code.generation.exceptions.UserGetException;
 import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.services.UserService;
@@ -93,7 +94,6 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
     @GetMapping("/currentUser") //Employee & Customer
     public ResponseEntity<?> getUserObjectOnUsername() {
         try {
@@ -105,10 +105,11 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}") //Employee & Customer
-    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody EditUserRequestDTO user) {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody CurrentUserResponseDTO user) {
         try {
             keyProvider.decodeJWT();
             user.setId(id);
+            userService.UpdateFilledFields(user); // Check if input fields are empty
             return ResponseEntity.ok(userService.updateUser(id, user));
         } catch (UserUpdateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
