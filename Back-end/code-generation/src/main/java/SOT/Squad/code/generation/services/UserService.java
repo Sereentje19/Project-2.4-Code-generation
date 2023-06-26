@@ -1,6 +1,7 @@
 package SOT.Squad.code.generation.services;
 
 import SOT.Squad.code.generation.exceptions.UserCreateException;
+import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
@@ -49,6 +50,13 @@ public class UserService {
             currentUserResponseDTO.setId(user.getId());
             currentUserResponseDTO.setFirstName(user.getFirstName());
             currentUserResponseDTO.setLastName(user.getLastName());
+            currentUserResponseDTO.setEmail(user.getEmail());
+            currentUserResponseDTO.setPhoneNumber(user.getPhoneNumber());
+            currentUserResponseDTO.setStreet(user.getStreet());
+            currentUserResponseDTO.setCity(user.getCity());
+            currentUserResponseDTO.setPostalCode(user.getPostalCode());
+            currentUserResponseDTO.setHouseNumber(user.getHouseNumber());
+            currentUserResponseDTO.setInActive(user.isInActive());
             currentUserResponseDTO.setRoles(user.getRoles());
             currentUserResponseDTO.setBankAccountList(user.getBankAccountList());
 
@@ -142,9 +150,9 @@ public class UserService {
         return userDropDownDTOList;
     }
     public CurrentUserResponseDTO getUser(long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return modelMapper.map(user.get(), CurrentUserResponseDTO.class);
+        User user = userRepository.findById(id).get();
+        if (user != null) {
+            return modelMapper.map(user, CurrentUserResponseDTO.class);
         }
         throw new UserCreateException("Username is not found.");
     }
@@ -156,12 +164,22 @@ public class UserService {
         }
         throw new UserCreateException("Username is not found.");
     }
-    public User updateUser(Long id, EditUserRequestDTO user) {
-            Optional<User> userToUpdate = userRepository.findById(id);
-            if (userToUpdate.isPresent()) {
-                User userUpdate = UpdateFilledFields(user, userToUpdate.get());
-                return userRepository.save(userUpdate);
-                }
+    public User updateUser(Long id, CurrentUserResponseDTO user) {
+            User userToUpdate = userRepository.findById(id).get();
+            if (userToUpdate != null) {
+                userToUpdate.setFirstName(user.getFirstName());
+                userToUpdate.setLastName(user.getLastName());
+                userToUpdate.setEmail(user.getEmail());
+                userToUpdate.setPhoneNumber(user.getPhoneNumber());
+                userToUpdate.setStreet(user.getStreet());
+                userToUpdate.setCity(user.getCity());
+                userToUpdate.setPostalCode(user.getPostalCode());
+                userToUpdate.setHouseNumber(user.getHouseNumber());
+                userToUpdate.setInActive(user.isInActive());
+                userToUpdate.setBankAccountList(user.getBankAccountList());
+                userToUpdate.setRoles(user.getRoles());
+                return userRepository.save(userToUpdate);
+            }
         throw new UserCreateException("Username is not found.");
 
 
@@ -173,35 +191,16 @@ public class UserService {
         }
         return true;
     }
-    private User UpdateFilledFields(EditUserRequestDTO user, User userToUpdate){
-        long phoneNumber = user.getPhoneNumber();
+    public void UpdateFilledFields(CurrentUserResponseDTO userToUpdate) {
+        long phoneNumber = userToUpdate.getPhoneNumber();
         String phoneNumberString = String.valueOf(phoneNumber);
-
-        if(user.getFirstName() != null){
-            userToUpdate.setFirstName(user.getFirstName());
+        if (!userToUpdate.getEmail().contains("@")) {
+            throw new UserUpdateException("Please enter a valid email.");
+        } else if (userToUpdate.getFirstName() == null || userToUpdate.getLastName() == null
+                || userToUpdate.getPostalCode() == null || userToUpdate.getCity() == null
+                || userToUpdate.getStreet() == null || !String.valueOf(userToUpdate.getHouseNumber()).matches("\\d+")) {
+            throw new UserUpdateException("Please fill all fields before saving all changes.");
         }
-        if(user.getLastName() != null){
-            userToUpdate.setLastName(user.getLastName());
-        }
-        if(user.getStreet() != null){
-            userToUpdate.setStreet(user.getStreet());
-        }
-        if(user.getHouseNumber() != 0){
-            userToUpdate.setHouseNumber(user.getHouseNumber());
-        }
-        if(user.getPostalCode() != null){
-            userToUpdate.setPostalCode(user.getPostalCode());
-        }
-        if(user.getCity() != null){
-            userToUpdate.setCity(user.getCity());
-        }
-        if (phoneNumberString.length() == 10){
-            userToUpdate.setPhoneNumber(phoneNumber);
-        }
-        if(user.getEmail() != null){
-            userToUpdate.setEmail(user.getEmail());
-        }
-        return userToUpdate;
     }
 
 }

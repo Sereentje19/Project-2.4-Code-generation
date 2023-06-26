@@ -30,10 +30,10 @@ public class MySecurityConfiguration {
                 .requestMatchers("/login").permitAll()
 
                 //users
+                .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users").authenticated()
                 .requestMatchers("/users/{id}").authenticated()
                 .requestMatchers("/users/current").authenticated()
-                .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users/dropdown").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()
 

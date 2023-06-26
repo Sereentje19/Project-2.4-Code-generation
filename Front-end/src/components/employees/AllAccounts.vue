@@ -13,7 +13,7 @@
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show all users</button>
+            <button class="filter-button" @click="resetFilter">Show all users with  accounts</button>
         </div>
 
         <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
@@ -35,7 +35,22 @@ export default {
     },
     data() {
         return {
-            users: [],
+            users: [
+                {
+                    id: 0,
+                    username: "",
+                    password: "",
+                    firstName: "",
+                    lastName: "",
+                    phoneNumber: "",
+                    email: "",
+                    street: "",
+                    houseNumber: "",
+                    postalCode: "",
+                    city: "",
+                    bankAccountList: []
+                }
+            ],
             selectedUser: null,
             searchQuery: '',
             showUsersWithNoAccounts: false
