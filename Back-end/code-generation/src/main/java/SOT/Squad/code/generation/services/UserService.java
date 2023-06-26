@@ -101,7 +101,7 @@ public class UserService {
             throw new UserCreateException("Pincode has to be exactly 4 numbers.");
         } else if (!user.getEmail().contains("@")) {
             throw new UserCreateException("Please enter a valid email.");
-        } else if (String.valueOf(user.getPhoneNumber()) == null || String.valueOf(user.getPhoneNumber()).length() != 10) {
+        } else if (user.getPhoneNumber() == null || user.getPhoneNumber().length() != 10) {
             throw new UserCreateException("Phonenumber has to be exactly 10 numbers");
         } else if (user.getFirstName() == null || user.getLastName() == null
                 || user.getPostalCode() == null || user.getCity() == null
@@ -181,8 +181,6 @@ public class UserService {
                 return userRepository.save(userToUpdate);
             }
         throw new UserCreateException("Username is not found.");
-
-
     }
     public boolean checkPincode(String pincode) {
         User user = userRepository.findUserByPincode(pincode);
@@ -192,7 +190,7 @@ public class UserService {
         return true;
     }
     public void UpdateFilledFields(CurrentUserResponseDTO userToUpdate) {
-        long phoneNumber = userToUpdate.getPhoneNumber();
+        String phoneNumber = userToUpdate.getPhoneNumber();
         String phoneNumberString = String.valueOf(phoneNumber);
         if (!userToUpdate.getEmail().contains("@")) {
             throw new UserUpdateException("Please enter a valid email.");

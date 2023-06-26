@@ -35,9 +35,9 @@ public class DataSeeder implements ApplicationRunner {
         BankAccount bankacc6 = new BankAccount(6, "NL12INHO0123456787",  100, 3, false, "EUR", List.of(AccountType.SAVINGS),10);
 
         //Users
-        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()),false, List.of(Role.CUSTOMER), "5781",2000,300);
-        User user2 = new User(2, "om", "al", "Omar", "Al Sayasna", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc3.getId()),false, List.of(Role.CUSTOMER), "2595",2000,300);
-        User user3 = new User(3, "serena", "kenter", "Serena", "Kenter", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc4.getId(), bankacc5.getId()),false, List.of(Role.EMPLOYEE), "3685",2000,300);
+        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", "0645671234", "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc2.getId()),false, List.of(Role.CUSTOMER), "5781",2000,300);
+        User user2 = new User(2, "om", "al", "Omar", "Al Sayasna", "0645671234", "Moerland8", "123street", 53, "2131GB", "hoofddorp",  List.of(bankacc3.getId()),false, List.of(Role.CUSTOMER), "2595",2000,300);
+        User user3 = new User(3, "serena", "kenter", "Serena", "Kenter", "0645671234", "Moerland8", "123street", 53, "2131GB", "hoofddorp", List.of(bankacc4.getId(), bankacc5.getId()),false, List.of(Role.EMPLOYEE), "3685",2000,300);
 
         //add Users
         userService.addUser(user1);

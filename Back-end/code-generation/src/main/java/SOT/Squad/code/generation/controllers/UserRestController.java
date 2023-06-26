@@ -6,7 +6,6 @@ import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
-import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;

@@ -167,7 +167,7 @@ export default {
                     this.transactions = res.data;
                     console.log(res.data)
                 }).catch((error) => {
-                    alert(error.response.data);
+                    alert("with current used filters there are no transactions");
                 });
         },
         WithDrawOrDeposit() {

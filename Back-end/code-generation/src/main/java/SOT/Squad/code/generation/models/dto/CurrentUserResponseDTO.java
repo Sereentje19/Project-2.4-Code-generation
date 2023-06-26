@@ -17,7 +17,7 @@ public class CurrentUserResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private long phoneNumber;
+    private String phoneNumber;
     private String street;
     private String city;
     private String postalCode;
