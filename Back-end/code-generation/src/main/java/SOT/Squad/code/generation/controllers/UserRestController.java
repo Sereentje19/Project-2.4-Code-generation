@@ -26,7 +26,6 @@ public class UserRestController {
     @Autowired
     JWTKeyProvider keyProvider;
 
-
     @Autowired
     JWTTokenProvider tokenProvider;
 
