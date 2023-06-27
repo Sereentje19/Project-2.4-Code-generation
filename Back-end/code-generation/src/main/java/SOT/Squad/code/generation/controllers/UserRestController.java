@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -128,6 +130,26 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    @GetMapping("/without-accounts") // Employee
+    public ResponseEntity<?> getUsersWithoutAccounts() {
+        try {
+            keyProvider.decodeJWT();
+            return ResponseEntity.ok(userService.getUsersWithoutAccounts());
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchUsers(@RequestParam("query") String query) {
+        try {
+            // Perform the search operation using the query parameter
+            List<User> searchResults = userService.searchUsers(query);
+            return ResponseEntity.ok(searchResults);
+        } catch (UserGetException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 
     @PutMapping("/{id}") //Employee & Customer
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody CurrentUserResponseDTO user) {

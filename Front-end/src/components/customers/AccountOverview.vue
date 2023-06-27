@@ -8,7 +8,7 @@
         <button @click="goToUserInfo">User Info</button>
       </div>
 
-      <div v-if="user.bankAccountList.length > 0">
+      <div v-if="user.bankAccountList.length > 0 || user.inActive == true">
         <h2>IBAN: {{ user.bankAccountList[0].iban }}</h2>
 
         <h3>Bank Accounts</h3>
@@ -64,10 +64,10 @@ export default {
         street: "",
         houseNumber: "",
         postalCode: "",
+        inActive: false,
         city: "",
         bankAccountList: []
       },
-
     };
   },
   computed: {
