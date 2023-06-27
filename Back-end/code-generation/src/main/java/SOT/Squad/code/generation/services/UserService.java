@@ -6,6 +6,7 @@ import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
+import SOT.Squad.code.generation.models.dto.EmployeeRoleDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -35,6 +36,7 @@ public class UserService {
         this.modelMapper = new ModelMapper();
         configureModelMapper();
     }
+
     private void configureModelMapper() {
         TypeMap<CurrentUserResponseDTO, User> typeMap = modelMapper.getTypeMap(CurrentUserResponseDTO.class, User.class);
         if (typeMap == null) {
@@ -58,6 +60,7 @@ public class UserService {
             currentUserResponseDTO.setHouseNumber(user.getHouseNumber());
             currentUserResponseDTO.setInActive(user.isInActive());
             currentUserResponseDTO.setRoles(user.getRoles());
+            currentUserResponseDTO.setEmployeeRole(user.getEmployeeRole());
             currentUserResponseDTO.setBankAccountList(user.getBankAccountList());
 
             return currentUserResponseDTO;
@@ -83,11 +86,11 @@ public class UserService {
 
         if (!hasUppercase) {
             throw new UserCreateException("Password must contain at least one uppercase letter.");
-        }else  if (!hasLowercase) {
+        } else if (!hasLowercase) {
             throw new UserCreateException("Password must contain at least one lowercase letter.");
-        }else if (!hasSpecialCharacters) {
+        } else if (!hasSpecialCharacters) {
             throw new UserCreateException("Password must contain at least one special character.");
-        }else if (!hasDigits) {
+        } else if (!hasDigits) {
             throw new UserCreateException("Password must contain at least one digit.");
         }
     }
@@ -110,6 +113,25 @@ public class UserService {
         }
     }
 
+    public User updateRole(EmployeeRoleDTO role, CurrentUserResponseDTO user) {
+        User updatedUser = new User();
+
+        updatedUser.setId(user.getId());
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setPhoneNumber(user.getPhoneNumber());
+        updatedUser.setStreet(user.getStreet());
+        updatedUser.setCity(user.getCity());
+        updatedUser.setPostalCode(user.getPostalCode());
+        updatedUser.setHouseNumber(user.getHouseNumber());
+        updatedUser.setInActive(user.isInActive());
+        updatedUser.setBankAccountList(user.getBankAccountList());
+        updatedUser.setRoles(user.getRoles());
+        updatedUser.setEmployeeRole(role.getEmployeeRole());
+
+        return userRepository.save(updatedUser);
+    }
 
     public User addUser(User user) {
         if (userRepository.findUserByUsername(user.getUsername()).isEmpty()) {
@@ -149,6 +171,7 @@ public class UserService {
 
         return userDropDownDTOList;
     }
+
     public CurrentUserResponseDTO getUser(long id) {
         User user = userRepository.findById(id).get();
         if (user != null) {
@@ -164,6 +187,13 @@ public class UserService {
         }
         throw new UserCreateException("Username is not found.");
     }
+
+    public User updateRole(Long id, CurrentUserResponseDTO user) {
+        User userToUpdate = userRepository.findById(id).get();
+        userToUpdate.setEmployeeRole(user.getEmployeeRole());
+
+        return userRepository.save(userToUpdate);
+    }
     public User updateUser(Long id, CurrentUserResponseDTO user) {
             User userToUpdate = userRepository.findById(id).get();
             if (userToUpdate != null) {
@@ -178,6 +208,9 @@ public class UserService {
                 userToUpdate.setInActive(user.isInActive());
                 userToUpdate.setBankAccountList(user.getBankAccountList());
                 userToUpdate.setRoles(user.getRoles());
+                userToUpdate.setEmployeeRole(user.getEmployeeRole());
+                userToUpdate.setUsername(userToUpdate.getUsername());
+                userToUpdate.setPassword(userToUpdate.getPassword());
                 return userRepository.save(userToUpdate);
             }
         throw new UserCreateException("Username is not found.");

@@ -153,7 +153,7 @@ public class TransactionService {
         if(newBankAccountTo == null || newBankAccountFrom == null){
             throw new BankAccountUpdateException("something went wrong while updating the bankaccounts");
         }
-        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getRoles());
+        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getEmployeeRole(), performedByUser.getRoles());
         User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
             throw new UserUpdateException("something went wrong while updating the user");
@@ -206,7 +206,7 @@ public class TransactionService {
         if(newBankAccount == null){
             throw new BankAccountUpdateException("something went wrong while updating the bankaccount");
         }
-        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getRoles());
+        CurrentUserResponseDTO editUserRequestDTO = new CurrentUserResponseDTO(performedByUser.getId(),performedByUser.getFirstName(), performedByUser.getLastName(), performedByUser.getEmail(), performedByUser.getPhoneNumber(), performedByUser.getStreet(), performedByUser.getCity(), performedByUser.getPostalCode(), performedByUser.getHouseNumber(), performedByUser.isInActive(), performedByUser.getBankAccountList(), performedByUser.getEmployeeRole(), performedByUser.getRoles());
         User newUser = userService.updateUser(performedByUser.getId(), editUserRequestDTO);
         if(newUser == null){
             throw new UserUpdateException("something went wrong while updating the user");

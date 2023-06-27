@@ -32,7 +32,7 @@ const router = createRouter({
     { path: '/employee/question', component: QuestionCustomer},
     { path: '/employee/AddBankAccount', component: AddBankAccount},
     { path: '/AddUser', component: AddUser},
-    { path: '/question', component: QuestionEmployee},
+    { path: '/question/:id', component: QuestionEmployee, props: true},
   ]
 })
 

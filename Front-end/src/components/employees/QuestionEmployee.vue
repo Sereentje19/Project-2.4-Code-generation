@@ -17,6 +17,7 @@
 <script>
 import headerNavigation from '../main/Header.vue'
 import footerNavigation from '../main/Footer.vue';
+import axios from '../../axios-auth.js';
 
 export default {
     header: {
@@ -31,13 +32,39 @@ export default {
             footerNavigation
         }
     },
+    name: "QuestionEmployee",
+    props: {
+        id: Number,
+    },
+    data() {
+        return {
+            user:{
+                employeeRole: [],
+            }
+        };
+    },
     methods: {
+        updateUserRole(role) {
+            this.user.employeeRole = [];
+            this.user.employeeRole.push(role);
+
+            axios
+                .put('users/role/' + this.id , this.user, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
+        },
         goToEmployee() {
-            localStorage.setItem("role", "EMPLOYEE")
+            this.updateUserRole("EMPLOYEE");
             this.$router.push(`/allAccounts`);
         },
         goToCustomer() {
-            localStorage.setItem("role", "CUSTOMER")
+            this.updateUserRole("CUSTOMER");
             this.$router.push(`/customerAccountOverview`);
         },
     },

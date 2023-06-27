@@ -32,7 +32,9 @@ public class MySecurityConfiguration {
                 //users
                 .requestMatchers("/users/register").permitAll()
                 .requestMatchers("/users").authenticated()
+                .requestMatchers("/users/role/{id}").authenticated()
                 .requestMatchers("/users/{id}").authenticated()
+                .requestMatchers("/users/role").authenticated()
                 .requestMatchers("/users/current").authenticated()
                 .requestMatchers("/users/dropdown").authenticated()
                 .requestMatchers("/users/pincode/{pincode}").authenticated()

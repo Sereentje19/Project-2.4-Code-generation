@@ -9,18 +9,18 @@
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
                     <div class="groupOptions">
-                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
+                        <div v-if="this.user.employeeRole == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="this.roleUser == 'CUSTOMER'" class="option">
+                        <div v-if="this.user.employeeRole == 'CUSTOMER'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
                         </div>
-                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
-                        <div v-if="this.roleUser == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.user.employeeRole == 'EMPLOYEE'" class="option"></div>
+                        <div v-if="this.user.employeeRole == 'EMPLOYEE'" class="option"></div>
                         <div class="option">
                             <button class="btn" @click="createTransaction()">
                                 Transaction
@@ -122,18 +122,29 @@ export default {
                 iban: '',
                 currencies: '',
             },
-            balanceFilter:
-            {
-                comparison: '',
-                value: null,
-            },
-            searchQuery: '',
+            user:{
+                employeeRole: []
+            }
         };
     },
     mounted() {
         this.getBankAccount();
+        this.getUserRoles();
     },
     methods: {
+        getUserRoles() {
+            axios
+                .get('users/role',  {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("jwt")
+                    }
+                })
+                .then((res) => {
+                    this.user = res.data;
+                }).catch((error) => {
+                    alert(error.response.data);
+                });
+        },
         getBankAccount() {
             const decodedId = atob(this.id)
             axios
@@ -167,7 +178,7 @@ export default {
                     this.transactions = res.data;
                     console.log(res.data)
                 }).catch((error) => {
-                    alert("with current used filters there are no transactions");
+                    alert("There are no transactions with current used filters");
                 });
         },
         WithDrawOrDeposit() {

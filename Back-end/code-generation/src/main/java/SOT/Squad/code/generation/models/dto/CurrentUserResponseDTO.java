@@ -24,7 +24,11 @@ public class CurrentUserResponseDTO {
     private int houseNumber;
     private boolean inActive;
     private List<Long> bankAccountList;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> employeeRole;
 
 }

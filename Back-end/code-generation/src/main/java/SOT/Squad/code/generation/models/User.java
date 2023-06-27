@@ -35,6 +35,9 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> employeeRole;
     private String pincode;
     private double dailyLimit;
     private int transactionLimit;

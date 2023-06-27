@@ -28,8 +28,10 @@ export default {
         return {
             user:
             {
+                id: 0,
                 username: '',
                 password: '',
+                employeeRole: [],
                 roles: []
             },
         };
@@ -37,7 +39,6 @@ export default {
     mounted() {
         delete axios.defaults.headers.common['Authorization'];
         localStorage.removeItem("jwt");
-        localStorage.setItem("role", "CUSTOMER")
     },
     methods: {
         login() {
@@ -49,31 +50,28 @@ export default {
                 localStorage.setItem("jwt", res.data.token);
                 console.log(res.data.token);
 
-                this.getUser(res.data.token);
+                this.getUserRoles(res.data.token);
             }).catch((error) => {
                 alert(error.response.data);
             });
         },
-        getUser(token) {
+        getUserRoles(token) {
             axios
-                .get('users/current', {
+                .get('users/role', {
                     headers: {
                         Authorization: "Bearer " + token
                     }
                 })
                 .then((res) => {
                     this.user = res.data;
+                    console.log(this.user)
 
-                    this.user.roles.forEach(element => {
-                        if (element == "EMPLOYEE") {
-                            this.$router.push(`/question`);
-                        }
-                        else {
-                            localStorage.setItem("role", "CUSTOMER")
-                            this.$router.push(`/customerAccountOverview`);
-                        }
-
-                    });
+                    if (this.user.roles[0] == "EMPLOYEE") {
+                        this.$router.push(`/question/` + this.user.id);
+                    }
+                    else {
+                        this.$router.push(`/customerAccountOverview`);
+                    }
                 }).catch((error) => {
                     alert(error.response.data);
                 });
