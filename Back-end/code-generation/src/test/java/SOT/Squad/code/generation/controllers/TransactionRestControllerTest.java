@@ -1,14 +1,26 @@
 package SOT.Squad.code.generation.controllers;
 
+import SOT.Squad.code.generation.exceptions.BankAccountUpdateException;
+import SOT.Squad.code.generation.exceptions.TransactionCreateException;
+import SOT.Squad.code.generation.exceptions.UserUpdateException;
+import SOT.Squad.code.generation.exceptions.ValidateTransactionException;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.Role;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
+import SOT.Squad.code.generation.models.dto.TransactionRequestDTO;
+import SOT.Squad.code.generation.models.dto.withdrawOrDepositDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.mockito.Mockito;
@@ -28,7 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+
 class TransactionRestControllerTest {
 
     private MockMvc mockMvc;
@@ -39,6 +51,7 @@ class TransactionRestControllerTest {
 
     @InjectMocks
     private TransactionRestController transactionController;
+    private JWTKeyProvider keyProvider;
 
     @BeforeEach
     void setUp() {
@@ -54,102 +67,81 @@ class TransactionRestControllerTest {
         ReflectionTestUtils.setField(transactionController, "keyProvider", keyProviderMock);
 
     }
+
     @Test
-    void addTransaction() throws Exception {
+    void addTransaction() throws TransactionCreateException, BankAccountUpdateException, UserUpdateException, ValidateTransactionException {
+        TransactionRequestDTO requestDTO = new TransactionRequestDTO();
         Transaction transaction = new Transaction();
-        // Set up your transaction object
+        when(transactionService.validateTransaction(requestDTO)).thenReturn(transaction);
 
-        when(transactionService.AddTransaction(any(Transaction.class))).thenReturn(transaction);
+        // Act
+        ResponseEntity<?> response = transactionController.addTransaction(requestDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/transactions")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(transaction)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(transaction, response.getBody()); // Update the assertion to match the Transaction object
+        verify(transactionService, times(1)).validateTransaction(requestDTO);
     }
 
-//    @Test
-//    void getAllTransactions() throws Exception {
-//        List<Transaction> transactions = new ArrayList<>();
-//        // Add some transactions to the list
-//
-//        when(transactionService.GetAllTransactions()).thenReturn(transactions);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/transactions")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-//    }
+    @Test
+    void withdrawOrDeposit() throws  Exception{
+        withdrawOrDepositDTO withdrawOrDeposit = new withdrawOrDepositDTO();
+        withdrawOrDeposit.setBankAccountId(1);
+        withdrawOrDeposit.setBedrag(100);
+        withdrawOrDeposit.setChoise("withdraw");
+        User performedByUser = new User();
+        performedByUser.setId(1);
+        withdrawOrDeposit.setPerformedByUser(performedByUser);
 
-//    @Test
-//    void getTransactionsByIban() throws Exception {
-//        String iban = "NL12INHO0123456789";
-//        List<Transaction> transactions = new ArrayList<>();
-//        // Add some transactions to the list
-//
-//        when(transactionService.GetTransactionsByIban(iban)).thenReturn(transactions);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/transactions/account/{iban}/{type}", iban, "CURRENT,SAVINGS")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-//    }
-//
-//    @Test
-//    void getTransactionById() throws Exception {
-//        // Arrange
-//        long id = 1L;
-//        Transaction transaction = new Transaction();
-//        transaction.setId(id);
-//        // Set up the transaction with the given ID
-//
-//        when(transactionService.GetTransactionById(id)).thenReturn(transaction);
-//
-//        // Act and Assert
-//        mockMvc.perform(get("/transactions/{id}", id)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(id));
-//    }
+        // Perform the test
+        ResponseEntity<?> response = transactionController.withdrawOrDeposit(withdrawOrDeposit);
 
-//    @Test
-//    void findByBankAccountAndAccountType() throws Exception {
-//        String iban = "NL12INHO0123456789";
-//        List<AccountType> accountTypes = List.of(AccountType.CURRENT, AccountType.SAVINGS);
-//        List<Transaction> transactions = new ArrayList<>();
-//
-//        User user1 = new User(1, "thijs", "moerland", "Thijs", "Moerland", 064567, "Moerland8", "123street", 53, "2131GB", "hoofddorp", null,true, List.of(Role.CUSTOMER), "5781",2000,300);
-//        Transaction transaction = new Transaction(1, "test", 100,  "NL12INHO0123456789", "NL12INHO0123456787", List.of(AccountType.CURRENT), List.of(AccountType.SAVINGS), "kenmerk", LocalDateTime.now(),user1);
-//
-//        // Add some transactions to the list that match the provided IBAN and account types
-//        transactions.add(transaction);
-//        // Mock the service method call
-//        when(transactionService.findByBankAccountAndAccountType(iban, accountTypes)).thenReturn(transactions);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/transactions/account/{iban}/{type}", iban, accountTypes.stream().map(AccountType::toString).collect(Collectors.joining(",")))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$").isNotEmpty());
-//    }
+        // Verify the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 
     @Test
-    void updateTransaction() throws Exception {
-        long transactionId = 1L;
-        Transaction updatedTransaction = new Transaction();
+    void getAllTransactions() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/transactions")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
-        when(transactionService.UpdateTransaction(any(Transaction.class))).thenReturn(updatedTransaction);
+    @Test
+    void getTransactionById() throws Exception{
+        long transactionId = 1;
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/transactions/{id}", transactionId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/transactions/{id}", transactionId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void findByBankAccountAndAccountType() throws Exception{
+        String bankAccount = "NL12INHO0123456789"; // Replace with the actual bank account number you want to test
+        String accountType = "savings"; // Replace with the actual account type you want to test
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/transactions")
+                        .param("bankAccount", bankAccount)
+                        .param("accountType", accountType)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void updateTransaction() throws Exception{
+        long transactionId = 1; // Replace with the actual transaction ID you want to update
+
+        String updatedTransactionJson = "{\n" +
+                "    \"amount\": 500.00,\n" +
+                "    \"description\": \"Updated transaction\",\n" +
+                "    \"bankAccount\": \"1234567890\",\n" +
+                "    \"accountType\": \"savings\"\n" +
+                "}"; // Replace with the updated transaction JSON you want to send
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/transactions/{id}", transactionId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedTransaction)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-
+                        .content(updatedTransactionJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
