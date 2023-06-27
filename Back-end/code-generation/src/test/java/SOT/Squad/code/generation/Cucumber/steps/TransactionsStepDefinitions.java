@@ -63,8 +63,8 @@ public class TransactionsStepDefinitions{
     @When("the transaction is added")
     public void theTransactionIsAdded() {
         bankAccount = new BankAccount(1, "NL12INHO0123456789",   1000, 1, false, "EUR", List.of(AccountType.CURRENT),10);
-        user = new User(1, "thijs", "moerland", "Thijs", "Moerland", "64567", "Moerland8", "123street", 53, "2131GB", "hoofddorp",
-                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER), "5781", 2000, 300);
+        User user = new User(1, "thijs", "moerland", "Thijs", "Moerland", "64567", "Moerland8", "123street", 53, "2131GB", "hoofddorp",
+                List.of(bankAccount.getId()), true, List.of(Role.CUSTOMER),List.of(Role.CUSTOMER), "5781", 2000, 300);
         Transaction transaction = new Transaction(4, "test", 100,  4, 3, "kenmerk", LocalDateTime.now().plusDays(4),user);
 
 
