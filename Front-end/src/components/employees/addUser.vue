@@ -110,7 +110,6 @@ export default {
             }
         },
         addUser() {
-            console.log(this.employeeRole)
             if (this.employeeRole != "EMPLOYEE") {
                 axios
                     .post('users/register', this.user)
