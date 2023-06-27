@@ -3,10 +3,8 @@ package SOT.Squad.code.generation.services;
 import SOT.Squad.code.generation.exceptions.UserCreateException;
 import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
-import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
-import SOT.Squad.code.generation.models.dto.EmployeeRoleDTO;
 import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -142,26 +140,6 @@ public class UserService {
                 || user.getStreet() == null || !String.valueOf(user.getHouseNumber()).matches("\\d+")) {
             throw new UserCreateException("Please fill all fields before saving all changes.");
         }
-    }
-
-    public User updateRole(EmployeeRoleDTO role, CurrentUserResponseDTO user) {
-        User updatedUser = new User();
-
-        updatedUser.setId(user.getId());
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setPhoneNumber(user.getPhoneNumber());
-        updatedUser.setStreet(user.getStreet());
-        updatedUser.setCity(user.getCity());
-        updatedUser.setPostalCode(user.getPostalCode());
-        updatedUser.setHouseNumber(user.getHouseNumber());
-        updatedUser.setInActive(user.isInActive());
-        updatedUser.setBankAccountList(user.getBankAccountList());
-        updatedUser.setRoles(user.getRoles());
-        updatedUser.setEmployeeRole(role.getEmployeeRole());
-
-        return userRepository.save(updatedUser);
     }
 
     public User addUser(User user) {
