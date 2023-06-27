@@ -74,6 +74,37 @@ public class UserService {
             throw new UsernameNotFoundException("Username not found");
         }
     }
+    public List<CurrentUserResponseDTO> getUsersWithoutAccounts() {
+        List<CurrentUserResponseDTO> usersWithoutAccounts = new ArrayList<>();
+
+        // Get all users
+        Iterable<User> allUsers = userRepository.findAll();
+
+        // Iterate over each user
+        for (User user : allUsers) {
+            // Check if the user's bank account list is empty
+            if (user.getBankAccountList().isEmpty()) {
+                // Create a new CurrentUserResponseDTO object
+                CurrentUserResponseDTO currentUserResponseDTO = new CurrentUserResponseDTO();
+
+                // Set the user details in the CurrentUserResponseDTO object
+                currentUserResponseDTO.setId(user.getId());
+                currentUserResponseDTO.setFirstName(user.getFirstName());
+                currentUserResponseDTO.setLastName(user.getLastName());
+                currentUserResponseDTO.setInActive(user.isInActive());
+                currentUserResponseDTO.setBankAccountList(user.getBankAccountList());
+
+                // Add the CurrentUserResponseDTO object to the list
+                usersWithoutAccounts.add(currentUserResponseDTO);
+            }
+        }
+
+        return usersWithoutAccounts;
+    }
+    public List<User> searchUsers(String query) {
+        return userRepository.searchUsers(query);
+    }
+
 
     public void checkPasswordStrength(String passw) {
         boolean hasUppercase = !passw.equals(passw.toLowerCase());
