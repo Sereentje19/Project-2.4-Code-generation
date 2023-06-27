@@ -130,6 +130,7 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
     @GetMapping("/without-accounts") // Employee
     public ResponseEntity<?> getUsersWithoutAccounts() {
         try {
@@ -139,6 +140,7 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
     @GetMapping("/search")
     public ResponseEntity<?> searchUsers(@RequestParam("query") String query) {
         try {
@@ -149,7 +151,6 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 
     @PutMapping("/{id}") //Employee & Customer
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody CurrentUserResponseDTO user) {
