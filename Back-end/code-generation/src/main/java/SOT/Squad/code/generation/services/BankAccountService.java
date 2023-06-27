@@ -144,6 +144,11 @@ public class BankAccountService {
     }
 
     public BankAccountInfoDTO getBankAccountInfo(long id) {
+        if(bankAccountRepository.getAllById(id) == null)
+        {
+            throw new BankAccountGetException("Bank account not found");
+        }
+
         BankAccount bankList = bankAccountRepository.getAllById(id);
 
         BankAccountInfoDTO bankAccountInfoDTO = new BankAccountInfoDTO();
@@ -155,6 +160,10 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAllBankAccountsByUserId(long id) {
+        if(bankAccountRepository.getAllByUserId(id) == null)
+        {
+            throw new BankAccountGetException("Bank account not found");
+        }
 
         return bankAccountRepository.getAllByUserId(id);
     }

@@ -2,7 +2,9 @@ package SOT.Squad.code.generation.controllers;
 
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import SOT.Squad.code.generation.models.*;
+import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
 import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
+import SOT.Squad.code.generation.models.dto.UserDropDownDTO;
 import SOT.Squad.code.generation.services.BankAccountService;
 import SOT.Squad.code.generation.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,19 +70,33 @@ public class UserRestControllerTest {
     @MockBean
     private JWTKeyProvider keyProvider;
 
-//    @Test
-//    public void testGetAllUsers() throws Exception {
-//        List<User> users = new ArrayList<>();
-//// Add some transactions to the list
-//
-//        when(userService.getAllUsers()).thenReturn(users);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/users")
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-//    }
+    @Test
+    public void testGetAllUsers() throws Exception {
+        List<UserDropDownDTO> users = new ArrayList<>();
+// Add some transactions to the list
+
+        when(userService.getAllUsers()).thenReturn(users);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    public void testGetAllUserIdsAndNames() throws Exception {
+        List<UserDropDownDTO> users = new ArrayList<>();
+// Add some transactions to the list
+
+        when(userService.getAllUsers()).thenReturn(users);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/dropdown")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
 
     @Test
     public void testAddUser() throws Exception {
@@ -116,46 +132,32 @@ public class UserRestControllerTest {
 
 
 
-//    @Test
-//    public void testGetUser() throws Exception {
-//        User user = new User();
-//        long id = 1L;
-//// Add some transactions to the list
-//
-//        when(userService.getUser(any(long.class))).thenReturn(user);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/users/{id}", id)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(user)))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-//    }
 
-//    @Test
-//    public void testGetUserOnUsername() throws Exception {
-//        User user = new User();
-//        JWTKeyProvider keyProviderMock = Mockito.mock(JWTKeyProvider.class);
-//        String username = keyProviderMock.decodeJWT();
-//// Add some transactions to the list
-//
-//        when(userService.getUser(any(long.class))).thenReturn(user);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/users/{username}", username)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(user)))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-////                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-//    }
+    @Test
+    public void testGetUser() throws Exception {
+        CurrentUserResponseDTO user = new CurrentUserResponseDTO();
+        long id = 1L;
+// Add some transactions to the list
+
+        when(userService.getUser(any(long.class))).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+    }
+
 
 //    @Test
 //    public void testUpdateUser() throws Exception {
-//        User user = new User();
+//        CurrentUserResponseDTO user = new CurrentUserResponseDTO();
+//        User user1 = new User();
 //        long id = 1L;
 //// Add some transactions to the list
 //
-//        when(userService.updateUser(id, any(EditUserRequestDTO.class))).thenReturn(user);
+//        when(userService.updateUser(id, any(CurrentUserResponseDTO.class))).thenReturn(user1);
 //
 //        mockMvc.perform(MockMvcRequestBuilders
 //                        .put("/users/{id}", id)
@@ -165,19 +167,58 @@ public class UserRestControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 //    }
     
-//    @Test
-//    public void testCheckPincode() throws Exception {
-//        User user = new User();
-//        String pincode = "4321";
-//        // Add some transactions to the list
-//
-//        when(userService.checkPincode(any(String.class))).thenReturn(user);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/users/{pincode}", pincode)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(user)))
-//                .andExpect(MockMvcResultMatchers.status().isOk());
-//    }
+    @Test
+    public void testCheckPincode() throws Exception {
+        String pincode = "4321";
+        // Add some transactions to the list
+
+        when(userService.checkPincode(any(String.class))).thenReturn(Boolean.TRUE);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/pincode/{pincode}", pincode)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Boolean.TRUE)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
+    public void testGetUsersWithoutAccounts() throws Exception {
+        List<CurrentUserResponseDTO> users = new ArrayList<>();
+        // Add some transactions to the list
+
+        when(userService.getUsersWithoutAccounts()).thenReturn(users);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/without-accounts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testGetUserObjectOnUsername() throws Exception {
+        String Username = "thijs";
+        User user = new User();
+        // Add some transactions to the list
+
+        when(userService.getUserObjecttByUsername(Username)).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/currentUser")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testGetUserOnUsername() throws Exception {
+        String Username = "thijs";
+        CurrentUserResponseDTO user = new CurrentUserResponseDTO();
+        // Add some transactions to the list
+
+        when(userService.getUserByUsername(Username)).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/users/currentUser")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
 }

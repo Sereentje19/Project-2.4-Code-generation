@@ -60,14 +60,16 @@ public class TransactionService {
 
     public List<TransactionResponseDTO> findBankAccountResponse(long id, Date startDate, Date endDate, String operator, int amount) {
         List<TransactionResponseDTO> dtoList = new ArrayList<>();
+        //convert date to localdatetime
         LocalDateTime startDateTime = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         LocalDateTime endDateTime = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
+        //get all transactions from bankaccount
         BankAccount b = bankAccountRepository.findById(id).get();
         List<Transaction> transactionList = transactionRepository.findAllTransactions(
                 startDateTime, endDateTime, b.getId(), b.getId(), operator, amount);
 
-
+        //loop through transactions and add to dto
         for (int i = 0; i < transactionList.size(); i++) {
             TransactionResponseDTO transactionResponseDTOList = new TransactionResponseDTO();
             transactionResponseDTOList.setId(transactionList.get(i).getId());
