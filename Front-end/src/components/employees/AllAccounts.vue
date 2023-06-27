@@ -4,7 +4,7 @@
     <div class="container">
         <h2>All Users</h2>
         <div id="inputAndBtn">
-            <input id="inputfield" type="text" v-model="searchQuery" placeholder="Search" />
+            <input id="inputfield" type="text" v-model="searchQuery" placeholder="Search" @input="searchUsers" />
             <button id="buttonAdd" class="add-user-button" @click="goToAddUser">Add Bankaccount</button>
         </div>
 
@@ -13,7 +13,7 @@
         </div>
 
         <div v-else>
-            <button class="filter-button" @click="resetFilter">Show all users with  accounts</button>
+            <button class="filter-button" @click="resetFilter">Show all users</button>
         </div>
 
         <div v-for="user in filteredUsers" :key="user.id" @click="selectUser(user)">
@@ -61,19 +61,7 @@ export default {
     },
     computed: {
         filteredUsers() {
-            if (this.showUsersWithNoAccounts) {
-                return this.users.filter(user => !user.bankAccountList || user.bankAccountList.length === 0);
-            }
-
-            if (this.searchQuery) {
-                const query = this.searchQuery.toLowerCase();
-                return this.users.filter(user => {
-                    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-                    return fullName.includes(query);
-                });
-            }
-
-            return this.users.filter(user => !user.inActive); // Only display active users
+            return this.users.filter(user => !user.inActive);
         }
     },
     methods: {
@@ -89,16 +77,42 @@ export default {
                 })
                 .catch(error => console.log(error));
         },
+        searchUsers() {
+            axios
+                .get('/users/search', {
+                    params: {
+                        query: this.searchQuery
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('jwt')
+                    }
+                })
+                .then((res) => {
+                    this.users = res.data;
+                })
+                .catch((error) => console.log(error));
+        },
+        filterUsersWithNoAccounts() {
+            axios
+                .get('/users/without-accounts', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('jwt')
+                    }
+                })
+                .then((res) => {
+                    this.users = res.data;
+                    this.showUsersWithNoAccounts = true;
+                })
+                .catch((error) => console.log(error));
+        },
         goToAddUser() {
             this.$router.push('/employee/question');
         },
         selectUser(user) {
             this.$router.push(`/employee/accounts/` + btoa(user.id));
         },
-        filterUsersWithNoAccounts() {
-            this.showUsersWithNoAccounts = true;
-        },
         resetFilter() {
+            this.getUsers();
             this.showUsersWithNoAccounts = false;
         }
     }
@@ -129,9 +143,11 @@ export default {
     margin-left: 10px;
     margin-bottom: 10px;
 }
+
 .listField {
     height: 40px;
     margin-bottom: 1px;
-    margin-top: 2px; /* Add margin-top for spacing */
+    margin-top: 2px;
+    /* Add margin-top for spacing */
 }
 </style>
