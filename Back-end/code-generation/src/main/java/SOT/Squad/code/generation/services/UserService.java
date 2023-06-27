@@ -145,6 +145,8 @@ public class UserService {
     public User addUser(User user) {
         if (userRepository.findUserByUsername(user.getUsername()).isEmpty()) {
             user.setPassword(encoder.encode(user.getPassword()));
+            user.setTransactionLimit(300);
+            user.setDailyLimit(300);
             return userRepository.save(user);
         }
         throw new UserCreateException("Username is already taken.");

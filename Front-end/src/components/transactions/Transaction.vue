@@ -9,12 +9,12 @@
                         <p>{{ this.bankAccount.iban }}</p>
                     </div>
                     <div class="groupOptions">
-                        <div v-if="this.user.employeeRole == 'CUSTOMER'" class="option">
+                        <div v-if="this.user.employeeRole != 'EMPLOYEE'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Deposit
                             </button>
                         </div>
-                        <div v-if="this.user.employeeRole == 'CUSTOMER'" class="option">
+                        <div v-if="this.user.employeeRole != 'EMPLOYEE'" class="option">
                             <button class="btn" @click="WithDrawOrDeposit()">
                                 Withdraw
                             </button>
