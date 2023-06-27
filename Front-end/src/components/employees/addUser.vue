@@ -33,7 +33,7 @@
             <label>House Number:</label>
             <input type="text" v-model="user.houseNumber" />
         </div>
-        <div v-if="this.currentUser == 'EMPLOYEE'">
+        <div v-if="this.employeeRole === 'EMPLOYEE'">
             <label>Account type:</label>
             <select v-model="this.selectedAccountType">
                 <option v-for="accountType in this.accountTypes" :value="accountType">{{ accountType }}</option>
@@ -90,14 +90,27 @@ export default {
                 currencies: "EUR",
                 accountType: [],
             },
+            employeeRole: ""
         };
+    },
+    mounted() {
+        this.checkJwtExists();
     },
     methods: {
         cancel() {
             this.$router.go(-1);
         },
+        checkJwtExists() {
+            const jwt = localStorage.getItem("jwt");
+            if (jwt !== null && jwt !== undefined) {
+                this.employeeRole = "EMPLOYEE";
+            }
+            else{
+                this.employeeRole = "CUSTOMER";
+            }
+        },
         addUser() {
-            if (this.currentUser == "CUSTOMER") {
+            if (this.employeeRole != "EMPLOYEE") {
                 axios
                     .post('users/register', this.user)
                     .then((res) => {

@@ -23,7 +23,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private long phoneNumber;
+    private String phoneNumber;
     private String email;
     private String street;
     private int houseNumber;
@@ -35,6 +35,9 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> employeeRole;
     private String pincode;
     private double dailyLimit;
     private int transactionLimit;

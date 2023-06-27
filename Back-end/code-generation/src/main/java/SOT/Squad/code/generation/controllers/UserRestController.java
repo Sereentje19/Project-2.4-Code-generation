@@ -6,8 +6,8 @@ import SOT.Squad.code.generation.exceptions.UserUpdateException;
 import SOT.Squad.code.generation.exceptions.WrongPincodeException;
 import SOT.Squad.code.generation.jwt.JWTTokenProvider;
 import SOT.Squad.code.generation.models.dto.CurrentUserResponseDTO;
-import SOT.Squad.code.generation.models.dto.EditUserRequestDTO;
 import SOT.Squad.code.generation.models.User;
+import SOT.Squad.code.generation.models.dto.EmployeeRoleDTO;
 import SOT.Squad.code.generation.services.UserService;
 import SOT.Squad.code.generation.jwt.JWTKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,6 @@ public class UserRestController {
 
     @Autowired
     JWTKeyProvider keyProvider;
-
 
     @Autowired
     JWTTokenProvider tokenProvider;
@@ -66,7 +65,6 @@ public class UserRestController {
         }
     }
 
-
     @PostMapping("/register")//Employee
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
@@ -74,6 +72,32 @@ public class UserRestController {
             userService.checkPasswordStrength(user.getPassword()); // Check password strength
             return ResponseEntity.ok(userService.addUser(user));
         } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/role/{id}")//Employee
+    public ResponseEntity<?> updateRole(@PathVariable long id, @RequestBody CurrentUserResponseDTO user) {
+        try {
+            keyProvider.decodeJWT();
+            user.setId(id);
+            return ResponseEntity.ok(userService.updateRole(id, user));
+        } catch (UserCreateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/role") //Employee & Customer
+    public ResponseEntity<?> getRoles() {
+        try {
+            String username = keyProvider.decodeJWT();
+            CurrentUserResponseDTO user = userService.getUserByUsername(username);
+            User user1 = new User();
+            user1.setId(user.getId());
+            user1.setRoles(user.getRoles());
+            user1.setEmployeeRole(user.getEmployeeRole());
+            return ResponseEntity.ok(user1);
+        } catch (UserGetException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

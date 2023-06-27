@@ -17,14 +17,18 @@ public class CurrentUserResponseDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private long phoneNumber;
+    private String phoneNumber;
     private String street;
     private String city;
     private String postalCode;
     private int houseNumber;
     private boolean inActive;
     private List<Long> bankAccountList;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> employeeRole;
 
 }

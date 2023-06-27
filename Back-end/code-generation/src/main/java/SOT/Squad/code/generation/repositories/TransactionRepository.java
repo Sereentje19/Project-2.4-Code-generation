@@ -14,7 +14,6 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
-    List<Transaction> findByBankAccountFromOrBankAccountTo(String bankAccountFrom, String bankAccountTo);
 
         @Query("SELECT t FROM Transaction t " +
                 "WHERE (t.bankAccountFrom = :bankAccountFrom OR t.bankAccountTo = :bankAccountTo) " +

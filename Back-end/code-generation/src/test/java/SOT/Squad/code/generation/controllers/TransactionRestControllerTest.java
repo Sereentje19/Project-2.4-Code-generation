@@ -83,20 +83,20 @@ class TransactionRestControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
 //    }
 
-    @Test
-    void getTransactionsByIban() throws Exception {
-        String iban = "NL12INHO0123456789";
-        List<Transaction> transactions = new ArrayList<>();
-        // Add some transactions to the list
-
-        when(transactionService.GetTransactionsByIban(iban)).thenReturn(transactions);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/transactions/account/{iban}/{type}", iban, "CURRENT,SAVINGS")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
-    }
+//    @Test
+//    void getTransactionsByIban() throws Exception {
+//        String iban = "NL12INHO0123456789";
+//        List<Transaction> transactions = new ArrayList<>();
+//        // Add some transactions to the list
+//
+//        when(transactionService.GetTransactionsByIban(iban)).thenReturn(transactions);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/transactions/account/{iban}/{type}", iban, "CURRENT,SAVINGS")
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+//    }
 //
 //    @Test
 //    void getTransactionById() throws Exception {

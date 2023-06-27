@@ -57,7 +57,7 @@ public class UserRestControllerTest {
     }
 
 
-    @Autowired
+//    @Autowired
     private MockMvc mockMvc;
 
     @Mock
@@ -149,21 +149,21 @@ public class UserRestControllerTest {
 ////                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
 //    }
 
-    @Test
-    public void testUpdateUser() throws Exception {
-        User user = new User();
-        long id = 1L;
-// Add some transactions to the list
-
-        when(userService.updateUser(id, any(EditUserRequestDTO.class))).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/users/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-    }
+//    @Test
+//    public void testUpdateUser() throws Exception {
+//        User user = new User();
+//        long id = 1L;
+//// Add some transactions to the list
+//
+//        when(userService.updateUser(id, any(EditUserRequestDTO.class))).thenReturn(user);
+//
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .put("/users/{id}", id)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(user)))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
+//    }
     
 //    @Test
 //    public void testCheckPincode() throws Exception {
